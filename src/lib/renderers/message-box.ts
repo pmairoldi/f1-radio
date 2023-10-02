@@ -4,7 +4,7 @@ type Element = Parameters<typeof satori>[0];
 
 export function messageBox(options: {
 	driver: string;
-	team: { name: string; color: string; logo: string };
+	team: { name: string; color: string /*logo: string*/ };
 	messages: { type: 'driver' | 'team'; message: string }[];
 }): Element {
 	const { driver, team, messages } = options;
