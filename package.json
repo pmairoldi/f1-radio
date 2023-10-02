@@ -35,5 +35,12 @@
 		"vite": "^4.4.2",
 		"vitest": "^0.32.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@resvg/resvg-js": "^2.4.1",
+		"satori": "^0.10.8",
+		"satori-html": "^0.3.2",
+		"svelte-component-to-image": "^0.1.0",
+		"tailwind-merge": "^1.14.0"
+	}
 }

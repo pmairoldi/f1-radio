@@ -1,0 +1,35 @@
+@font-face {
+	font-family: 'Formula1 Display-Wide';
+	src: url('Formula1-Display-Wide.woff2') format('woff2'),
+		url('Formula1-Display-Wide.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Formula1 Display';
+	src: url('Formula1-Display-Bold.woff2') format('woff2'),
+		url('Formula1-Display-Bold.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Formula1 Display';
+	src: url('Formula1-Display-Regular.woff2') format('woff2'),
+		url('Formula1-Display-Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Formula1 Display';
+	src: url('Formula1-Display-Black.woff2') format('woff2'),
+		url('Formula1-Display-Black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
