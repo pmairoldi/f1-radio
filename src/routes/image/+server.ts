@@ -6,6 +6,8 @@ import { Resvg } from '@resvg/resvg-js';
 import { messageBox } from '$lib/renderers/message-box';
 
 import f1Regular from '$lib/fonts/Formula1-Display-Regular.woff';
+import { drivers } from '$lib/data';
+import { error } from '@sveltejs/kit';
 
 // import alfa_romeo_logo from '$lib/assets/alfa-romeo-logo.png';
 // import alphatauri_logo from '$lib/assets/alphatauri-logo.png';
@@ -25,32 +27,6 @@ import f1Regular from '$lib/fonts/Formula1-Display-Regular.woff';
 // 	return `data:image/png;base64,${base64}`;
 // }
 
-const teams = [
-	'Red Bull Racing',
-	'Mercedes',
-	'Ferrari',
-	'Aston Martin',
-	'McLaren',
-	'Alpine',
-	'Williams',
-	'Haas F1 Team',
-	'Alfa Romeo',
-	'AlphaTauri'
-] as const;
-
-const colors: Record<(typeof teams)[number], string> = {
-	'Red Bull Racing': '#3671C6',
-	Mercedes: '#6CD3BF',
-	Ferrari: '#F91536',
-	'Aston Martin': '#358C75',
-	McLaren: '#F58020',
-	Alpine: '#2293D1',
-	Williams: '#37BEDD',
-	'Haas F1 Team': '#B6BABD',
-	'Alfa Romeo': '#C92D4B',
-	AlphaTauri: '#5E8FAA'
-};
-
 // const logos: Record<(typeof teams)[number], string> = {
 // 	'Red Bull Racing': toBase64(red_bull_racing_logo),
 // 	Mercedes: toBase64(mercedes_logo),
@@ -64,18 +40,25 @@ const colors: Record<(typeof teams)[number], string> = {
 // 	AlphaTauri: toBase64(alphatauri_logo)
 // };
 
-export const GET: RequestHandler = async () => {
-	const driver = 'Verstappen';
-	const team = {
-		name: 'Red Bull Racing',
-		color: colors['Red Bull Racing']
-		// logo: logos['Red Bull Racing']
-	};
-	const messages: { type: 'driver' | 'team'; message: string }[] = [
-		{ type: 'driver', message: 'The car is 100% broken' }
-	];
+export const GET: RequestHandler = async (event) => {
+	const query = event.url.searchParams;
+	const d = query.get('d') ?? '';
+	const m = query.getAll('m');
 
-	const svg = await satori(messageBox({ driver, team, messages }), {
+	const driver = drivers.find(
+		(driver) => d === `${driver.name.first}_${driver.name.last}`.toLowerCase()
+	);
+
+	if (driver == null) {
+		throw error(404, `Driver not found!`);
+	}
+
+	const messages: { type: 'driver' | 'team'; message: string }[] = [{ type: 'driver', message: m[0] }];
+
+	const name = driver.name.display === 'first' ? driver.name.first : driver.name.last;
+	const team = driver.team;
+
+	const svg = await satori(messageBox({ driver: name, team: team, messages }), {
 		width: 320,
 		fonts: [
 			{

@@ -1,62 +1,71 @@
-<script>
-	import MessageBox from '../lib/MessageBox.svelte';
+<script lang="ts">
+	// import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { drivers } from '$lib/data';
+	import type { ChangeEventHandler } from 'svelte/elements';
+
+	$: driver = $page.url.searchParams.get('d');
+	$: messages = $page.url.searchParams.get('m');
+
+	const driverChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+		// const url = $page.url;
+		// url.searchParams.set('d', event.currentTarget.value);
+		// goto(url);
+		driver = event.currentTarget.value;
+	};
+
+	const messagesChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+		// const url = $page.url;
+		// url.searchParams.set('m', event.currentTarget.value);
+		// goto(url);
+		messages = event.currentTarget.value;
+	};
+
+	function getQuery(driver: string, messages: string): string {
+		const query = new URLSearchParams();
+		query.set('d', driver);
+		query.set('m', messages);
+
+		return query.toString();
+	}
+
+	$: image = `/image?${getQuery(driver ?? '', messages ?? '')}`;
 </script>
 
-<div class="flex p-10 items-start justify-center gap-2">
-	<!-- <MessageBox
-		team="Alfa Romeo"
-		name="Bottas"
-		color="text-slate-500"
-		message="I've got a puncture"
-	/> -->
+<header class="p-4 text-white bg-red-700">
+	<h1 class="text-3xl font-f1">F1 Radio Meme</h1>
+</header>
 
-	<!-- <svg xmlns="http://www.w3.org/2000/svg" width="320" height="82" viewBox="0 0 320 82">
-		<defs>
-			<style>
-				@font-face {
-					font-family: 'Roboto Condensed';
-					src: url(data:application/font-woff;charset=utf-8;base64,your_base64_encoded_long_string)
-						format('woff');
-					font-weight: normal;
-					font-style: normal;
-				}
-				@font-face {
-					font-family: 'Open Sans';
-					src: url(data:application/font-woff;charset=utf-8;base64,your_base64_encoded_long_string)
-						format('woff');
-					font-weight: normal;
-					font-style: normal;
-				}
-				@font-face {
-					font-family: 'Anonymous Pro';
-					src: url(data:application/font-woff;charset=utf-8;base64,your_base64_encoded_long_string)
-						format('woff');
-					font-weight: normal;
-					font-style: normal;
-				}
-			</style>
-		</defs>
-		<style>
-			.small {
-				font: italic 13px sans-serif;
-			}
-			.heavy {
-				font: bold 30px sans-serif;
-			}
+<main class="grid grid-cols-1 gap-4 p-4 font-f1 items-center">
+	<label class="flex flex-col">
+		<span>Pick a driver:</span>
+		<select
+			value={driver}
+			on:change={driverChange}
+			class="text-white bg-red-700 rounded-md p-2 appearance-none"
+		>
+			<option value={null} />
+			{#each drivers as driver}
+				<option value={`${driver.name.first}_${driver.name.last}`.toLowerCase()}>
+					{#if driver.name.display === 'first'}
+						{driver.name.first}
+					{:else}
+						{driver.name.last}
+					{/if}
+				</option>
+			{/each}
+		</select>
+	</label>
 
-			/* Note that the color of the text is set with the    *
-			 * fill property, the color property is for HTML only */
-			.Rrrrr {
-				font: italic 40px serif;
-				fill: red;
-			}
-		</style>
+	<label class="flex flex-col">
+		<span>Messages:</span>
+		<input
+			type="text"
+			value={messages}
+			on:change={messagesChange}
+			class="text-white bg-red-700 rounded-md p-2 appearance-none"
+		/>
+	</label>
 
-		<text x="20" y="35" class="small">My</text>
-		<text x="40" y="35" class="heavy">cat</text>
-		<text x="55" y="55" class="small">is</text>
-		<text x="65" y="55" class="Rrrrr">Grumpy!</text>
-	</svg> -->
-
-	<img src="/image" alt="" />
-</div>
+	<img src={image} alt="" width="320" />
+</main>
