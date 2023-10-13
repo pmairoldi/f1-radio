@@ -59,6 +59,9 @@
 
 <main class="p-4 font-f1">
 	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
+		<h2 class="w-full text-lg">
+			Generate funny f1 radio meme and copy the image to post to your favorite website!
+		</h2>
 		<form on:input={formChange} autocomplete="off" class="flex flex-col gap-4 w-full">
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
@@ -110,6 +113,7 @@
 		</form>
 
 		{#if driver !== ''}
+			<hr class="w-full" />
 			<img src={image} alt="" width="320" />
 		{/if}
 	</div>

@@ -76,6 +76,7 @@ export const GET: RequestHandler = async (event) => {
 	});
 
 	const resvg = new Resvg(svg, {
+		dpi: 300,
 		textRendering: 2,
 		imageRendering: 0,
 		shapeRendering: 2
