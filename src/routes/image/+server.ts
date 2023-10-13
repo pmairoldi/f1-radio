@@ -1,12 +1,12 @@
 // import fs from 'fs';
+import { Resvg } from '@resvg/resvg-js';
 import satori from 'satori';
 import type { RequestHandler } from './$types';
-import { Resvg } from '@resvg/resvg-js';
 
 import { messageBox } from '$lib/renderers/message-box';
 
+import { drivers, type Messages } from '$lib/data';
 import f1Regular from '$lib/fonts/Formula1-Display-Regular.woff';
-import { drivers } from '$lib/data';
 import { error } from '@sveltejs/kit';
 
 // import alfa_romeo_logo from '$lib/assets/alfa-romeo-logo.png';
@@ -42,8 +42,12 @@ import { error } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async (event) => {
 	const query = event.url.searchParams;
-	const d = query.get('d') ?? '';
-	const m = query.getAll('m');
+	const d = query.get('d');
+	const m = query.get('m');
+
+	if (d == null || m == null) {
+		throw error(400, `Invalid query parameters.`);
+	}
 
 	const driver = drivers.find(
 		(driver) => d === `${driver.name.first}_${driver.name.last}`.toLowerCase()
@@ -53,7 +57,7 @@ export const GET: RequestHandler = async (event) => {
 		throw error(404, `Driver not found!`);
 	}
 
-	const messages: { type: 'driver' | 'team'; message: string }[] = [{ type: 'driver', message: m[0] }];
+	const messages: Messages = JSON.parse(m);
 
 	const name = driver.name.display === 'first' ? driver.name.first : driver.name.last;
 	const team = driver.team;

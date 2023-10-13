@@ -60,3 +60,6 @@ export const drivers: Driver[] = [
 	{ name: { first: 'Nyck', last: 'De Vries', display: 'last' }, team: teams['AlphaTauri'] },
 	{ name: { first: 'Daniel', last: 'Ricciardo', display: 'last' }, team: teams['AlphaTauri'] }
 ];
+
+export type Message = { type: 'driver' | 'team'; message: string };
+export type Messages = Message[];

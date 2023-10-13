@@ -1,71 +1,116 @@
 <script lang="ts">
-	// import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { drivers } from '$lib/data';
-	import type { ChangeEventHandler } from 'svelte/elements';
+	import { drivers, type Messages } from '$lib/data';
+	import type { FormEventHandler } from 'svelte/elements';
 
-	$: driver = $page.url.searchParams.get('d');
-	$: messages = $page.url.searchParams.get('m');
+	let driver: string = '';
+	let messages: Messages = [];
 
-	const driverChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
-		// const url = $page.url;
-		// url.searchParams.set('d', event.currentTarget.value);
-		// goto(url);
-		driver = event.currentTarget.value;
+	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
+		const form = new FormData(event.currentTarget);
+
+		const d = form.get('driver') as string | null;
+		const m = form.getAll('messages') as string[] | null;
+
+		if (d != null) {
+			driver = d;
+		} else {
+			driver = '';
+		}
+
+		if (m != null) {
+			const newMessage: Messages = [];
+			for (let i = 0; i < m.length; i += 2) {
+				const type = m[i] as 'driver' | 'team';
+				const message = m[i + 1];
+
+				newMessage.push({ type: type, message: message });
+			}
+
+			messages = newMessage;
+		} else {
+			messages = [];
+		}
 	};
 
-	const messagesChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		// const url = $page.url;
-		// url.searchParams.set('m', event.currentTarget.value);
-		// goto(url);
-		messages = event.currentTarget.value;
-	};
+	function addMessage() {
+		messages.push({ type: 'driver', message: '' });
+		messages = messages;
+	}
 
-	function getQuery(driver: string, messages: string): string {
+	function removeMessage(index: number) {
+		messages.splice(index, 1);
+		messages = messages;
+	}
+
+	function getQuery(driver: string, messages: Messages): string {
 		const query = new URLSearchParams();
 		query.set('d', driver);
-		query.set('m', messages);
+		query.set('m', JSON.stringify(messages));
 
 		return query.toString();
 	}
 
-	$: image = `/image?${getQuery(driver ?? '', messages ?? '')}`;
+	$: image = `/image?${getQuery(driver, messages)}`;
 </script>
 
 <header class="p-4 text-white bg-red-700">
-	<h1 class="text-3xl font-f1">F1 Radio Meme</h1>
+	<h1 class="text-3xl font-f1 max-w-2xl mx-auto">F1 Radio Meme</h1>
 </header>
 
-<main class="grid grid-cols-1 gap-4 p-4 font-f1 items-center">
-	<label class="flex flex-col">
-		<span>Pick a driver:</span>
-		<select
-			value={driver}
-			on:change={driverChange}
-			class="text-white bg-red-700 rounded-md p-2 appearance-none"
-		>
-			<option value={null} />
-			{#each drivers as driver}
-				<option value={`${driver.name.first}_${driver.name.last}`.toLowerCase()}>
-					{#if driver.name.display === 'first'}
-						{driver.name.first}
-					{:else}
-						{driver.name.last}
-					{/if}
-				</option>
-			{/each}
-		</select>
-	</label>
+<main class="p-4 font-f1">
+	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
+		<form on:input={formChange} autocomplete="off" class="flex flex-col gap-4 w-full">
+			<label class="flex flex-col">
+				<span>Pick a driver:</span>
+				<select
+					value={driver}
+					name="driver"
+					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+				>
+					<option value={null} />
+					{#each drivers as driver}
+						<option value={`${driver.name.first}_${driver.name.last}`.toLowerCase()}>
+							{#if driver.name.display === 'first'}
+								{driver.name.first}
+							{:else}
+								{driver.name.last}
+							{/if}
+						</option>
+					{/each}
+				</select>
+			</label>
 
-	<label class="flex flex-col">
-		<span>Messages:</span>
-		<input
-			type="text"
-			value={messages}
-			on:change={messagesChange}
-			class="text-white bg-red-700 rounded-md p-2 appearance-none"
-		/>
-	</label>
+			<label class="flex flex-col gap-2">
+				<span>Messages:</span>
+				{#each messages as message, i}
+					<div class="flex flex-row items-center gap-2">
+						<select value={message.type} name="messages">
+							<option value="driver">Driver</option>
+							<option value="team">Team</option>
+						</select>
+						<span>:</span>
+						<input
+							type="text"
+							value={message.message}
+							name="messages"
+							class="w-full flex-auto text-white bg-red-700 p-2 appearance-none rounded-xl"
+						/>
+						<button type="button" on:click={() => removeMessage(i)}>X</button>
+					</div>
+				{/each}
+			</label>
 
-	<img src={image} alt="" width="320" />
+			<button
+				type="button"
+				on:click={() => addMessage()}
+				class="bg-red-700 text-white p-2 rounded-xl"
+			>
+				Add Message
+			</button>
+		</form>
+
+		{#if driver !== ''}
+			<img src={image} alt="" width="320" />
+		{/if}
+	</div>
 </main>
