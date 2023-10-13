@@ -83,7 +83,7 @@
 				</select>
 			</label>
 
-			<label class="flex flex-col gap-2">
+			<div class="flex flex-col gap-2">
 				<span>Messages:</span>
 				{#each messages as message, i}
 					<div class="flex flex-row items-center gap-2">
@@ -101,7 +101,7 @@
 						<button type="button" on:click={() => removeMessage(i)}>X</button>
 					</div>
 				{/each}
-			</label>
+			</div>
 
 			<button
 				type="button"

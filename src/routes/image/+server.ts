@@ -76,13 +76,14 @@ export const GET: RequestHandler = async (event) => {
 	});
 
 	const resvg = new Resvg(svg, {
-		dpi: 300,
-		textRendering: 2,
-		imageRendering: 0,
-		shapeRendering: 2
+		fitTo: {
+			mode: 'width',
+			value: 320 * 3
+		}
 	});
-	const pngData = resvg.render();
-	const pngBuffer = pngData.asPng();
 
-	return new Response(pngBuffer, { headers: { 'Content-Type': 'image/png' } });
+	const image = resvg.render();
+	const png = image.asPng();
+
+	return new Response(png, { headers: { 'Content-Type': 'image/png' } });
 };
