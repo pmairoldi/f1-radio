@@ -1,3 +1,14 @@
+import alfa_romeo_logo from '$lib/assets/alfa-romeo-logo.png';
+import alphatauri_logo from '$lib/assets/alphatauri-logo.png';
+import alpine_logo from '$lib/assets/alpine-logo.png';
+import aston_martin_logo from '$lib/assets/aston-martin-logo.png';
+import ferrari_logo from '$lib/assets/ferrari-logo.png';
+import haas_f1_team_logo from '$lib/assets/haas-f1-team-logo.png';
+import mclaren_logo from '$lib/assets/mclaren-logo.png';
+import mercedes_logo from '$lib/assets/mercedes-logo.png';
+import red_bull_racing_logo from '$lib/assets/red-bull-racing-logo.png';
+import williams_logo from '$lib/assets/williams-logo.png';
+
 const teamNames = [
 	'Red Bull Racing',
 	'Mercedes',
@@ -11,27 +22,32 @@ const teamNames = [
 	'AlphaTauri'
 ] as const;
 
-type Team = {
+export type Team = {
 	name: string;
 	color: string;
+	logo: string;
 };
 
 const teams: Record<(typeof teamNames)[number], Team> = {
-	'Red Bull Racing': { name: 'Red Bull Racing', color: '#3671C6' },
-	Mercedes: { name: 'Mercedes', color: '#6CD3BF' },
-	Ferrari: { name: 'Ferrari', color: '#F91536' },
-	'Aston Martin': { name: 'Aston Martin', color: '#358C75' },
-	McLaren: { name: 'McLaren', color: '#F58020' },
-	Alpine: { name: 'Alpine', color: '#2293D1' },
-	Williams: { name: 'Williams', color: '#37BEDD' },
-	'Haas F1 Team': { name: 'Haas F1 Team', color: '#B6BABD' },
-	'Alfa Romeo': { name: 'Alfa Romeo', color: '#C92D4B' },
-	AlphaTauri: { name: 'AlphaTauri', color: '#5E8FAA' }
+	'Red Bull Racing': {
+		name: 'Red Bull Racing',
+		color: '#3671C6',
+		logo: red_bull_racing_logo
+	},
+	Mercedes: { name: 'Mercedes', color: '#6CD3BF', logo: mercedes_logo },
+	Ferrari: { name: 'Ferrari', color: '#F91536', logo: ferrari_logo },
+	'Aston Martin': { name: 'Aston Martin', color: '#358C75', logo: aston_martin_logo },
+	McLaren: { name: 'McLaren', color: '#F58020', logo: mclaren_logo },
+	Alpine: { name: 'Alpine', color: '#2293D1', logo: alpine_logo },
+	Williams: { name: 'Williams', color: '#37BEDD', logo: williams_logo },
+	'Haas F1 Team': { name: 'Haas F1 Team', color: '#B6BABD', logo: haas_f1_team_logo },
+	'Alfa Romeo': { name: 'Alfa Romeo', color: '#C92D4B', logo: alfa_romeo_logo },
+	AlphaTauri: { name: 'AlphaTauri', color: '#5E8FAA', logo: alphatauri_logo }
 };
 
-type Name = { first: string; last: string; display: 'first' | 'last' };
+export type Name = { first: string; last: string; display: 'first' | 'last' };
 
-type Driver = {
+export type Driver = {
 	name: Name;
 	team: Team;
 };

@@ -1,20 +1,24 @@
 <script lang="ts">
-	import { drivers, type Messages } from '$lib/data';
+	import { drivers, type Driver, type Messages } from '$lib/data';
 	import type { FormEventHandler } from 'svelte/elements';
+	import RadioBox from '../lib/renderers/RadioBox.svelte';
 
-	let driver: string = '';
-	let messages: Messages = [];
+	let driver: Driver | null = drivers[0];
+	let messages: Messages = [
+		{ type: 'driver', message: "I've got no grip out here mate!" },
+		{ type: 'team', message: 'copy' }
+	];
 
 	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
 
-		const d = form.get('driver') as string | null;
+		const d = form.get('driver') as Driver | null;
 		const m = form.getAll('messages') as string[] | null;
-
+		console.log(d);
 		if (d != null) {
 			driver = d;
 		} else {
-			driver = '';
+			driver = null;
 		}
 
 		if (m != null) {
@@ -42,15 +46,15 @@
 		messages = messages;
 	}
 
-	function getQuery(driver: string, messages: Messages): string {
+	function getQuery(driver: Driver, messages: Messages): string {
 		const query = new URLSearchParams();
-		query.set('d', driver);
+		query.set('d', `${driver.name.first}_${driver.name.last}`.toLowerCase());
 		query.set('m', JSON.stringify(messages));
 
 		return query.toString();
 	}
 
-	$: image = `/image?${getQuery(driver, messages)}`;
+	$: image = driver != null ? `/image?${getQuery(driver, messages)}` : null;
 </script>
 
 <header class="p-4 text-white bg-red-700">
@@ -72,7 +76,7 @@
 				>
 					<option value={null} />
 					{#each drivers as driver}
-						<option value={`${driver.name.first}_${driver.name.last}`.toLowerCase()}>
+						<option value={driver}>
 							{#if driver.name.display === 'first'}
 								{driver.name.first}
 							{:else}
@@ -112,8 +116,9 @@
 			</button>
 		</form>
 
-		{#if driver !== ''}
+		{#if driver != null}
 			<hr class="w-full" />
+			<RadioBox {driver} {messages} />
 			<img src={image} alt="" width="320" />
 		{/if}
 	</div>
