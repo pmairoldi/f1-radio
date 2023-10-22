@@ -2,6 +2,7 @@
 	"name": "f1-radio",
 	"version": "0.0.1",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -14,10 +15,15 @@
 		"test:integration": "playwright test",
 		"test:unit": "vitest"
 	},
+	"dependencies": {
+		"dom-to-image": "^2.6.0",
+		"tailwind-merge": "^1.14.0"
+	},
 	"devDependencies": {
 		"@playwright/test": "^1.39.0",
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.25.2",
+		"@types/dom-to-image": "^2.6.6",
 		"@typescript-eslint/eslint-plugin": "^6.7.5",
 		"@typescript-eslint/parser": "^6.7.5",
 		"autoprefixer": "^10.4.16",
@@ -34,13 +40,5 @@
 		"typescript": "^5.2.2",
 		"vite": "^4.4.11",
 		"vitest": "^0.32.4"
-	},
-	"type": "module",
-	"dependencies": {
-		"@resvg/resvg-js": "^2.4.1",
-		"satori": "^0.10.9",
-		"satori-html": "^0.3.2",
-		"svelte-component-to-image": "^0.1.0",
-		"tailwind-merge": "^1.14.0"
 	}
 }

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { drivers, type Driver, type Messages } from '$lib/data';
 	import type { FormEventHandler } from 'svelte/elements';
-	import RadioBox from '../lib/renderers/RadioBox.svelte';
+	import RadioBox from '$lib/renderers/RadioBox.svelte';
+	import domtoimage from 'dom-to-image';
+
+	let output: HTMLElement | undefined;
 
 	let driver: Driver | null = drivers[0];
 	let messages: Messages = [
@@ -12,11 +15,11 @@
 	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
 
-		const d = form.get('driver') as Driver | null;
+		const d = form.get('driver') as string | null;
 		const m = form.getAll('messages') as string[] | null;
-		console.log(d);
+
 		if (d != null) {
-			driver = d;
+			driver = drivers.find((driver) => driver.id === d) ?? null;
 		} else {
 			driver = null;
 		}
@@ -46,15 +49,18 @@
 		messages = messages;
 	}
 
-	function getQuery(driver: Driver, messages: Messages): string {
-		const query = new URLSearchParams();
-		query.set('d', `${driver.name.first}_${driver.name.last}`.toLowerCase());
-		query.set('m', JSON.stringify(messages));
+	async function copy() {
+		if (output == null) {
+			return;
+		}
 
-		return query.toString();
+		try {
+			const blob = await domtoimage.toBlob(output);
+			await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+		} catch (error) {
+			console.error('oops, something went wrong!', error);
+		}
 	}
-
-	$: image = driver != null ? `/image?${getQuery(driver, messages)}` : null;
 </script>
 
 <header class="p-4 text-white bg-red-700">
@@ -70,13 +76,13 @@
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
 				<select
-					value={driver}
+					value={driver?.id ?? ''}
 					name="driver"
 					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 				>
 					<option value={null} />
 					{#each drivers as driver}
-						<option value={driver}>
+						<option value={driver.id}>
 							{#if driver.name.display === 'first'}
 								{driver.name.first}
 							{:else}
@@ -118,9 +124,11 @@
 
 		{#if driver != null}
 			<hr class="w-full" />
-			<RadioBox {driver} {messages} />
+			<RadioBox {driver} {messages} bind:element={output} />
 
-			<img src={image} alt="" width="320" />
+			<button type="button" class="bg-red-700 text-white p-2 rounded-xl" on:click={() => copy()}
+				>Copy</button
+			>
 		{/if}
 	</div>
 </main>

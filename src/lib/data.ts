@@ -48,33 +48,94 @@ const teams: Record<(typeof teamNames)[number], Team> = {
 export type Name = { first: string; last: string; display: 'first' | 'last' };
 
 export type Driver = {
+	id: string;
 	name: Name;
 	team: Team;
 };
 
 export const drivers: Driver[] = [
-	{ name: { first: 'Max', last: 'Verstappen', display: 'last' }, team: teams['Red Bull Racing'] },
-	{ name: { first: 'Sergio', last: 'Perez', display: 'last' }, team: teams['Red Bull Racing'] },
-	{ name: { first: 'Lewis', last: 'Hamilton', display: 'last' }, team: teams['Mercedes'] },
-	{ name: { first: 'Fernando', last: 'Alonso', display: 'last' }, team: teams['Aston Martin'] },
-	{ name: { first: 'Carlos', last: 'Sainz', display: 'last' }, team: teams['Ferrari'] },
-	{ name: { first: 'Charles', last: 'Leclerc', display: 'last' }, team: teams['Ferrari'] },
-	{ name: { first: 'Lando', last: 'Norris', display: 'last' }, team: teams['McLaren'] },
-	{ name: { first: 'George', last: 'Russell', display: 'last' }, team: teams['Mercedes'] },
-	{ name: { first: 'Oscar', last: 'Piastri', display: 'last' }, team: teams['McLaren'] },
-	{ name: { first: 'Lance', last: 'Stroll', display: 'last' }, team: teams['Aston Martin'] },
-	{ name: { first: 'Pierre', last: 'Gasly', display: 'last' }, team: teams['Alpine'] },
-	{ name: { first: 'Esteban', last: 'Ocon', display: 'last' }, team: teams['Alpine'] },
-	{ name: { first: 'Alexander', last: 'Albon', display: 'last' }, team: teams['Williams'] },
-	{ name: { first: 'Nico', last: 'Hulkenberg', display: 'last' }, team: teams['Haas F1 Team'] },
-	{ name: { first: 'Valtteri', last: 'Bottas', display: 'last' }, team: teams['Alfa Romeo'] },
-	{ name: { first: 'Zhou', last: 'Guanyu', display: 'first' }, team: teams['Alfa Romeo'] },
-	{ name: { first: 'Yuki', last: 'Tsunoda', display: 'last' }, team: teams['AlphaTauri'] },
-	{ name: { first: 'Kevin', last: 'Magnussen', display: 'last' }, team: teams['Haas F1 Team'] },
-	{ name: { first: 'Liam', last: 'Lawson', display: 'last' }, team: teams['AlphaTauri'] },
-	{ name: { first: 'Logan', last: 'Sargeant', display: 'last' }, team: teams['Williams'] },
-	{ name: { first: 'Nyck', last: 'De Vries', display: 'last' }, team: teams['AlphaTauri'] },
-	{ name: { first: 'Daniel', last: 'Ricciardo', display: 'last' }, team: teams['AlphaTauri'] }
+	{
+		id: '1',
+		name: { first: 'Max', last: 'Verstappen', display: 'last' },
+		team: teams['Red Bull Racing']
+	},
+	{
+		id: '11',
+		name: { first: 'Sergio', last: 'Perez', display: 'last' },
+		team: teams['Red Bull Racing']
+	},
+	{
+		id: '44',
+		name: { first: 'Lewis', last: 'Hamilton', display: 'last' },
+		team: teams['Mercedes']
+	},
+	{
+		id: '14',
+		name: { first: 'Fernando', last: 'Alonso', display: 'last' },
+		team: teams['Aston Martin']
+	},
+	{ id: '55', name: { first: 'Carlos', last: 'Sainz', display: 'last' }, team: teams['Ferrari'] },
+	{
+		id: '16',
+		name: { first: 'Charles', last: 'Leclerc', display: 'last' },
+		team: teams['Ferrari']
+	},
+	{ id: '4', name: { first: 'Lando', last: 'Norris', display: 'last' }, team: teams['McLaren'] },
+	{
+		id: '63',
+		name: { first: 'George', last: 'Russell', display: 'last' },
+		team: teams['Mercedes']
+	},
+	{ id: '81', name: { first: 'Oscar', last: 'Piastri', display: 'last' }, team: teams['McLaren'] },
+	{
+		id: '18',
+		name: { first: 'Lance', last: 'Stroll', display: 'last' },
+		team: teams['Aston Martin']
+	},
+	{ id: '10', name: { first: 'Pierre', last: 'Gasly', display: 'last' }, team: teams['Alpine'] },
+	{ id: '31', name: { first: 'Esteban', last: 'Ocon', display: 'last' }, team: teams['Alpine'] },
+	{
+		id: '23',
+		name: { first: 'Alexander', last: 'Albon', display: 'last' },
+		team: teams['Williams']
+	},
+	{
+		id: '27',
+		name: { first: 'Nico', last: 'Hulkenberg', display: 'last' },
+		team: teams['Haas F1 Team']
+	},
+	{
+		id: '77',
+		name: { first: 'Valtteri', last: 'Bottas', display: 'last' },
+		team: teams['Alfa Romeo']
+	},
+	{
+		id: '24',
+		name: { first: 'Zhou', last: 'Guanyu', display: 'first' },
+		team: teams['Alfa Romeo']
+	},
+	{
+		id: '22',
+		name: { first: 'Yuki', last: 'Tsunoda', display: 'last' },
+		team: teams['AlphaTauri']
+	},
+	{
+		id: '20',
+		name: { first: 'Kevin', last: 'Magnussen', display: 'last' },
+		team: teams['Haas F1 Team']
+	},
+	{ id: '40', name: { first: 'Liam', last: 'Lawson', display: 'last' }, team: teams['AlphaTauri'] },
+	{ id: '2', name: { first: 'Logan', last: 'Sargeant', display: 'last' }, team: teams['Williams'] },
+	{
+		id: '21',
+		name: { first: 'Nyck', last: 'De Vries', display: 'last' },
+		team: teams['AlphaTauri']
+	},
+	{
+		id: '3',
+		name: { first: 'Daniel', last: 'Ricciardo', display: 'last' },
+		team: teams['AlphaTauri']
+	}
 ];
 
 export type Message = { type: 'driver' | 'team'; message: string };
