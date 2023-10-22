@@ -44,7 +44,6 @@ export const GET: RequestHandler = async (event) => {
 
 	const result = render(RadioBox, { driver: driver, messages: messages });
 	const element = toReactNode(`${result.html}<style>${result.css.code}</style>`);
-	console.log(element);
 	const svg = await satori(element, {
 		width: 320,
 		fonts: [

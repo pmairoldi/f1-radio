@@ -119,6 +119,7 @@
 		{#if driver != null}
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} />
+
 			<img src={image} alt="" width="320" />
 		{/if}
 	</div>
