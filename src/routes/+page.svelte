@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { drivers, type Driver, type Messages } from '$lib/data';
-	import type { FormEventHandler } from 'svelte/elements';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
+	import type { FormEventHandler } from 'svelte/elements';
 
 	let output: HTMLElement | undefined;
 
 	let driver: Driver | null = drivers[0];
 	let messages: Messages = [
-		{ type: 'driver', message: "I've got no grip out here mate!" },
-		{ type: 'team', message: 'copy' }
+		{ type: 'driver', message: "You've given me a hell of a gap to close" },
+		{ type: 'team', message: 'copy, lewis. Just see what we can do' }
 	];
 
 	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
@@ -49,16 +49,22 @@
 		messages = messages;
 	}
 
+	let copying: boolean = false;
 	async function copy() {
 		if (output == null) {
 			return;
 		}
 
+		copying = true;
 		try {
-			const blob = await domtoimage.toBlob(output);
-			await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+			await navigator.clipboard.write([
+				new ClipboardItem({ 'image/png': domtoimage.toBlob(output) })
+			]);
+
+			copying = false;
 		} catch (error) {
 			console.error('oops, something went wrong!', error);
+			copying = false;
 		}
 	}
 </script>
@@ -126,9 +132,14 @@
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} bind:element={output} />
 
-			<button type="button" class="bg-red-700 text-white p-2 rounded-xl" on:click={() => copy()}
-				>Copy</button
+			<button
+				type="button"
+				class="bg-red-700 text-white p-2 rounded-xl"
+				on:click={() => copy()}
+				disabled={copying}
 			>
+				Copy
+			</button>
 		{/if}
 	</div>
 </main>

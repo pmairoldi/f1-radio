@@ -25,29 +25,35 @@
 			<img class="logo" src={team.logo} alt="" />
 			<span style="color: #ffffff;"> Radio </span>
 		</div>
+		<div class="audio-wave">
+			{#each wave as item}
+				<div
+					class="audio-wave-item"
+					style="height: {item *
+						100}%; background: {team.color}; box-shadow: 0px 0px 10px 2px {team.color};"
+				/>
+			{/each}
+		</div>
+		<hr class="separator" style="background: {team.color};" />
 	</div>
-	<div class="audio-wave">
-		{#each wave as item}
-			<div
-				class="audio-wave-item"
-				style="height: {item *
-					100}%; background: {team.color}; box-shadow: 0px 0px 10px 2px {team.color};"
-			/>
-		{/each}
-	</div>
-	<hr class="separator" style="background: {team.color};" />
 
 	<div class="messages">
 		{#each messages as message}
 			{#if message.type === 'team'}
-				<span class="team-message" style="color: #ffffff;">"{message.message}"</span>
+				<span class="team-message" style="color: #ffffff;">
+					"{@html message.message.split('.').join('.<br/>')}"
+				</span>
 			{/if}
 
 			{#if message.type === 'driver'}
-				<span class="driver-message" style="color: {team.color};">"{message.message}"</span>
+				<span class="driver-message" style="color: {team.color};">
+					"{@html message.message.split('.').join('.<br/>')}"
+				</span>
 			{/if}
 		{/each}
 	</div>
+
+	<!-- <footer class="text-white text-opacity-50 text-center w-full pb-2 text-sm">@f1-radio-meme</footer> -->
 </div>
 
 <style>
@@ -63,15 +69,15 @@
 	.header {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
-		padding: 12px 16px;
 		background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+		padding: 20px 0 12px 0;
 	}
 
 	.driver {
 		text-transform: uppercase;
 		font-style: italic;
-		font-size: 32px;
+		font-size: 36px;
+		padding: 0 20px;
 		line-height: 1;
 		display: flex;
 		justify-content: flex-end;
@@ -81,8 +87,9 @@
 	.radio {
 		text-transform: uppercase;
 		font-style: italic;
-		font-size: 32px;
+		font-size: 36px;
 		line-height: 1;
+		padding: 0 20px;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
@@ -95,15 +102,15 @@
 
 	.separator {
 		border: 0;
-		height: 4px;
+		height: 3px;
 		margin-top: 4px;
-		margin-bottom: 8px;
 	}
 
 	.audio-wave {
 		display: flex;
 		flex-direction: row;
 		align-items: flex-end;
+		justify-content: center;
 		gap: 4px;
 		height: 36px;
 	}
@@ -116,11 +123,12 @@
 	.messages {
 		display: flex;
 		flex-direction: column;
-		padding: 24px 16px;
+		padding: 24px 24px;
+		text-transform: uppercase;
 		font-size: 24px;
 		font-style: italic;
-		line-height: 1;
-		gap: 8px;
+		line-height: 1.2;
+		gap: 32px;
 		background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
 		border-top: 2px solid rgba(255, 255, 255, 0.2);
 	}
