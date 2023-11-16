@@ -4,7 +4,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				f1: ['Formula1 Display', 'system-ui', 'sans-serif']
+				f1: ['F1', 'system-ui', 'sans-serif']
 			}
 		}
 	},

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { drivers, type Driver, type Messages } from '$lib/data';
+	import { page } from '$app/stores';
+	import { drivers, type Driver, type Messages } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
 	import type { FormEventHandler } from 'svelte/elements';
@@ -7,6 +8,7 @@
 	let output: HTMLElement | undefined;
 
 	let driver: Driver | null = drivers[0];
+
 	let messages: Messages = [
 		{ type: 'driver', message: "You've given me a hell of a gap to close" },
 		{ type: 'team', message: 'copy, lewis. Just see what we can do' }
@@ -40,7 +42,14 @@
 	};
 
 	function addMessage() {
-		messages.push({ type: 'driver', message: '' });
+		const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+		if (lastMessage?.type === 'driver') {
+			messages.push({ type: 'team', message: '' });
+		} else if (lastMessage?.type === 'team') {
+			messages.push({ type: 'driver', message: '' });
+		} else {
+			messages.push({ type: 'driver', message: '' });
+		}
 		messages = messages;
 	}
 
@@ -57,8 +66,15 @@
 
 		copying = true;
 		try {
+			const { offsetWidth, offsetHeight } = output;
 			await navigator.clipboard.write([
-				new ClipboardItem({ 'image/png': domtoimage.toBlob(output) })
+				new ClipboardItem({
+					'image/png': domtoimage.toBlob(output, {
+						width: offsetWidth * 3,
+						height: offsetHeight * 3,
+						style: { zoom: 3 }
+					})
+				})
 			]);
 
 			copying = false;
@@ -66,6 +82,11 @@
 			console.error('oops, something went wrong!', error);
 			copying = false;
 		}
+	}
+
+	//TODO: make better
+	function init(el: HTMLElement) {
+		el.focus();
 	}
 </script>
 
@@ -86,7 +107,7 @@
 					name="driver"
 					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 				>
-					<option value={null} />
+					<option value="">&ndash;</option>
 					{#each drivers as driver}
 						<option value={driver.id}>
 							{#if driver.name.display === 'first'}
@@ -103,7 +124,11 @@
 				<span>Messages:</span>
 				{#each messages as message, i}
 					<div class="flex flex-row items-center gap-2">
-						<select value={message.type} name="messages">
+						<select
+							value={message.type}
+							name="messages"
+							class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+						>
 							<option value="driver">Driver</option>
 							<option value="team">Team</option>
 						</select>
@@ -113,6 +138,7 @@
 							value={message.message}
 							name="messages"
 							class="w-full flex-auto text-white bg-red-700 p-2 appearance-none rounded-xl"
+							use:init
 						/>
 						<button type="button" on:click={() => removeMessage(i)}>X</button>
 					</div>
@@ -143,3 +169,14 @@
 		{/if}
 	</div>
 </main>
+
+<style>
+	select {
+		padding-right: 28px;
+		background-image: linear-gradient(45deg, transparent 50%, white 50%),
+			linear-gradient(135deg, white 50%, transparent 50%);
+		background-position: calc(100% - 15px) calc(1em + 2px), calc(100% - 10px) calc(1em + 2px);
+		background-size: 5px 5px, 5px 5px;
+		background-repeat: no-repeat;
+	}
+</style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Driver, Messages } from '../data';
+	import type { Driver, Messages } from '../types';
 
 	export let driver: Driver;
 	export let messages: Messages;
@@ -58,8 +58,7 @@
 
 <style>
 	.message {
-		width: 100%;
-		max-width: 320px;
+		width: 320px;
 		display: flex;
 		flex-direction: column;
 		background-color: #16181c;
@@ -76,6 +75,7 @@
 	.driver {
 		text-transform: uppercase;
 		font-style: italic;
+		font-weight: 500;
 		font-size: 36px;
 		padding: 0 20px;
 		line-height: 1;
@@ -87,17 +87,18 @@
 	.radio {
 		text-transform: uppercase;
 		font-style: italic;
+		font-weight: 500;
 		font-size: 36px;
 		line-height: 1;
 		padding: 0 20px;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
-		gap: 8px;
+		gap: 4px;
 	}
 
 	.logo {
-		height: 30px;
+		height: 45px;
 	}
 
 	.separator {

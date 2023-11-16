@@ -39,6 +39,7 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.11",
+		"vite-imagetools": "^6.2.4",
 		"vite-plugin-mkcert": "^1.16.0",
 		"vitest": "^0.32.4"
 	}
