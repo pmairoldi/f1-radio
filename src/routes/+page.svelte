@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { drivers, type Driver, type Messages } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
@@ -7,7 +8,17 @@
 
 	let output: HTMLElement | undefined;
 
-	let driver: Driver | null = drivers[0];
+	$: console.log($page.url.searchParams.toString());
+
+	let driver: Driver | null;
+	$: {
+		const d = $page.url.searchParams.get('d');
+		if (d != null) {
+			driver = drivers.find((driver) => driver.id === d) ?? null;
+		} else {
+			driver = null;
+		}
+	}
 
 	let messages: Messages = [
 		{ type: 'driver', message: "You've given me a hell of a gap to close" },
@@ -20,11 +31,11 @@
 		const d = form.get('driver') as string | null;
 		const m = form.getAll('messages') as string[] | null;
 
-		if (d != null) {
-			driver = drivers.find((driver) => driver.id === d) ?? null;
-		} else {
-			driver = null;
-		}
+		// if (d != null) {
+		// 	driver = drivers.find((driver) => driver.id === d) ?? null;
+		// } else {
+		// 	driver = null;
+		// }
 
 		if (m != null) {
 			const newMessage: Messages = [];
@@ -39,6 +50,8 @@
 		} else {
 			messages = [];
 		}
+
+		setQuery(d, m);
 	};
 
 	function addMessage() {
@@ -87,6 +100,29 @@
 	//TODO: make better
 	function init(el: HTMLElement) {
 		el.focus();
+	}
+
+	function readQuery(): { driver: Driver | null; messages: Messages[] } {
+		return { driver: null, messages: [] };
+	}
+
+	function setQuery(d: string | null, m: string[] | null) {
+		const url = new URL($page.url);
+		const q = url.searchParams;
+
+		if (d != null) {
+			q.set('d', d);
+		} else {
+			q.delete('d');
+		}
+
+		if (m != null) {
+			q.set('m', JSON.stringify(m));
+		} else {
+			q.delete('m');
+		}
+
+		goto(url, { replaceState: true, keepFocus: true });
 	}
 </script>
 
