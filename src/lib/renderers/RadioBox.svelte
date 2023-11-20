@@ -9,11 +9,15 @@
 
 	export let element: HTMLElement | undefined;
 
-	const wave: number[] = [
-		0.1, 0.2, 0.2, 0.2, 0.4, 0.4, 0.3, 0.4, 0.3, 0.4, 0.5, 0.6, 0.6, 0.6, 0.5, 0.7, 0.8, 0.7, 0.8,
-		0.8, 0.6, 0.7, 0.8, 0.6, 0.4, 0.4, 0.5, 0.4, 0.3, 0.7, 0.5, 0.3, 0.2, 0.2, 0.1, 0.4, 0.3, 0.1,
-		0.2, 0.2, 0.3
+	const sine: number[] = [
+		0, 1, 2, 5, 8, 11, 16, 21, 26, 32, 38, 44, 50, 56, 62, 68, 74, 79, 84, 89, 92, 95, 98, 99, 100,
+		100, 99, 98, 95, 92, 89, 84, 79, 74, 68, 62, 56, 50, 44, 38, 32, 26, 21, 16, 11, 8, 5, 2, 1, 0
 	];
+	const wave = sine.map((v) => {
+		const rand = Math.random();
+		const noise = (rand - 0.5) * 40;
+		return v + noise;
+	});
 </script>
 
 <div class="message" bind:this={element} style="--team-color: {team.color};">
@@ -29,7 +33,7 @@
 			{#each wave as item}
 				<div
 					class="audio-wave-item"
-					style="--wave-height: {item * 100}%; --wave-intensity: {item * 25}%;"
+					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
 				/>
 			{/each}
 		</div>

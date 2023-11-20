@@ -1,24 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { drivers, type Driver, type Messages } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
 	import type { FormEventHandler } from 'svelte/elements';
+	import type { PageData } from './$types';
+	import { drivers, type Messages } from '$lib';
+
+	export let data: PageData;
+	// $: console.log($page.data);
+
+	$: ({ driver } = data);
+	$: console.log(data);
 
 	let output: HTMLElement | undefined;
-
-	$: console.log($page.url.searchParams.toString());
-
-	let driver: Driver | null;
-	$: {
-		const d = $page.url.searchParams.get('d');
-		if (d != null) {
-			driver = drivers.find((driver) => driver.id === d) ?? null;
-		} else {
-			driver = null;
-		}
-	}
 
 	let messages: Messages = [
 		{ type: 'driver', message: "You've given me a hell of a gap to close" },
@@ -27,30 +22,24 @@
 
 	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
-
 		const d = form.get('driver') as string | null;
 		const m = form.getAll('messages') as string[] | null;
-
 		// if (d != null) {
 		// 	driver = drivers.find((driver) => driver.id === d) ?? null;
 		// } else {
 		// 	driver = null;
 		// }
-
 		if (m != null) {
 			const newMessage: Messages = [];
 			for (let i = 0; i < m.length; i += 2) {
 				const type = m[i] as 'driver' | 'team';
 				const message = m[i + 1];
-
 				newMessage.push({ type: type, message: message });
 			}
-
 			messages = newMessage;
 		} else {
 			messages = [];
 		}
-
 		setQuery(d, m);
 	};
 
@@ -102,10 +91,6 @@
 		el.focus();
 	}
 
-	function readQuery(): { driver: Driver | null; messages: Messages[] } {
-		return { driver: null, messages: [] };
-	}
-
 	function setQuery(d: string | null, m: string[] | null) {
 		const url = new URL($page.url);
 		const q = url.searchParams;
@@ -138,13 +123,14 @@
 		<form on:input={formChange} autocomplete="off" class="flex flex-col gap-4 w-full">
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
+				{data.driver?.id}
 				<select
 					value={driver?.id ?? ''}
 					name="driver"
 					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 				>
 					<option value="">&ndash;</option>
-					{#each drivers as driver}
+					{#each drivers as driver (driver.id)}
 						<option value={driver.id}>
 							{#if driver.name.display === 'first'}
 								{driver.name.first}
@@ -190,6 +176,7 @@
 			</button>
 		</form>
 
+		{driver}
 		{#if driver != null}
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} bind:element={output} />
