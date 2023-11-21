@@ -4,7 +4,6 @@
 	import { drivers, type Message } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
-	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
 
@@ -82,29 +81,6 @@
 		}
 	}
 
-	let sharing: boolean = false;
-	async function share() {
-		if (output == null) {
-			return;
-		}
-
-		sharing = true;
-		try {
-			const { offsetWidth, offsetHeight } = output;
-			const blob = await domtoimage.toBlob(output, {
-				width: offsetWidth * 3,
-				height: offsetHeight * 3,
-				style: { zoom: 3 }
-			});
-			const file = new File([blob], 'F1RadioMeme.png', { type: 'image/png' });
-			await navigator.share({ files: [file] });
-			sharing = false;
-		} catch (error) {
-			console.error('oops, something went wrong!', error);
-			sharing = false;
-		}
-	}
-
 	//TODO: make better
 	function init(el: HTMLElement) {
 		el.focus();
@@ -136,16 +112,6 @@
 
 		goto(url, { replaceState: true, keepFocus: true });
 	}
-
-	let canShare: boolean;
-	onMount(() => {
-		if (navigator.canShare != null) {
-			const file = new File([], 'F1RadioMeme.png', { type: 'image/png' });
-			canShare = navigator.canShare({ files: [file] });
-		} else {
-			canShare = false;
-		}
-	});
 </script>
 
 <header class="p-4 text-white bg-red-700">
@@ -221,25 +187,40 @@
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} bind:element={output} />
 
-			{#if canShare}
-				<button
-					type="button"
-					class="bg-red-700 text-white p-2 rounded-xl"
-					on:click={() => share()}
-					disabled={sharing}
-				>
-					Share
-				</button>
-			{:else}
-				<button
-					type="button"
-					class="bg-red-700 text-white p-2 rounded-xl"
-					on:click={() => copy()}
-					disabled={copying}
-				>
+			<button
+				type="button"
+				class="bg-red-700 text-white p-2 rounded-xl flex items-center gap-1 disabled:opacity-70"
+				on:click={() => copy()}
+				disabled={copying}
+			>
+				{#if copying}
+					<svg
+						class="animate-spin h-4 w-4 text-white"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
+						<circle
+							class="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							stroke-width="4"
+						/>
+						<path
+							class="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+						/>
+					</svg>
+				{/if}
+				{#if copying}
+					Copying
+				{:else}
 					Copy
-				</button>
-			{/if}
+				{/if}
+			</button>
 		{/if}
 	</div>
 </main>
