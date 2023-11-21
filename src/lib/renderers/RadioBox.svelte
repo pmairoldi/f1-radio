@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Driver, Messages } from '../types';
+	import type { Driver, Message } from '../types';
 
 	export let driver: Driver;
-	export let messages: Messages;
+	export let messages: Message[];
 
 	$: name = driver.name.display === 'first' ? driver.name.first : driver.name.last;
 	$: team = driver.team;

@@ -1,46 +1,40 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { drivers, type Message } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
-	import { drivers, type Messages } from '$lib';
 
 	export let data: PageData;
-	// $: console.log($page.data);
 
 	$: ({ driver } = data);
-	$: console.log(data);
+	$: ({ messages } = data);
 
 	let output: HTMLElement | undefined;
 
-	let messages: Messages = [
-		{ type: 'driver', message: "You've given me a hell of a gap to close" },
-		{ type: 'team', message: 'copy, lewis. Just see what we can do' }
-	];
-
-	const formChange: FormEventHandler<HTMLFormElement> = (event) => {
+	const onFormChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
 		const d = form.get('driver') as string | null;
 		const m = form.getAll('messages') as string[] | null;
-		// if (d != null) {
-		// 	driver = drivers.find((driver) => driver.id === d) ?? null;
-		// } else {
-		// 	driver = null;
-		// }
+
+		const update: Partial<{ driver: string | null; messages: Message[] }> = {};
+		update.driver = d;
+
 		if (m != null) {
-			const newMessage: Messages = [];
+			const newMessage: Message[] = [];
 			for (let i = 0; i < m.length; i += 2) {
 				const type = m[i] as 'driver' | 'team';
 				const message = m[i + 1];
 				newMessage.push({ type: type, message: message });
 			}
-			messages = newMessage;
+			update.messages = newMessage;
 		} else {
-			messages = [];
+			update.messages = [];
 		}
-		setQuery(d, m);
+
+		setQuery(update);
 	};
 
 	function addMessage() {
@@ -52,12 +46,13 @@
 		} else {
 			messages.push({ type: 'driver', message: '' });
 		}
-		messages = messages;
+
+		setQuery({ messages });
 	}
 
 	function removeMessage(index: number) {
 		messages.splice(index, 1);
-		messages = messages;
+		setQuery({ messages });
 	}
 
 	let copying: boolean = false;
@@ -86,25 +81,44 @@
 		}
 	}
 
+	let sharing: boolean = false;
+	async function share() {
+		try {
+			await navigator.share({ title: 'F1RadioMeme', url: $page.url.toString() });
+			sharing = false;
+		} catch (error) {
+			console.error('oops, something went wrong!', error);
+			sharing = false;
+		}
+	}
+
 	//TODO: make better
 	function init(el: HTMLElement) {
 		el.focus();
 	}
 
-	function setQuery(d: string | null, m: string[] | null) {
+	function setQuery(update: Partial<{ driver: string | null; messages: Message[] }>) {
 		const url = new URL($page.url);
-		const q = url.searchParams;
+		const { searchParams } = url;
+		const { driver, messages } = update;
 
-		if (d != null) {
-			q.set('d', d);
-		} else {
-			q.delete('d');
+		if (driver !== undefined) {
+			if (driver != null) {
+				searchParams.set('d', driver);
+			} else {
+				searchParams.delete('d');
+			}
 		}
 
-		if (m != null) {
-			q.set('m', JSON.stringify(m));
-		} else {
-			q.delete('m');
+		if (messages !== undefined) {
+			if (messages.length > 0) {
+				searchParams.delete('m');
+				messages.forEach((m) => {
+					searchParams.append('m', `${m.type}:${m.message}`);
+				});
+			} else {
+				searchParams.delete('m');
+			}
 		}
 
 		goto(url, { replaceState: true, keepFocus: true });
@@ -120,22 +134,26 @@
 		<h2 class="w-full text-lg">
 			Generate funny f1 radio meme and copy the image to post to your favorite website!
 		</h2>
-		<form on:input={formChange} autocomplete="off" class="flex flex-col gap-4 w-full">
+		<form
+			on:input={onFormChange}
+			on:submit|preventDefault
+			autocomplete="off"
+			class="flex flex-col gap-4 w-full"
+		>
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
-				{data.driver?.id}
 				<select
 					value={driver?.id ?? ''}
 					name="driver"
 					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 				>
 					<option value="">&ndash;</option>
-					{#each drivers as driver (driver.id)}
-						<option value={driver.id}>
-							{#if driver.name.display === 'first'}
-								{driver.name.first}
+					{#each drivers as d (d.id)}
+						<option value={d.id} selected={driver?.id === d.id}>
+							{#if d.name.display === 'first'}
+								{d.name.first}
 							{:else}
-								{driver.name.last}
+								{d.name.last}
 							{/if}
 						</option>
 					{/each}
@@ -151,8 +169,8 @@
 							name="messages"
 							class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 						>
-							<option value="driver">Driver</option>
-							<option value="team">Team</option>
+							<option value="driver" selected={message.type === 'driver'}>Driver</option>
+							<option value="team" selected={message.type === 'team'}>Team</option>
 						</select>
 						<span>:</span>
 						<input
@@ -176,19 +194,29 @@
 			</button>
 		</form>
 
-		{driver}
 		{#if driver != null}
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} bind:element={output} />
 
-			<button
-				type="button"
-				class="bg-red-700 text-white p-2 rounded-xl"
-				on:click={() => copy()}
-				disabled={copying}
-			>
-				Copy
-			</button>
+			<div class="grid grid-cols-2 gap-4">
+				<button
+					type="button"
+					class="bg-red-700 text-white p-2 rounded-xl"
+					on:click={() => copy()}
+					disabled={copying}
+				>
+					Copy
+				</button>
+
+				<button
+					type="button"
+					class="bg-red-700 text-white p-2 rounded-xl"
+					on:click={() => share()}
+					disabled={sharing}
+				>
+					Share
+				</button>
+			</div>
 		{/if}
 	</div>
 </main>

@@ -13,4 +13,3 @@ export type Driver = {
 };
 
 export type Message = { type: 'driver' | 'team'; message: string };
-export type Messages = Message[];
