@@ -4,6 +4,7 @@
 	import { drivers, type Message } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
+	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
 
@@ -83,8 +84,20 @@
 
 	let sharing: boolean = false;
 	async function share() {
+		if (output == null) {
+			return;
+		}
+
+		sharing = true;
 		try {
-			await navigator.share({ title: 'F1RadioMeme', url: $page.url.toString() });
+			const { offsetWidth, offsetHeight } = output;
+			const blob = await domtoimage.toBlob(output, {
+				width: offsetWidth * 3,
+				height: offsetHeight * 3,
+				style: { zoom: 3 }
+			});
+			const file = new File([blob], 'F1RadioMeme.png', { type: 'image/png' });
+			await navigator.share({ files: [file] });
 			sharing = false;
 		} catch (error) {
 			console.error('oops, something went wrong!', error);
@@ -123,6 +136,16 @@
 
 		goto(url, { replaceState: true, keepFocus: true });
 	}
+
+	let canShare: boolean;
+	onMount(() => {
+		if (navigator.canShare != null) {
+			const file = new File([], 'F1RadioMeme.png', { type: 'image/png' });
+			canShare = navigator.canShare({ files: [file] });
+		} else {
+			canShare = false;
+		}
+	});
 </script>
 
 <header class="p-4 text-white bg-red-700">
@@ -198,16 +221,7 @@
 			<hr class="w-full" />
 			<RadioBox {driver} {messages} bind:element={output} />
 
-			<div class="grid grid-cols-2 gap-4">
-				<button
-					type="button"
-					class="bg-red-700 text-white p-2 rounded-xl"
-					on:click={() => copy()}
-					disabled={copying}
-				>
-					Copy
-				</button>
-
+			{#if canShare}
 				<button
 					type="button"
 					class="bg-red-700 text-white p-2 rounded-xl"
@@ -216,7 +230,16 @@
 				>
 					Share
 				</button>
-			</div>
+			{:else}
+				<button
+					type="button"
+					class="bg-red-700 text-white p-2 rounded-xl"
+					on:click={() => copy()}
+					disabled={copying}
+				>
+					Copy
+				</button>
+			{/if}
 		{/if}
 	</div>
 </main>
