@@ -121,7 +121,7 @@
 <main class="p-4 font-f1">
 	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
 		<h2 class="w-full text-lg">
-			Generate funny f1 radio meme and copy the image to post to your favorite website!
+			Generate funny f1 radio memes and copy the image to post to your favorite website!
 		</h2>
 		<form
 			on:input={onFormChange}
