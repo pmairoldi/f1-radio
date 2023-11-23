@@ -1,35 +1,40 @@
 @font-face {
-	font-family: 'Formula1 Display-Wide';
-	src: url('Formula1-Display-Wide.woff2') format('woff2'),
-		url('Formula1-Display-Wide.woff') format('woff');
-	font-weight: 500;
+	font-family: F1;
+	font-display: auto;
+	src: url(Formula1-Regular.woff2) format('woff2'), url(Formula1-Regular.woff) format('woff');
+	font-weight: 400;
 	font-style: normal;
-	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Formula1 Display';
-	src: url('Formula1-Display-Bold.woff2') format('woff2'),
-		url('Formula1-Display-Bold.woff') format('woff');
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
+	font-family: F1;
+	font-display: auto;
+	src: url(Formula1-Italic.woff2) format('woff2'), url(Formula1-Italic.woff) format('woff');
+	font-weight: 400;
+	font-style: italic;
 }
 
 @font-face {
-	font-family: 'Formula1 Display';
-	src: url('Formula1-Display-Regular.woff2') format('woff2'),
-		url('Formula1-Display-Regular.woff') format('woff');
-	font-weight: normal;
+	font-family: F1;
+	font-display: auto;
+	src: url(Formula1-Bold.woff2) format('woff2'), url(Formula1-Bold.woff) format('woff');
+	font-weight: 700;
 	font-style: normal;
-	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Formula1 Display';
-	src: url('Formula1-Display-Black.woff2') format('woff2'),
-		url('Formula1-Display-Black.woff') format('woff');
+	font-family: F1;
+	font-display: auto;
+	src: url(Formula1-Black.woff2) format('woff2'), url(Formula1-Black.woff) format('woff');
 	font-weight: 900;
 	font-style: normal;
-	font-display: swap;
+}
+
+@font-face {
+	font-family: F1Wide;
+	font-display: auto;
+	src: url(Formula1-Wide.woff2) format('woff2'), url(Formula1-Wide.woff) format('woff');
+	font-weight: 400;
+	font-style: normal;
+	font-stretch: expanded;
 }
