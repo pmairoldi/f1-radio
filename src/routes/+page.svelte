@@ -4,6 +4,7 @@
 	import { drivers, type Message } from '$lib';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
+	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
 
@@ -81,9 +82,15 @@
 		}
 	}
 
-	//TODO: make better
+	let mounted = false;
+	onMount(() => {
+		mounted = true;
+	});
+
 	function init(el: HTMLElement) {
-		el.focus();
+		if (mounted) {
+			el.focus();
+		}
 	}
 
 	function setQuery(update: Partial<{ driver: string | null; messages: Message[] }>) {
@@ -140,9 +147,9 @@
 					{#each drivers as d (d.id)}
 						<option value={d.id} selected={driver?.id === d.id}>
 							{#if d.name.display === 'first'}
-								{d.name.first}
+								{d.name.last} {d.name.first}
 							{:else}
-								{d.name.last}
+								{d.name.first} {d.name.last}
 							{/if}
 						</option>
 					{/each}
@@ -162,14 +169,18 @@
 							<option value="team" selected={message.type === 'team'}>Team</option>
 						</select>
 						<span>:</span>
-						<input
-							type="text"
-							value={message.message}
-							name="messages"
-							class="w-full flex-auto text-white bg-red-700 p-2 appearance-none rounded-xl"
-							use:init
-						/>
-						<button type="button" on:click={() => removeMessage(i)}>X</button>
+						<div class="flex-auto flex items-center text-white bg-red-700 rounded-xl overflow-clip">
+							<input
+								type="text"
+								value={message.message}
+								name="messages"
+								class="w-full p-2 bg-inherit appearance-none"
+								use:init
+							/>
+							{#if i !== 0}
+								<button class="p-2" type="button" on:click={() => removeMessage(i)}>X</button>
+							{/if}
+						</div>
 					</div>
 				{/each}
 			</div>

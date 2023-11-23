@@ -74,6 +74,7 @@
 		background-color: var(--background-color);
 		overflow: clip;
 		color: var(--team-color);
+		font-variant-ligatures: none;
 	}
 
 	.header {
@@ -97,16 +98,21 @@
 		text-transform: uppercase;
 		font-weight: 700;
 		transform: skewX(-10deg);
-		font-size: 36px;
 		line-height: 1;
 	}
 
+	.driver span {
+		font-size: 34px;
+	}
+
 	.radio span {
+		font-size: 36px;
 		color: var(--light-text-color);
 	}
 
 	.logo {
-		height: 45px;
+		max-height: 36px;
+		max-width: 64px;
 	}
 
 	.separator {
@@ -121,7 +127,8 @@
 		align-items: stretch;
 		justify-content: center;
 		gap: 4px;
-		height: 36px;
+		height: 32px;
+		padding-top: 4px;
 	}
 
 	.audio-wave-item {

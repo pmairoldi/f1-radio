@@ -4,7 +4,6 @@
 	src: url(Formula1-Regular.woff2) format('woff2'), url(Formula1-Regular.woff) format('woff');
 	font-weight: 400;
 	font-style: normal;
-	font-display: swap;
 }
 
 @font-face {
@@ -13,7 +12,6 @@
 	src: url(Formula1-Italic.woff2) format('woff2'), url(Formula1-Italic.woff) format('woff');
 	font-weight: 400;
 	font-style: italic;
-	font-display: swap;
 }
 
 @font-face {
@@ -22,7 +20,6 @@
 	src: url(Formula1-Bold.woff2) format('woff2'), url(Formula1-Bold.woff) format('woff');
 	font-weight: 700;
 	font-style: normal;
-	font-display: swap;
 }
 
 @font-face {
@@ -31,7 +28,6 @@
 	src: url(Formula1-Black.woff2) format('woff2'), url(Formula1-Black.woff) format('woff');
 	font-weight: 900;
 	font-style: normal;
-	font-display: swap;
 }
 
 @font-face {
@@ -41,5 +37,4 @@
 	font-weight: 400;
 	font-style: normal;
 	font-stretch: expanded;
-	font-display: swap;
 }
