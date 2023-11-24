@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { drivers, type Message } from '$lib';
-	import OG from '$lib/assets/OG.png';
 	import X from '$lib/assets/X.svg';
 	import SEO from '$lib/components/SEO.svelte';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
@@ -10,6 +9,7 @@
 	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
+	import { assets } from '$app/paths';
 
 	export let data: PageData;
 
@@ -128,7 +128,7 @@
 	title="F1 Radio Meme"
 	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
 	url="https://f1radiomeme.com"
-	imageUrl={OG}
+	imageUrl="{assets}/OG.png"
 />
 
 <header class="p-4 text-white bg-red-700">
