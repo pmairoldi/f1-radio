@@ -16,6 +16,7 @@
 		"test:unit": "vitest"
 	},
 	"dependencies": {
+		"@vercel/analytics": "^1.1.1",
 		"dom-to-image": "^2.6.0",
 		"tailwind-merge": "^1.14.0"
 	},
