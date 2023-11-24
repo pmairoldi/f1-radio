@@ -66,13 +66,20 @@
 
 		copying = true;
 		try {
+			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
+
 			await navigator.clipboard.write([
 				new ClipboardItem({
 					'image/png': domtoimage.toBlob(output, {
-						width: offsetWidth * 3,
-						height: offsetHeight * 3,
-						style: { zoom: 3 }
+						height: offsetHeight * scale,
+						width: offsetWidth * scale,
+						style: {
+							transform: `scale(${scale})`,
+							transformOrigin: 'top left',
+							width: `${offsetWidth}px`,
+							height: `${offsetHeight}px`
+						}
 					})
 				})
 			]);
@@ -130,8 +137,14 @@
 	imageUrl="https://f1radiomeme.com/OG.png"
 />
 
-<header class="p-4 text-white bg-red-700">
-	<div class="max-w-2xl mx-auto flex items-center">
+<svelte:head>
+	<meta name="color-scheme" content="light dark" />
+	<meta name="theme-color" content="rgb(185 28 28)" media="(prefers-color-scheme: light)" />
+	<meta name="theme-color" content="rgb(185 28 28)" media="(prefers-color-scheme: dark)" />
+</svelte:head>
+
+<header class="p-4 text-white bg-red-700 sticky top-0 flex-none">
+  <div class="max-w-2xl mx-auto flex items-center">
 		<h1 class="text-3xl font-f1 flex-auto">F1 Radio Meme</h1>
 		<a href="https://x.com/F1RadioMeme" class="flex-none" title="Follow us on X" target="_blank">
 			<img src={X} height="26" width="26" alt="" aria-hidden="true" />
@@ -139,7 +152,7 @@
 	</div>
 </header>
 
-<main class="p-4 font-f1">
+<main class="p-4 font-f1 flex-auto text-black dark:text-white bg-white dark:bg-black">
 	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
 		<h2 class="w-full text-lg flex items-center">
 			Generate funny f1 radio memes and copy the image to post to your favorite website!
@@ -209,8 +222,10 @@
 		</form>
 
 		{#if driver != null}
-			<hr class="w-full" />
-			<RadioBox {driver} {messages} bind:element={output} />
+			<hr class="w-full border-gray-300 dark:border-gray-700" />
+			<div class="border border-red-300 dark:border-gray-700">
+				<RadioBox {driver} {messages} bind:element={output} />
+			</div>
 
 			<button
 				type="button"
