@@ -128,7 +128,7 @@
 	title="F1 Radio Meme"
 	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
 	url="https://f1radiomeme.com"
-	imageUrl="{assets}/OG.png"
+	imageUrl="https://f1radiomeme.com/OG.png"
 />
 
 <header class="p-4 text-white bg-red-700">
