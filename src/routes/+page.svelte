@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { drivers, type Message } from '$lib';
 	import X from '$lib/assets/X.svg';
+	import SEO from '$lib/components/SEO.svelte';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
 	import { onMount } from 'svelte';
@@ -129,6 +130,13 @@
 	}
 </script>
 
+<SEO
+	title="F1 Radio Meme"
+	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
+	url="https://f1radiomeme.com"
+	imageUrl="https://f1radiomeme.com/OG.png"
+/>
+
 <svelte:head>
 	<meta name="color-scheme" content="light dark" />
 	<meta name="theme-color" content="rgb(185 28 28)" media="(prefers-color-scheme: light)" />
@@ -136,7 +144,7 @@
 </svelte:head>
 
 <header class="p-4 text-white bg-red-700 sticky top-0 flex-none">
-	<div class="max-w-2xl mx-auto flex items-center">
+  <div class="max-w-2xl mx-auto flex items-center">
 		<h1 class="text-3xl font-f1 flex-auto">F1 Radio Meme</h1>
 		<a href="https://x.com/F1RadioMeme" class="flex-none" title="Follow us on X" target="_blank">
 			<img src={X} height="26" width="26" alt="" aria-hidden="true" />
