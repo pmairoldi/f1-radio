@@ -60,7 +60,7 @@
 </div>
 
 <style>
-	:root {
+	.message {
 		--background-color: #16181c; /* change to dotted bg */
 		--light-text-color: #ffffff;
 		--gradient-background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0, transparent 80px);
