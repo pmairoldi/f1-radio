@@ -9,7 +9,6 @@
 	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
-	import { assets } from '$app/paths';
 
 	export let data: PageData;
 
