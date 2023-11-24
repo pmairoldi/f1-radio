@@ -65,13 +65,20 @@
 
 		copying = true;
 		try {
+			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
+
 			await navigator.clipboard.write([
 				new ClipboardItem({
 					'image/png': domtoimage.toBlob(output, {
-						width: offsetWidth * 3,
-						height: offsetHeight * 3,
-						style: { zoom: 3 }
+						height: offsetHeight * scale,
+						width: offsetWidth * scale,
+						style: {
+							transform: `scale(${scale})`,
+							transformOrigin: 'top left',
+							width: `${offsetWidth}px`,
+							height: `${offsetHeight}px`
+						}
 					})
 				})
 			]);
