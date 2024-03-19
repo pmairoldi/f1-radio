@@ -4,8 +4,10 @@ import alpine_logo from '$lib/assets/alpine-logo.png';
 import aston_martin_logo from '$lib/assets/aston-martin-logo.png';
 import ferrari_logo from '$lib/assets/ferrari-logo.png';
 import haas_logo from '$lib/assets/haas-logo.png';
+import kick_logo from '$lib/assets/kick-logo.png';
 import mclaren_logo from '$lib/assets/mclaren-logo.png';
 import mercedes_logo from '$lib/assets/mercedes-logo.png';
+import rb_logo from '$lib/assets/rb-logo.png';
 import red_bull_racing_logo from '$lib/assets/red-bull-racing-logo.png';
 import williams_logo from '$lib/assets/williams-logo.png';
 import type { Driver, Team } from './types';
@@ -20,7 +22,9 @@ const teamNames = [
 	'Williams',
 	'Haas F1 Team',
 	'Alfa Romeo',
-	'AlphaTauri'
+	'AlphaTauri',
+	'RB',
+	'Kick'
 ] as const;
 
 const teams: Record<(typeof teamNames)[number], Team> = {
@@ -37,7 +41,9 @@ const teams: Record<(typeof teamNames)[number], Team> = {
 	Williams: { name: 'Williams', color: '#37bedd', logo: williams_logo },
 	'Haas F1 Team': { name: 'Haas F1 Team', color: '#b6babd', logo: haas_logo },
 	'Alfa Romeo': { name: 'Alfa Romeo', color: '#b12039', logo: alfa_romeo_logo },
-	AlphaTauri: { name: 'AlphaTauri', color: '#4e7c9b', logo: alphatauri_logo }
+	AlphaTauri: { name: 'AlphaTauri', color: '#4e7c9b', logo: alphatauri_logo },
+	RB: { name: 'RB', color: '#6692FF', logo: rb_logo },
+	Kick: { name: 'Kick', color: '#52e252', logo: kick_logo }
 };
 
 export const drivers: Driver[] = [
@@ -89,7 +95,7 @@ export const drivers: Driver[] = [
 	{
 		id: '3',
 		name: { first: 'Daniel', last: 'Ricciardo', display: 'last' },
-		team: teams['AlphaTauri']
+		team: teams['RB']
 	},
 	{
 		id: '27',
@@ -99,17 +105,17 @@ export const drivers: Driver[] = [
 	{
 		id: '77',
 		name: { first: 'Valtteri', last: 'Bottas', display: 'last' },
-		team: teams['Alfa Romeo']
+		team: teams['Kick']
 	},
 	{
 		id: '24',
 		name: { first: 'Zhou', last: 'Guanyu', display: 'first' },
-		team: teams['Alfa Romeo']
+		team: teams['Kick']
 	},
 	{
 		id: '22',
 		name: { first: 'Yuki', last: 'Tsunoda', display: 'last' },
-		team: teams['AlphaTauri']
+		team: teams['RB']
 	},
 	{
 		id: '20',
