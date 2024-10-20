@@ -183,7 +183,7 @@ export const drivers: Driver[] = [
 	},
 	{
 		id: '43',
-		name: { first: 'Franco', last: 'Colapinto', display: 'first' },
+		name: { first: 'Franco', last: 'Colapinto', display: 'last' },
 		team: teams['Williams']
 	},
 	{
