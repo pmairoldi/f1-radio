@@ -130,7 +130,7 @@
 			}
 		}
 
-		goto(url, { replaceState: true, keepFocus: true });
+		goto(url, { replaceState: true, keepFocus: true, invalidateAll: true });
 	}
 </script>
 
