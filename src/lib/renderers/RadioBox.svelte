@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { Driver, Message } from '../types';
 
-	export let driver: Driver;
-	export let messages: Message[];
+	interface Props {
+		driver: Driver;
+		messages: Message[];
+		element: HTMLElement | undefined;
+	}
 
-	$: name = driver.name.display === 'first' ? driver.name.first : driver.name.last;
-	$: team = driver.team;
-
-	export let element: HTMLElement | undefined;
+	let { driver, messages, element = $bindable() }: Props = $props();
 
 	const sine: number[] = [
 		0, 1, 2, 5, 8, 11, 16, 21, 26, 32, 38, 44, 50, 56, 62, 68, 74, 79, 84, 89, 92, 95, 98, 99, 100,
@@ -18,6 +18,8 @@
 		const noise = (rand - 0.5) * 40;
 		return v + noise;
 	});
+	let name = $derived(driver.name.display === 'first' ? driver.name.first : driver.name.last);
+	let team = $derived(driver.team);
 </script>
 
 <div class="message" bind:this={element} style="--team-color: {team.color};">
@@ -34,7 +36,7 @@
 				<div
 					class="audio-wave-item"
 					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
-				/>
+				></div>
 			{/each}
 		</div>
 		<hr class="separator" />

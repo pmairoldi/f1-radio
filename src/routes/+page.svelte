@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { drivers, type Message } from '$lib';
 	import X from '$lib/assets/X.svg';
 	import SEO from '$lib/components/SEO.svelte';
@@ -10,12 +10,16 @@
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	$: ({ driver } = data);
-	$: ({ messages } = data);
+	let { data }: Props = $props();
 
-	let output: HTMLElement | undefined;
+	let { driver } = $derived(data);
+	let { messages } = $derived(data);
+
+	let output: HTMLElement | undefined = $state();
 
 	const onFormChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
@@ -58,7 +62,7 @@
 		setQuery({ messages });
 	}
 
-	let copying: boolean = false;
+	let copying: boolean = $state(false);
 	async function copy() {
 		if (output == null) {
 			return;
@@ -103,7 +107,7 @@
 	}
 
 	function setQuery(update: Partial<{ driver: string | null; messages: Message[] }>) {
-		const url = new URL($page.url);
+		const url = new URL(page.url);
 		const { searchParams } = url;
 		const { driver, messages } = update;
 
@@ -144,22 +148,27 @@
 </svelte:head>
 
 <header class="p-4 text-white bg-red-700 sticky top-0 flex-none">
-  <div class="max-w-2xl mx-auto flex items-center">
+	<div class="max-w-2xl mx-auto flex items-center">
 		<h1 class="text-3xl font-f1 flex-auto">F1 Radio Meme</h1>
-		<a href="https://x.com/F1RadioMeme" class="flex-none" title="Follow us on X" target="_blank">
-			<img src={X} height="26" width="26" alt="" aria-hidden="true" />
+		<a
+			href="https://buymeacoffee.com/pmairoldi"
+			class="flex-none flex gap-2 bg-white border border-white text-red-700 px-2 py-1 rounded-lg hover:bg-red-700 hover:text-white transition-colors"
+			title="Buy me a coffee"
+			target="_blank"
+		>
+			Donate
 		</a>
 	</div>
 </header>
 
-<main class="p-4 font-f1 flex-auto text-black dark:text-white bg-white dark:bg-black">
+<main class="p-4 font-f1 flex-auto">
 	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
 		<h2 class="w-full text-lg flex items-center">
 			Generate funny f1 radio memes and copy the image to post to your favorite website!
 		</h2>
 		<form
-			on:input={onFormChange}
-			on:submit|preventDefault
+			oninput={onFormChange}
+			onsubmit={(event) => event.preventDefault()}
 			autocomplete="off"
 			class="flex flex-col gap-4 w-full"
 		>
@@ -205,7 +214,7 @@
 								use:init
 							/>
 							{#if i !== 0}
-								<button class="p-2" type="button" on:click={() => removeMessage(i)}>X</button>
+								<button class="p-2" type="button" onclick={() => removeMessage(i)}>X</button>
 							{/if}
 						</div>
 					</div>
@@ -214,7 +223,7 @@
 
 			<button
 				type="button"
-				on:click={() => addMessage()}
+				onclick={() => addMessage()}
 				class="bg-red-700 text-white p-2 rounded-xl"
 			>
 				Add Message
@@ -230,7 +239,7 @@
 			<button
 				type="button"
 				class="bg-red-700 text-white p-2 rounded-xl flex items-center gap-1 disabled:opacity-70"
-				on:click={() => copy()}
+				onclick={() => copy()}
 				disabled={copying}
 			>
 				{#if copying}
@@ -265,13 +274,29 @@
 	</div>
 </main>
 
+<footer class="max-w-2xl mx-auto p-6">
+	<a
+		href="https://x.com/F1RadioMeme"
+		class="flex-none flex gap-2"
+		title="Follow us on X"
+		target="_blank"
+	>
+		<img src={X} height="16" width="16" alt="" aria-hidden="true" />
+		Follow Us
+	</a>
+</footer>
+
 <style>
 	select {
 		padding-right: 28px;
 		background-image: linear-gradient(45deg, transparent 50%, white 50%),
 			linear-gradient(135deg, white 50%, transparent 50%);
-		background-position: calc(100% - 15px) calc(1em + 2px), calc(100% - 10px) calc(1em + 2px);
-		background-size: 5px 5px, 5px 5px;
+		background-position:
+			calc(100% - 15px) calc(1em + 2px),
+			calc(100% - 10px) calc(1em + 2px);
+		background-size:
+			5px 5px,
+			5px 5px;
 		background-repeat: no-repeat;
 	}
 </style>
