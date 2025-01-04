@@ -2,7 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { drivers, type Message } from '$lib';
-	import X from '$lib/assets/X.svg';
+	import XDark from '$lib/assets/X-dark.svg';
+	import XLight from '$lib/assets/X-light.svg';
 	import SEO from '$lib/components/SEO.svelte';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import domtoimage from 'dom-to-image';
@@ -137,6 +138,7 @@
 <SEO
 	title="F1 Radio Meme"
 	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
+	name="F1RadioMeme"
 	url="https://f1radiomeme.com"
 	imageUrl="https://f1radiomeme.com/OG.png"
 />
@@ -200,6 +202,7 @@
 							value={message.type}
 							name="messages"
 							class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+							aria-label="Pick to enter drive or team message"
 						>
 							<option value="driver" selected={message.type === 'driver'}>Driver</option>
 							<option value="team" selected={message.type === 'team'}>Team</option>
@@ -211,6 +214,7 @@
 								value={message.message}
 								name="messages"
 								class="w-full p-2 bg-inherit appearance-none"
+								aria-label="Enter a message"
 								use:init
 							/>
 							{#if i !== 0}
@@ -274,14 +278,18 @@
 	</div>
 </main>
 
-<footer class="max-w-2xl mx-auto p-6">
+<footer class="max-w-2xl mx-auto p-6 flex flex-row gap-4 items-center">
 	<a
 		href="https://x.com/F1RadioMeme"
-		class="flex-none flex gap-2"
+		class="flex-none flex gap-2 items-center"
 		title="Follow us on X"
 		target="_blank"
 	>
-		<img src={X} height="16" width="16" alt="" aria-hidden="true" />
+		<picture>
+			<source srcset={XLight} media="(prefers-color-scheme: light)" />
+			<source srcset={XDark} media="(prefers-color-scheme: dark)" />
+			<img src={XLight} height="16" width="16" alt="X Logo" />
+		</picture>
 		Follow Us
 	</a>
 </footer>
