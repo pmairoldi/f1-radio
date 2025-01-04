@@ -138,6 +138,7 @@
 <SEO
 	title="F1 Radio Meme"
 	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
+	name="F1RadioMeme"
 	url="https://f1radiomeme.com"
 	imageUrl="https://f1radiomeme.com/OG.png"
 />
