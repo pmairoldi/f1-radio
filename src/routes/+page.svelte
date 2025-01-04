@@ -202,6 +202,7 @@
 							value={message.type}
 							name="messages"
 							class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+							aria-label="Pick to enter drive or team message"
 						>
 							<option value="driver" selected={message.type === 'driver'}>Driver</option>
 							<option value="team" selected={message.type === 'team'}>Team</option>
@@ -213,6 +214,7 @@
 								value={message.message}
 								name="messages"
 								class="w-full p-2 bg-inherit appearance-none"
+								aria-label="Enter a message"
 								use:init
 							/>
 							{#if i !== 0}
