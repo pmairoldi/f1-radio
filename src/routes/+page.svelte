@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { drivers, type Message } from '$lib';
-	import XDark from '$lib/assets/X-dark.svg';
-	import XLight from '$lib/assets/X-light.svg';
+	import CopyButton from '$lib/components/CopyButton.svelte';
+	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
-	import domtoimage from 'dom-to-image';
+	import RadioBoxMessage from '$lib/renderers/RadioBoxMessage.svelte';
+	import { drivers as _drivers } from '$lib/seasons/2024';
+	import { type Message } from '$lib/types';
 	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
@@ -20,7 +22,11 @@
 	let { driver } = $derived(data);
 	let { messages } = $derived(data);
 
-	let output: HTMLElement | undefined = $state();
+	let output = $state<HTMLElement | undefined>();
+
+	const drivers = Object.entries(_drivers).flatMap(([key, value]) => {
+		return { key: key, value: value };
+	});
 
 	const onFormChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
@@ -34,8 +40,8 @@
 			const newMessage: Message[] = [];
 			for (let i = 0; i < m.length; i += 2) {
 				const type = m[i] as 'driver' | 'team';
-				const message = m[i + 1];
-				newMessage.push({ type: type, message: message });
+				const text = m[i + 1];
+				newMessage.push({ type: type, text: text });
 			}
 			update.messages = newMessage;
 		} else {
@@ -48,11 +54,11 @@
 	function addMessage() {
 		const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 		if (lastMessage?.type === 'driver') {
-			messages.push({ type: 'team', message: '' });
+			messages.push({ type: 'team', text: '' });
 		} else if (lastMessage?.type === 'team') {
-			messages.push({ type: 'driver', message: '' });
+			messages.push({ type: 'driver', text: '' });
 		} else {
-			messages.push({ type: 'driver', message: '' });
+			messages.push({ type: 'driver', text: '' });
 		}
 
 		setQuery({ messages });
@@ -61,39 +67,6 @@
 	function removeMessage(index: number) {
 		messages.splice(index, 1);
 		setQuery({ messages });
-	}
-
-	let copying: boolean = $state(false);
-	async function copy() {
-		if (output == null) {
-			return;
-		}
-
-		copying = true;
-		try {
-			const scale = 3;
-			const { offsetWidth, offsetHeight } = output;
-
-			await navigator.clipboard.write([
-				new ClipboardItem({
-					'image/png': domtoimage.toBlob(output, {
-						height: offsetHeight * scale,
-						width: offsetWidth * scale,
-						style: {
-							transform: `scale(${scale})`,
-							transformOrigin: 'top left',
-							width: `${offsetWidth}px`,
-							height: `${offsetHeight}px`
-						}
-					})
-				})
-			]);
-
-			copying = false;
-		} catch (error) {
-			console.error('oops, something went wrong!', error);
-			copying = false;
-		}
 	}
 
 	let mounted = false;
@@ -124,7 +97,7 @@
 			if (messages.length > 0) {
 				searchParams.delete('m');
 				messages.forEach((m) => {
-					searchParams.append('m', `${m.type}:${m.message}`);
+					searchParams.append('m', `${m.type}:${m.text}`);
 				});
 			} else {
 				searchParams.delete('m');
@@ -143,29 +116,11 @@
 	imageUrl="https://f1radiomeme.com/OG.png"
 />
 
-<svelte:head>
-	<meta name="color-scheme" content="light dark" />
-	<meta name="theme-color" content="rgb(185 28 28)" media="(prefers-color-scheme: light)" />
-	<meta name="theme-color" content="rgb(185 28 28)" media="(prefers-color-scheme: dark)" />
-</svelte:head>
-
-<header class="p-4 text-white bg-red-700 sticky top-0 flex-none">
-	<div class="max-w-2xl mx-auto flex items-center">
-		<h1 class="text-3xl font-f1 flex-auto">F1 Radio Meme</h1>
-		<a
-			href="https://buymeacoffee.com/pmairoldi"
-			class="flex-none flex gap-2 bg-white border border-white text-red-700 px-2 py-1 rounded-lg hover:bg-red-700 hover:text-white transition-colors"
-			title="Buy me a coffee"
-			target="_blank"
-		>
-			Donate
-		</a>
-	</div>
-</header>
+<Header />
 
 <main class="p-4 font-f1 flex-auto">
 	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
-		<h2 class="w-full text-lg flex items-center">
+		<h2 class="w-full flex items-center">
 			Generate funny f1 radio memes and copy the image to post to your favorite website!
 		</h2>
 		<form
@@ -177,17 +132,17 @@
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
 				<select
-					value={driver?.id ?? ''}
+					value={driver?.key ?? ''}
 					name="driver"
 					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
 				>
 					<option value="">&ndash;</option>
-					{#each drivers as d (d.id)}
-						<option value={d.id} selected={driver?.id === d.id}>
-							{#if d.name.display === 'first'}
-								{d.name.last} {d.name.first}
+					{#each drivers as d (d.key)}
+						<option value={d.key} selected={driver?.key === d.key}>
+							{#if d.value.name.display === 'first'}
+								{d.value.name.last} {d.value.name.first}
 							{:else}
-								{d.name.first} {d.name.last}
+								{d.value.name.first} {d.value.name.last}
 							{/if}
 						</option>
 					{/each}
@@ -211,7 +166,7 @@
 						<div class="flex-auto flex items-center text-white bg-red-700 rounded-xl overflow-clip">
 							<input
 								type="text"
-								value={message.message}
+								value={message.text}
 								name="messages"
 								class="w-full p-2 bg-inherit appearance-none"
 								aria-label="Enter a message"
@@ -237,62 +192,19 @@
 		{#if driver != null}
 			<hr class="w-full border-gray-300 dark:border-gray-700" />
 			<div class="border border-red-300 dark:border-gray-700">
-				<RadioBox {driver} {messages} bind:element={output} />
+				<RadioBox name={driver.value.name} team={driver.value.team} bind:element={output}>
+					{#each messages as message}
+						<RadioBoxMessage type={message.type} text={message.text} />
+					{/each}
+				</RadioBox>
 			</div>
 
-			<button
-				type="button"
-				class="bg-red-700 text-white p-2 rounded-xl flex items-center gap-1 disabled:opacity-70"
-				onclick={() => copy()}
-				disabled={copying}
-			>
-				{#if copying}
-					<svg
-						class="animate-spin h-4 w-4 text-white"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-					>
-						<circle
-							class="opacity-25"
-							cx="12"
-							cy="12"
-							r="10"
-							stroke="currentColor"
-							stroke-width="4"
-						/>
-						<path
-							class="opacity-75"
-							fill="currentColor"
-							d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-						/>
-					</svg>
-				{/if}
-				{#if copying}
-					Copying
-				{:else}
-					Copy
-				{/if}
-			</button>
+			<CopyButton element={output} />
 		{/if}
 	</div>
 </main>
 
-<footer class="max-w-2xl mx-auto p-6 flex flex-row gap-4 items-center">
-	<a
-		href="https://x.com/F1RadioMeme"
-		class="flex-none flex gap-2 items-center"
-		title="Follow us on X"
-		target="_blank"
-	>
-		<picture>
-			<source srcset={XLight} media="(prefers-color-scheme: light)" />
-			<source srcset={XDark} media="(prefers-color-scheme: dark)" />
-			<img src={XLight} height="16" width="16" alt="X Logo" />
-		</picture>
-		Follow Us
-	</a>
-</footer>
+<Footer />
 
 <style>
 	select {

@@ -1,13 +1,15 @@
 <script lang="ts">
-	import type { Driver, Message } from '../types';
+	import type { Snippet } from 'svelte';
+	import type { Name, Team } from '../types';
 
 	interface Props {
-		driver: Driver;
-		messages: Message[];
-		element: HTMLElement | undefined;
+		name: Name;
+		team: Team;
+		children?: Snippet;
+		element?: HTMLElement | undefined;
 	}
 
-	let { driver, messages, element = $bindable() }: Props = $props();
+	let { name, team, children, element = $bindable() }: Props = $props();
 
 	const sine: number[] = [
 		0, 1, 2, 5, 8, 11, 16, 21, 26, 32, 38, 44, 50, 56, 62, 68, 74, 79, 84, 89, 92, 95, 98, 99, 100,
@@ -18,14 +20,12 @@
 		const noise = (rand - 0.5) * 40;
 		return v + noise;
 	});
-	let name = $derived(driver.name.display === 'first' ? driver.name.first : driver.name.last);
-	let team = $derived(driver.team);
 </script>
 
-<div class="message" bind:this={element} style="--team-color: {team.color};">
+<div class="font-f1 message" bind:this={element} style="--team-color: {team.color};">
 	<div class="header">
 		<div class="driver">
-			<span>{name}</span>
+			<span>{name.display === 'first' ? name.first : name.last}</span>
 		</div>
 		<div class="radio">
 			<img class="logo" src={team.logo} alt="" />
@@ -43,19 +43,7 @@
 	</div>
 
 	<div class="messages">
-		{#each messages as message}
-			{#if message.type === 'team'}
-				<span class="team-message">
-					"{@html message.message.split('.').join('.<br/>')}"
-				</span>
-			{/if}
-
-			{#if message.type === 'driver'}
-				<span class="driver-message">
-					"{@html message.message.split('.').join('.<br/>')}"
-				</span>
-			{/if}
-		{/each}
+		{@render children?.()}
 	</div>
 
 	<footer class="text-white text-opacity-50 text-center w-full pb-2 text-sm">@F1RadioMeme</footer>
@@ -155,16 +143,5 @@
 		gap: 32px;
 		background-image: var(--gradient-background);
 		border-top: var(--gradient-background-border);
-	}
-
-	.team-message {
-		text-align: start;
-		word-wrap: break-word;
-		color: var(--light-text-color);
-	}
-
-	.driver-message {
-		text-align: end;
-		word-wrap: break-word;
 	}
 </style>
