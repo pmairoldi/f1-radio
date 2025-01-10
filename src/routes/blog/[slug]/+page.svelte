@@ -25,10 +25,10 @@
 	<article class="flex flex-col gap-8 max-w-2xl mx-auto">
 		<header class="flex flex-col gap-1">
 			<h1 class="text-2xl font-f1">{data.meta.title}</h1>
-			<p class="text-sm text-red-700">Published at {formatDate(data.meta.date)}</p>
+			<p class="text-sm text-red-600">Published at {formatDate(data.meta.date)}</p>
 			<div class="text-xs flex flex-wrap gap-1 font-f1">
 				{#each data.meta.categories as category}
-					<span class="rounded px-1 py-0.5 bg-red-700 text-white">&num;{category}</span>
+					<span class="rounded px-1 py-0.5 bg-red-600 text-white">&num;{category}</span>
 				{/each}
 			</div>
 		</header>
@@ -59,6 +59,6 @@
 	}
 
 	.prose :global(a) {
-		@apply underline text-red-700;
+		@apply underline text-red-600;
 	}
 </style>

@@ -30,15 +30,18 @@
 			<ul>
 				{#each data.posts as post}
 					<li>
-						<a class="flex flex-row gap-2 group" href={`/blog/${post.slug}`}>
+						<a
+							class="flex flex-row gap-2 hover:bg-gray-500/20 dark:hover:bg-gray-200/20 p-2 rounded-lg transition-colors"
+							href={`/blog/${post.slug}`}
+						>
 							<div class="flex flex-col gap-1 flex-1">
 								<h2 class="text-2xl col-start-1 font-f1">{post.title}</h2>
-								<p class="text-sm text-red-700 col-start-1">Published at {formatDate(post.date)}</p>
+								<p class="text-sm text-red-600 col-start-1">Published at {formatDate(post.date)}</p>
 								<p class="text-sm col-start-1">{post.description}</p>
 							</div>
 
 							<span
-								class="flex items-center gap-1 row-start-1 row-span-3 col-start-2 text-sm group-hover:text-red-700 transition-colors"
+								class="flex items-center gap-1 row-start-1 row-span-3 col-start-2 text-sm text-red-600 transition-colors"
 							>
 								Read
 								<svg
