@@ -81,7 +81,7 @@ After seeing the car he is chasing pull away on the straight, [Stroll](/?d=lance
 
 ## Yuki dramatically questions team in Abu Dhabi
 
-After the team tells him to stay out [Yuki](/d=yuki_tsunoda) has an existential crisis!
+After the team tells him to stay out [Yuki](/?d=yuki_tsunoda) has an existential crisis!
 
 <ArticleRadioBox driver={yuki_tsunoda}>
   <RadioBoxMessage type="team" text="Stay out." />
