@@ -7,7 +7,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import RadioBox from '$lib/renderers/RadioBox.svelte';
 	import RadioBoxMessage from '$lib/renderers/RadioBoxMessage.svelte';
-	import { drivers as _drivers } from '$lib/seasons/2024';
+	import { drivers as _drivers } from '$lib/seasons/current';
 	import { type Message } from '$lib/types';
 	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';

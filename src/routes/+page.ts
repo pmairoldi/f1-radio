@@ -1,4 +1,4 @@
-import { drivers } from '$lib/seasons/2024';
+import { drivers } from '$lib/seasons/current';
 import { type Driver, type Message } from '$lib/types';
 import type { PageLoad } from './$types';
 
