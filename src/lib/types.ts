@@ -4,10 +4,12 @@ export type Team = {
 	logo: string;
 };
 
-export type Name = { first: string; last: string; display: 'first' | 'last' };
+export type NameDisplay = 'first' | 'last';
+
+export type Name = { first: string; last: string; display: NameDisplay };
 
 export type Driver = {
-	id: string;
+	number: number;
 	name: Name;
 	team: Team;
 };

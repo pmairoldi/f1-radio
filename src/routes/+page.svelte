@@ -5,10 +5,9 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import RadioBox from '$lib/renderers/RadioBox.svelte';
-	import RadioBoxMessage from '$lib/renderers/RadioBoxMessage.svelte';
+	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
 	import { drivers as _drivers } from '$lib/seasons/current';
-	import { type Message } from '$lib/types';
+	import { type Message, type Name } from '$lib/types';
 	import { onMount } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
@@ -108,6 +107,14 @@
 	}
 </script>
 
+{#snippet name(name: Name)}
+	{#if name.display === 'first'}
+		{name.last} {name.first}
+	{:else}
+		{name.first} {name.last}
+	{/if}
+{/snippet}
+
 <SEO
 	title="F1 Radio Meme"
 	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
@@ -139,11 +146,7 @@
 					<option value="">&ndash;</option>
 					{#each drivers as d (d.key)}
 						<option value={d.key} selected={driver?.key === d.key}>
-							{#if d.value.name.display === 'first'}
-								{d.value.name.last} {d.value.name.first}
-							{:else}
-								{d.value.name.first} {d.value.name.last}
-							{/if}
+							{@render name(d.value.name)}
 						</option>
 					{/each}
 				</select>
@@ -192,7 +195,7 @@
 		{#if driver != null}
 			<hr class="w-full border-gray-300 dark:border-gray-700" />
 			<div class="border border-red-300 dark:border-gray-700">
-				<RadioBox name={driver.value.name} team={driver.value.team} bind:element={output}>
+				<RadioBox driver={driver.value} bind:element={output}>
 					{#each messages as message}
 						<RadioBoxMessage type={message.type} text={message.text} />
 					{/each}
