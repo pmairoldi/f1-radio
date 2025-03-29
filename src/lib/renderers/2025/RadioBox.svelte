@@ -23,14 +23,22 @@
 </script>
 
 <div class="font-f1 message" bind:this={element} style="--team-color: {team.color};">
-	<div class="header">
-		<div class="driver">
-			<span>{name.display === 'first' ? name.first : name.last}</span>
+	<div class="flex flex-col p-3">
+		<div class="flex flex-row items-center justify-end">
+			<span class="leading-none font-bold uppercase text-4xl text-[var(--team-color)]">
+				{name.display === 'first' ? name.first : name.last}
+			</span>
 		</div>
-		<div class="radio">
-			<img class="logo" src={team.logo} alt={team.name} />
-			<span> Radio </span>
+		<div class="flex flex-row items-center justify-end">
+			<span class="leading-none font-bold uppercase text-4xl text-white"> Radio </span>
 		</div>
+		<div class="flex flex-row items-center justify-between">
+			<span class="font-black text-6xl text-[var(--team-color)]">{driver.number}</span>
+			<div class="logo">
+				<img src={team.logo} alt={team.name} />
+			</div>
+		</div>
+
 		<div class="audio-wave">
 			{#each wave as item}
 				<div
@@ -39,7 +47,6 @@
 				></div>
 			{/each}
 		</div>
-		<hr class="separator" />
 	</div>
 
 	<div class="messages">
@@ -50,6 +57,10 @@
 </div>
 
 <style>
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+
 	.message {
 		--background-color: #16181c; /* change to dotted bg */
 		--light-text-color: #ffffff;
@@ -63,7 +74,6 @@
 		flex-direction: column;
 		background-color: var(--background-color);
 		overflow: clip;
-		color: var(--team-color);
 		font-variant-ligatures: none;
 	}
 
@@ -71,23 +81,31 @@
 		display: flex;
 		flex-direction: column;
 		background-image: var(--gradient-background);
-		padding: 24px 0 12px 0;
+		padding: 12px;
 	}
 
 	.driver,
-	.radio {
-		padding: 0 20px;
+	.radio,
+	.logo {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
-		gap: 12px;
 	}
 
-	.driver span,
+	.logo {
+		justify-content: center;
+		width: 64px;
+	}
+
+	.driver span {
+		text-transform: uppercase;
+		font-weight: 700;
+		line-height: 1;
+	}
+
 	.radio span {
 		text-transform: uppercase;
 		font-weight: 700;
-		transform: skewX(-10deg);
 		line-height: 1;
 	}
 
@@ -100,15 +118,9 @@
 		color: var(--light-text-color);
 	}
 
-	.logo {
-		max-height: 36px;
+	.logo img {
+		max-height: 48px;
 		max-width: 64px;
-	}
-
-	.separator {
-		border: 0;
-		border-top: 4px solid #16181c;
-		border-bottom: 2px solid currentColor;
 	}
 
 	.audio-wave {
@@ -135,13 +147,10 @@
 	.messages {
 		display: flex;
 		flex-direction: column;
-		padding: 24px 24px;
+		padding: 24px 12px;
 		text-transform: uppercase;
 		font-size: 24px;
-		font-style: italic;
 		line-height: 1.2;
-		gap: 32px;
-		background-image: var(--gradient-background);
-		border-top: var(--gradient-background-border);
+		gap: 16px;
 	}
 </style>
