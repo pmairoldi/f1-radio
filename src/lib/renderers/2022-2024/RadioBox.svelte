@@ -1,15 +1,15 @@
 <script lang="ts">
+	import type { Driver } from '$lib/types';
 	import type { Snippet } from 'svelte';
-	import type { Name, Team } from '../types';
 
 	interface Props {
-		name: Name;
-		team: Team;
+		driver: Driver;
 		children?: Snippet;
 		element?: HTMLElement | undefined;
 	}
 
-	let { name, team, children, element = $bindable() }: Props = $props();
+	let { driver, children, element = $bindable() }: Props = $props();
+	let { name, team } = $derived(driver);
 
 	const sine: number[] = [
 		0, 1, 2, 5, 8, 11, 16, 21, 26, 32, 38, 44, 50, 56, 62, 68, 74, 79, 84, 89, 92, 95, 98, 99, 100,
@@ -28,7 +28,7 @@
 			<span>{name.display === 'first' ? name.first : name.last}</span>
 		</div>
 		<div class="radio">
-			<img class="logo" src={team.logo} alt="" />
+			<img class="logo" src={team.logo} alt={team.name} />
 			<span> Radio </span>
 		</div>
 		<div class="audio-wave">

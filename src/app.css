@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+	--font-f1: F1, system-ui, sans-serif;
+}
 
 body {
 	min-height: 100dvh;

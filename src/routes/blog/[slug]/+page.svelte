@@ -28,7 +28,7 @@
 			<p class="text-sm text-red-600">Published at {formatDate(data.meta.date)}</p>
 			<div class="text-xs flex flex-wrap gap-1 font-f1">
 				{#each data.meta.categories as category}
-					<span class="rounded px-1 py-0.5 bg-red-600 text-white">&num;{category}</span>
+					<span class="rounded-sm px-1 py-0.5 bg-red-600 text-white">&num;{category}</span>
 				{/each}
 			</div>
 		</header>
@@ -42,6 +42,8 @@
 <Footer />
 
 <style>
+	@reference "../../../app.css";
+
 	.prose > :global(h2) {
 		@apply text-xl font-f1;
 	}
