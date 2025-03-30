@@ -57,9 +57,7 @@
 </div>
 
 <style>
-	@tailwind base;
-	@tailwind components;
-	@tailwind utilities;
+	@reference "../../../app.css";
 
 	.message {
 		--background-color: #16181c; /* change to dotted bg */
