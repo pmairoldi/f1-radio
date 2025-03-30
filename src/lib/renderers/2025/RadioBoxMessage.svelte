@@ -8,26 +8,13 @@
 </script>
 
 {#if type === 'team'}
-	<span class="team-message">
+	<span class="text-start break-words text-white">
 		"{@html text}"
 	</span>
 {/if}
 
 {#if type === 'driver'}
-	<span class="driver-message">
+	<span class="text-end break-words text-[var(--team-color)]">
 		"{@html text}"
 	</span>
 {/if}
-
-<style>
-	.team-message {
-		text-align: start;
-		word-wrap: break-word;
-		color: var(--light-text-color);
-	}
-
-	.driver-message {
-		text-align: end;
-		word-wrap: break-word;
-	}
-</style>

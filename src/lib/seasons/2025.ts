@@ -89,9 +89,9 @@ export const drivers = {
 		name: { first: 'Max', last: 'Verstappen', display: 'last' },
 		team: teams['red_bull_racing']
 	},
-	liam_lawson: {
-		number: 30,
-		name: { first: 'Liam', last: 'Lawson', display: 'last' },
+	yuki_tsunoda: {
+		number: 22,
+		name: { first: 'Yuki', last: 'Tsunoda', display: 'last' },
 		team: teams['red_bull_racing']
 	},
 	george_russell: {
@@ -134,9 +134,9 @@ export const drivers = {
 		name: { first: 'Esteban', last: 'Ocon', display: 'last' },
 		team: teams['haas']
 	},
-	yuki_tsunoda: {
-		number: 22,
-		name: { first: 'Yuki', last: 'Tsunoda', display: 'last' },
+	liam_lawson: {
+		number: 30,
+		name: { first: 'Liam', last: 'Lawson', display: 'last' },
 		team: teams['racing_bulls']
 	},
 	isack_hadjar: {
