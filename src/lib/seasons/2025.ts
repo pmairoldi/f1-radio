@@ -100,7 +100,7 @@ export const drivers = {
 		team: teams['mercedes']
 	},
 	kimi_antonelli: {
-		number: 63,
+		number: 12,
 		name: { first: 'Kimi', last: 'Antonelli', display: 'last' },
 		team: teams['mercedes']
 	},
