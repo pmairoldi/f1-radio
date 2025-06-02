@@ -119,9 +119,9 @@ export const drivers = {
 		name: { first: 'Pierre', last: 'Gasly', display: 'last' },
 		team: teams['alpine']
 	},
-	jack_doohan: {
-		number: 7,
-		name: { first: 'Jack', last: 'Doohan', display: 'last' },
+	franco_colapinto: {
+		number: 43,
+		name: { first: 'Franco', last: 'Colapinto', display: 'last' },
 		team: teams['alpine']
 	},
 	oliver_bearman: {
@@ -163,5 +163,10 @@ export const drivers = {
 		number: 5,
 		name: { first: 'Gabriel', last: 'Bortoleto', display: 'last' },
 		team: teams['kick']
+	},
+	jack_doohan: {
+		number: 7,
+		name: { first: 'Jack', last: 'Doohan', display: 'last' },
+		team: teams['alpine']
 	}
 } as const satisfies Record<string, Driver>;
