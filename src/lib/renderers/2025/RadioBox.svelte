@@ -14,7 +14,9 @@
 	let { name, team } = $derived(driver);
 
 	const wave = $derived.by(() => {
-		const random = new SeededRandom(driver.name.first + driver.name.last);
+		const random = new SeededRandom(
+			`${driver.team.name}-${driver.number}-${driver.name.first}-${driver.name.last}`
+		);
 
 		const sine: number[] = [0, 0.383, 0.707, 0.924, 1, 0.924, 0.707, 0.383, 0];
 
