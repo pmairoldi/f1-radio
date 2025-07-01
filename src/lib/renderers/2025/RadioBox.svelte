@@ -14,7 +14,9 @@
 	let { name, team } = $derived(driver);
 
 	const wave = $derived.by(() => {
-		const random = new SeededRandom(driver.name.first + driver.name.last);
+		const random = new SeededRandom(
+			`${driver.team.name}-${driver.number}-${driver.name.first}-${driver.name.last}`
+		);
 
 		const sine: number[] = [0, 0.383, 0.707, 0.924, 1, 0.924, 0.707, 0.383, 0];
 		const wave = sine.map((v) => {
@@ -23,14 +25,25 @@
 			const normalized = (v + 1) * 24;
 
 			const height = Math.max(0, Math.min(48, normalized + noise));
-			const rows = Math.round(height / 4);
-			const dots = new Array<number>();
-			for (let row = 0; row <= rows; ++row) {
-				const offset = cubicIn(row / rows);
-				dots.push(130 - 80 * offset);
+			const topHeight = Math.round(height / 4);
+			const bottomHeight = topHeight / 2;
+
+			const top = new Array<number>();
+			for (let row = 0; row <= topHeight; ++row) {
+				const offset = cubicIn(row / topHeight);
+				top.push(130 - 80 * offset);
 			}
 
-			return [dots, dots, dots, dots, dots, dots, dots, dots, dots];
+			const bottom = new Array<number>();
+			for (let row = 0; row <= bottomHeight; ++row) {
+				const offset = cubicIn(row / bottomHeight);
+				bottom.push(130 - 80 * offset);
+			}
+
+			return {
+				top: [top, top, top, top, top, top, top, top, top],
+				bottom: [bottom, bottom, bottom, bottom, bottom, bottom, bottom, bottom, bottom]
+			};
 		});
 
 		return wave;
@@ -65,11 +78,11 @@
 		<div class="grid grid-cols-9 absolute start-0 end-0 -bottom-6 items-end -z-10">
 			{#each wave as item}
 				<div class="flex flex-row row-start-1 h-12">
-					{#each item as column}
+					{#each item.top as column}
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/80"
+									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/80 flex-none"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
@@ -78,11 +91,11 @@
 				</div>
 
 				<div class="flex flex-row self-start -scale-y-[1] row-start-2 h-6">
-					{#each item as column}
+					{#each item.bottom as column}
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/20"
+									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/20 flex-none"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
