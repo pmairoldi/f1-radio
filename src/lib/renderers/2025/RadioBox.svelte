@@ -13,6 +13,15 @@
 	let { driver, children, element = $bindable() }: Props = $props();
 	let { name, team } = $derived(driver);
 
+	function getWave(height: number) {
+		const wave = new Array<number>();
+		for (let row = 0; row <= height; ++row) {
+			const offset = cubicIn(row / height);
+			wave.push(110 - 70 * offset);
+		}
+		return wave;
+	}
+
 	const wave = $derived.by(() => {
 		const random = new SeededRandom(
 			`${driver.team.name}-${driver.number}-${driver.name.first}-${driver.name.last}`
@@ -28,17 +37,8 @@
 			const topHeight = Math.round(height / 4);
 			const bottomHeight = topHeight / 2;
 
-			const top = new Array<number>();
-			for (let row = 0; row <= topHeight; ++row) {
-				const offset = cubicIn(row / topHeight);
-				top.push(110 - 75 * offset);
-			}
-
-			const bottom = new Array<number>();
-			for (let row = 0; row <= bottomHeight; ++row) {
-				const offset = cubicIn(row / bottomHeight);
-				bottom.push(110 - 75 * offset);
-			}
+			const top = getWave(topHeight);
+			const bottom = getWave(bottomHeight);
 
 			return {
 				top: [top, top, top, top, top, top, top, top, top],
