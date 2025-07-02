@@ -46,7 +46,7 @@
 		{@render children?.()}
 	</div>
 
-	<footer class="text-white text-opacity-50 text-center w-full pb-2 text-sm">@F1RadioMeme</footer>
+	<footer class="text-opacity-50 w-full pb-2 text-center text-sm text-white">@F1RadioMeme</footer>
 </div>
 
 <style>

@@ -7,58 +7,58 @@ import mclaren_logo from '$lib/assets/mclaren-logo.png';
 import mercedes_logo from '$lib/assets/mercedes-logo.png';
 import rb_logo from '$lib/assets/rb-logo.png';
 import red_bull_racing_logo from '$lib/assets/red-bull-racing-logo.png';
-import williams_logo from '$lib/assets/williams-logo.png';
+import williams_logo from '$lib/assets/williams-logo-2025.png';
 import type { Driver, Team } from '../types';
 
 export const teams = {
 	red_bull_racing: {
 		name: 'Red Bull Racing',
-		color: '#1e5bc6',
+		color: '#4781D7',
 		logo: red_bull_racing_logo
 	},
 	mercedes: {
 		name: 'Mercedes',
-		color: '#6cd3bf',
+		color: '#00D7B6',
 		logo: mercedes_logo
 	},
 	ferrari: {
 		name: 'Ferrari',
-		color: '#ed1c24',
+		color: '#ED1131',
 		logo: ferrari_logo
 	},
 	aston_martin: {
 		name: 'Aston Martin',
-		color: '#2d826d',
+		color: '#229971',
 		logo: aston_martin_logo
 	},
 	mclaren: {
 		name: 'McLaren',
-		color: '#f58020',
+		color: '#F47600',
 		logo: mclaren_logo
 	},
 	alpine: {
 		name: 'Alpine',
-		color: '#2293d1',
+		color: '#00A1E8',
 		logo: alpine_logo
 	},
 	williams: {
 		name: 'Williams',
-		color: '#37bedd',
+		color: '#1868DB',
 		logo: williams_logo
 	},
 	haas: {
 		name: 'Haas F1 Team',
-		color: '#b6babd',
+		color: '#9C9FA2',
 		logo: haas_logo
 	},
 	racing_bulls: {
 		name: 'RB',
-		color: '#6692FF',
+		color: '#6C98FF',
 		logo: rb_logo
 	},
 	kick: {
 		name: 'Kick',
-		color: '#52e252',
+		color: '#01C00E',
 		logo: kick_logo
 	}
 } as const satisfies Record<string, Team>;

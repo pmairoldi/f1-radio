@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-	--font-f1: F1, system-ui, sans-serif;
+	--font-f1: 'Formula1', system-ui, sans-serif;
+	--font-kh-interference-f1: 'KH Interference F1', system-ui, sans-serif;
 }
 
 body {

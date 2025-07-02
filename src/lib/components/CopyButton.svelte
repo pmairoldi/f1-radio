@@ -45,13 +45,13 @@
 
 <button
 	type="button"
-	class="bg-red-700 text-white p-2 rounded-xl flex items-center gap-1 disabled:opacity-70"
+	class="flex items-center gap-1 rounded-xl bg-red-700 p-2 text-white disabled:opacity-70"
 	onclick={() => execute()}
 	disabled={running}
 >
 	{#if running}
 		<svg
-			class="animate-spin h-4 w-4 text-white"
+			class="h-4 w-4 animate-spin text-white"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"

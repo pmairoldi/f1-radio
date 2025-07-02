@@ -21,14 +21,14 @@
 
 <Header />
 
-<main class="p-4 flex-auto">
-	<article class="flex flex-col gap-8 max-w-2xl mx-auto">
+<main class="flex-auto p-4">
+	<article class="mx-auto flex max-w-2xl flex-col gap-8">
 		<header class="flex flex-col gap-1">
-			<h1 class="text-2xl font-f1">{data.meta.title}</h1>
+			<h1 class="font-f1 text-2xl">{data.meta.title}</h1>
 			<p class="text-sm text-red-600">Published at {formatDate(data.meta.date)}</p>
-			<div class="text-xs flex flex-wrap gap-1 font-f1">
+			<div class="font-f1 flex flex-wrap gap-1 text-xs">
 				{#each data.meta.categories as category}
-					<span class="rounded-sm px-1 py-0.5 bg-red-600 text-white">&num;{category}</span>
+					<span class="rounded-sm bg-red-600 px-1 py-0.5 text-white">&num;{category}</span>
 				{/each}
 			</div>
 		</header>
@@ -42,25 +42,27 @@
 <Footer />
 
 <style>
-	@reference "../../../app.css";
-
 	.prose > :global(h2) {
-		@apply text-xl font-f1;
+		font-family: var(--font-f1);
+		font-size: var(--text-xl);
+		line-height: var(--tw-leading, var(--text-xl--line-height));
 	}
 
 	.prose > :global(p) {
-		@apply text-sm;
+		font-size: var(--text-sm);
+		line-height: var(--tw-leading, var(--text-sm--line-height));
 	}
 
 	.prose > :global(* + *) {
-		@apply mt-3;
+		margin-top: calc(var(--spacing) * 3);
 	}
 
 	.prose > :global(* + h2) {
-		@apply mt-6;
+		margin-top: calc(var(--spacing) * 6);
 	}
 
 	.prose :global(a) {
-		@apply underline text-red-600;
+		color: var(--color-red-600);
+		text-decoration-line: underline;
 	}
 </style>

@@ -31,13 +31,13 @@
 			const top = new Array<number>();
 			for (let row = 0; row <= topHeight; ++row) {
 				const offset = cubicIn(row / topHeight);
-				top.push(130 - 80 * offset);
+				top.push(110 - 75 * offset);
 			}
 
 			const bottom = new Array<number>();
 			for (let row = 0; row <= bottomHeight; ++row) {
 				const offset = cubicIn(row / bottomHeight);
-				bottom.push(130 - 80 * offset);
+				bottom.push(110 - 75 * offset);
 			}
 
 			return {
@@ -51,38 +51,38 @@
 </script>
 
 <div
-	class="font-f1 w-[320px] flex flex-col bg-gray-900 overflow-clip [font-variant-ligatures:none]"
+	class="font-f1 flex w-[320px] flex-col overflow-clip bg-gray-900 [font-variant-ligatures:none]"
 	bind:this={element}
 	style="--team-color: {team.color}; --light-team-color: color-mix(in oklab, var(--team-color), white);"
 >
-	<div class="flex flex-col p-3 relative z-0">
+	<div class="relative z-0 flex flex-col p-3">
 		<div class="flex flex-row items-center justify-end">
-			<span class="leading-none font-bold uppercase text-4xl text-[var(--team-color)]">
+			<span class="text-4xl leading-none font-bold text-[var(--team-color)] uppercase">
 				{name.display === 'first' ? name.first : name.last}
 			</span>
 		</div>
 		<div class="flex flex-row items-center justify-end">
-			<span class="leading-none font-bold uppercase text-4xl text-white"> Radio </span>
+			<span class="text-4xl leading-none font-black text-white uppercase"> Radio </span>
 		</div>
 		<div class="flex flex-row items-center justify-between">
 			<span
-				class="font-black text-6xl bg-gradient-to-tl from-[var(--light-team-color)] to-60% to-[var(--team-color)] text-transparent bg-clip-text"
+				class="font-kh-interference-f1 bg-gradient-to-tl from-[var(--light-team-color)] to-[var(--team-color)] to-60% bg-clip-text text-7xl font-black text-transparent"
 			>
 				{driver.number}
 			</span>
-			<div class="justify-end w-16 h-16 flex">
-				<img src={team.logo} alt={team.name} class="max-w-full max-h-full object-contain" />
+			<div class="flex h-16 w-16 justify-end">
+				<img src={team.logo} alt={team.name} class="max-h-full max-w-full object-contain" />
 			</div>
 		</div>
 
-		<div class="grid grid-cols-9 absolute start-0 end-0 -bottom-6 items-end -z-10">
+		<div class="absolute start-0 end-0 -bottom-6 -z-10 grid grid-cols-9 items-end">
 			{#each wave as item}
-				<div class="flex flex-row row-start-1 h-12">
+				<div class="row-start-1 flex h-12 flex-row">
 					{#each item.top as column}
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/80 flex-none"
+									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/80"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
@@ -90,12 +90,12 @@
 					{/each}
 				</div>
 
-				<div class="flex flex-row self-start -scale-y-[1] row-start-2 h-6">
+				<div class="row-start-2 flex h-6 -scale-y-[1] flex-row self-start">
 					{#each item.bottom as column}
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 rounded-full scale-[var(--intensity)] bg-[var(--team-color)]/20 flex-none"
+									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/20"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
@@ -106,9 +106,9 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col px-3 py-6 uppercase text-2xl leading-[1.2] gap-4">
+	<div class="flex flex-col gap-4 px-3 py-6 text-2xl leading-[1.2] uppercase">
 		{@render children?.()}
 	</div>
 
-	<footer class="text-white text-opacity-50 text-center w-full pb-2 text-sm">@F1RadioMeme</footer>
+	<footer class="text-opacity-50 w-full pb-2 text-center text-sm text-white">@F1RadioMeme</footer>
 </div>

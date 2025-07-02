@@ -5,10 +5,10 @@
 	import CoffeeLight from '$lib/assets/coffee-light.svg';
 </script>
 
-<footer class="w-full justify-center max-w-2xl mx-auto p-6 flex flex-row gap-6 items-center">
+<footer class="mx-auto flex w-full max-w-2xl flex-row items-center justify-center gap-6 p-6">
 	<a
 		href="https://x.com/F1RadioMeme"
-		class="flex-none flex gap-2 items-center underline"
+		class="flex flex-none items-center gap-2 underline"
 		title="Follow us on X"
 		target="_blank"
 	>
@@ -22,7 +22,7 @@
 
 	<a
 		href="https://buymeacoffee.com/pmairoldi"
-		class="flex-none flex gap-2 items-center underline"
+		class="flex flex-none items-center gap-2 underline"
 		title="Buy me a coffee"
 		target="_blank"
 	>
