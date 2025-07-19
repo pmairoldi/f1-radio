@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { injectRandom } from '$lib/random.svelte';
 	import { SeededRandom } from '$lib/seeded-random';
 	import type { Driver } from '$lib/types';
 	import type { Snippet } from 'svelte';
@@ -13,10 +14,11 @@
 	let { driver, children, element = $bindable() }: Props = $props();
 	let { name, team } = $derived(driver);
 
+	const random = injectRandom();
+	const seed = $derived(`${random.get() * 100}`);
+
 	const wave = $derived.by(() => {
-		const random = new SeededRandom(
-			`${driver.team.name}-${driver.number}-${driver.name.first}-${driver.name.last}`
-		);
+		const random = new SeededRandom(seed);
 
 		const sine: number[] = [0, 0.383, 0.707, 0.924, 1, 0.924, 0.707, 0.383, 0];
 
