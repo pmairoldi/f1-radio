@@ -53,7 +53,7 @@
 <div
 	class="font-f1 flex w-[320px] flex-col overflow-clip bg-gray-900 [font-variant-ligatures:none]"
 	bind:this={element}
-	style="--team-color: {team.color}; --light-team-color: color-mix(in oklab, var(--team-color), white);"
+	style="--team-color: {team.color}; --light-team-color: color-mix(in oklab, var(--team-color), white); will-change: transform;"
 >
 	<div class="relative z-0 flex flex-col p-3">
 		<div class="flex flex-row items-center justify-end">
