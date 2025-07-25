@@ -17,9 +17,7 @@
 
 		running = true;
 		try {
-			// Detect Safari and use lower scale for better performance
-			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			const scale = isSafari ? 2 : 3;
+			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
 
 			await navigator.clipboard.write([
@@ -27,8 +25,6 @@
 					'image/png': domtoimage.toBlob(output, {
 						height: offsetHeight * scale,
 						width: offsetWidth * scale,
-						quality: isSafari ? 0.8 : 1.0, // Reduce quality for Safari
-						cacheBust: false, // Disable cache busting for better performance
 						style: {
 							transform: `scale(${scale})`,
 							transformOrigin: 'top left',
