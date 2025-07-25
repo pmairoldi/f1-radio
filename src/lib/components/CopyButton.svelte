@@ -25,6 +25,7 @@
 					'image/png': domtoimage.toBlob(output, {
 						height: offsetHeight * scale,
 						width: offsetWidth * scale,
+						cacheBust: false, // Disable cache busting for better performance
 						style: {
 							transform: `scale(${scale})`,
 							transformOrigin: 'top left',
