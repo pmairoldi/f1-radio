@@ -75,14 +75,14 @@
 			</div>
 		</div>
 
-		<div class="absolute start-0 end-0 -bottom-6 -z-10 grid grid-cols-9 items-end">
+		<div class="absolute start-0 end-0 -bottom-6 -z-10 grid grid-cols-9 items-end safari-optimize">
 			{#each wave as item}
 				<div class="row-start-1 flex h-12 flex-row">
 					{#each item.top as column}
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/80"
+									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/80 safari-wave-dot"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
@@ -95,7 +95,7 @@
 						<div class="flex flex-col-reverse items-center">
 							{#each column as row}
 								<div
-									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/20"
+									class="size-1 flex-none scale-[var(--intensity)] rounded-full bg-[var(--team-color)]/20 safari-wave-dot"
 									style="--intensity: {row}%"
 								></div>
 							{/each}
@@ -112,3 +112,19 @@
 
 	<footer class="text-opacity-50 w-full pb-2 text-center text-sm text-white">@F1RadioMeme</footer>
 </div>
+
+<style>
+	/* Safari-specific optimizations */
+	@media screen and (-webkit-min-device-pixel-ratio: 0) {
+		.safari-optimize {
+			transform: translateZ(0);
+			backface-visibility: hidden;
+			perspective: 1000px;
+		}
+		
+		.safari-wave-dot {
+			transform-style: flat;
+			will-change: auto;
+		}
+	}
+</style>

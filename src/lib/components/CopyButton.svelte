@@ -17,27 +17,61 @@
 
 		running = true;
 		try {
-			const scale = 3;
+			// Detect Safari for optimizations
+			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			const scale = isSafari ? 2 : 3; // Lower scale for Safari
 			const { offsetWidth, offsetHeight } = output;
+
+			// Temporarily hide complex elements for Safari during copy
+			const waveElements = isSafari ? output.querySelectorAll('.safari-optimize') : [];
+			if (isSafari) {
+				waveElements.forEach(el => el.style.display = 'none');
+			}
+
+			// Safari-specific optimizations
+			const options = {
+				height: offsetHeight * scale,
+				width: offsetWidth * scale,
+				cacheBust: false,
+				filter: (node: Element) => {
+					// Skip animations and complex elements that slow down Safari
+					if (node.classList && node.classList.contains('animate-spin')) {
+						return false;
+					}
+					return true;
+				},
+				style: {
+					transform: `scale(${scale})`,
+					transformOrigin: 'top left',
+					width: `${offsetWidth}px`,
+					height: `${offsetHeight}px`
+				}
+			};
+
+			// Add Safari-specific optimizations
+			if (isSafari) {
+				options.quality = 0.8;
+				options.pixelRatio = 1; // Force pixel ratio to 1 for Safari
+			}
 
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': domtoimage.toBlob(output, {
-						height: offsetHeight * scale,
-						width: offsetWidth * scale,
-						cacheBust: false, // Disable cache busting for better performance
-						style: {
-							transform: `scale(${scale})`,
-							transformOrigin: 'top left',
-							width: `${offsetWidth}px`,
-							height: `${offsetHeight}px`
-						}
-					})
+					'image/png': domtoimage.toBlob(output, options)
 				})
 			]);
 
+			// Restore hidden elements
+			if (isSafari) {
+				waveElements.forEach(el => el.style.display = '');
+			}
+
 			running = false;
 		} catch (error) {
+			// Restore hidden elements on error
+			if (isSafari) {
+				const waveElements = output.querySelectorAll('.safari-optimize');
+				waveElements.forEach(el => el.style.display = '');
+			}
 			console.error('oops, something went wrong!', error);
 			running = false;
 		}
