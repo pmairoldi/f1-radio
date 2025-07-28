@@ -24,8 +24,34 @@
 
 			// Temporarily hide complex elements for Safari during copy
 			const waveElements = isSafari ? output.querySelectorAll('.safari-optimize') : [];
+			let originalStyles = [];
+			
 			if (isSafari) {
+				// Hide wave animation
 				waveElements.forEach(el => el.style.display = 'none');
+				
+				// Disable all animations and transitions temporarily
+				const styleSheet = document.createElement('style');
+				styleSheet.id = 'safari-copy-optimize';
+				styleSheet.textContent = `
+					* {
+						animation-duration: 0s !important;
+						animation-delay: 0s !important;
+						transition-duration: 0s !important;
+						transition-delay: 0s !important;
+						transform: none !important;
+						filter: none !important;
+						box-shadow: none !important;
+						text-shadow: none !important;
+					}
+				`;
+				document.head.appendChild(styleSheet);
+				
+				// Force a reflow to apply the styles
+				output.offsetHeight;
+				
+				// Wait for next frame to ensure styles are applied
+				await new Promise(resolve => requestAnimationFrame(resolve));
 			}
 
 			// Safari-specific optimizations
@@ -33,9 +59,16 @@
 				height: offsetHeight * scale,
 				width: offsetWidth * scale,
 				cacheBust: false,
+				useCORS: true,
+				allowTaint: false,
+				skipAutoScale: true,
 				filter: (node: Element) => {
 					// Skip animations and complex elements that slow down Safari
 					if (node.classList && node.classList.contains('animate-spin')) {
+						return false;
+					}
+					// Skip pseudo-elements that are expensive to render
+					if (isSafari && node.classList && node.classList.contains('safari-wave-dot')) {
 						return false;
 					}
 					return true;
@@ -44,14 +77,20 @@
 					transform: `scale(${scale})`,
 					transformOrigin: 'top left',
 					width: `${offsetWidth}px`,
-					height: `${offsetHeight}px`
+					height: `${offsetHeight}px`,
+					// Force simpler rendering
+					'image-rendering': isSafari ? 'pixelated' : 'auto',
+					'backface-visibility': 'hidden',
+					'transform-style': 'flat'
 				}
 			};
 
 			// Add Safari-specific optimizations
 			if (isSafari) {
-				options.quality = 0.8;
+				options.quality = 0.7; // Even lower quality for Safari
 				options.pixelRatio = 1; // Force pixel ratio to 1 for Safari
+				options.bgcolor = '#1f2937'; // Set background color to avoid transparency calculations
+				options.imagePlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Tiny placeholder for images
 			}
 
 			await navigator.clipboard.write([
@@ -60,17 +99,29 @@
 				})
 			]);
 
-			// Restore hidden elements
+			// Restore hidden elements and styles
 			if (isSafari) {
 				waveElements.forEach(el => el.style.display = '');
+				
+				// Remove the temporary style sheet
+				const tempStyleSheet = document.getElementById('safari-copy-optimize');
+				if (tempStyleSheet) {
+					tempStyleSheet.remove();
+				}
 			}
 
 			running = false;
 		} catch (error) {
-			// Restore hidden elements on error
+			// Restore hidden elements and styles on error
 			if (isSafari) {
 				const waveElements = output.querySelectorAll('.safari-optimize');
 				waveElements.forEach(el => el.style.display = '');
+				
+				// Remove the temporary style sheet
+				const tempStyleSheet = document.getElementById('safari-copy-optimize');
+				if (tempStyleSheet) {
+					tempStyleSheet.remove();
+				}
 			}
 			console.error('oops, something went wrong!', error);
 			running = false;
