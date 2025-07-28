@@ -23,7 +23,6 @@
 			await navigator.clipboard.write([
 				new ClipboardItem({
 					'image/png': snapdom.toBlob(output, {
-						scale: scale,
 						width: offsetWidth * scale,
 						height: offsetHeight * scale,
 						type: 'png'
