@@ -17,45 +17,36 @@
 
 		running = true;
 		try {
-			// Check clipboard permissions first
-			const permission = await navigator.permissions.query({ name: 'clipboard-write' as PermissionName });
-			console.log('Clipboard permission:', permission.state);
+			const scale = 3;
+			const { offsetWidth, offsetHeight } = output;
 
-			// Detect Safari for optimizations
-			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			const scale = isSafari ? 2 : 3;
-
-			console.log('Starting html2canvas capture...');
-
-			// Generate canvas using html2canvas with minimal options first
+			// Generate canvas using html2canvas (replacing dom-to-image)
 			const canvas = await html2canvas(output, {
 				scale: scale,
-				backgroundColor: '#1f2937'
+				width: offsetWidth,
+				height: offsetHeight,
+				backgroundColor: null, // Keep transparent background like original
+				useCORS: true,
+				allowTaint: false
 			});
-			
-			console.log('Canvas generated:', canvas.width, 'x', canvas.height);
-			
-			// Convert canvas to blob
+
+			// Convert canvas to blob to mimic the original dom-to-image.toBlob behavior
 			const blob = await new Promise<Blob>((resolve, reject) => {
 				canvas.toBlob((blob) => {
 					if (blob) {
-						console.log('Blob created successfully:', blob.size, 'bytes');
 						resolve(blob);
 					} else {
-						reject(new Error('Failed to create blob from canvas'));
+						reject(new Error('Failed to create blob'));
 					}
-				}, 'image/png', 0.95);
+				}, 'image/png');
 			});
 
-			// Try copying to clipboard
-			console.log('Attempting to copy to clipboard...');
 			await navigator.clipboard.write([
 				new ClipboardItem({
 					'image/png': blob
 				})
 			]);
 
-			console.log('Successfully copied to clipboard');
 			running = false;
 		} catch (error) {
 			console.error('oops, something went wrong!', error);
