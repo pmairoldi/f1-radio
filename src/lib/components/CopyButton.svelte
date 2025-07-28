@@ -1,5 +1,5 @@
 <script lang="ts">
-	import domtoimage from 'dom-to-image';
+	import { snapdom } from '@zumer/snapdom';
 
 	interface Props {
 		element?: HTMLElement | undefined;
@@ -20,18 +20,17 @@
 			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
 
+			// Use snapdom.toBlob for much faster HTML to image conversion
+			const blob = await snapdom.toBlob(output, {
+				scale: scale,
+				width: offsetWidth * scale,
+				height: offsetHeight * scale,
+				type: 'png'
+			});
+
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': domtoimage.toBlob(output, {
-						height: offsetHeight * scale,
-						width: offsetWidth * scale,
-						style: {
-							transform: `scale(${scale})`,
-							transformOrigin: 'top left',
-							width: `${offsetWidth}px`,
-							height: `${offsetHeight}px`
-						}
-					})
+					'image/png': blob
 				})
 			]);
 
