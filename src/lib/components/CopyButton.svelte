@@ -20,17 +20,14 @@
 			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
 
-			// Use snapdom.toBlob for much faster HTML to image conversion
-			const blob = await snapdom.toBlob(output, {
-				scale: scale,
-				width: offsetWidth * scale,
-				height: offsetHeight * scale,
-				type: 'png'
-			});
-
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': blob
+					'image/png': snapdom.toBlob(output, {
+						scale: scale,
+						width: offsetWidth * scale,
+						height: offsetHeight * scale,
+						type: 'png'
+					})
 				})
 			]);
 
