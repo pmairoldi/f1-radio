@@ -17,51 +17,45 @@
 
 		running = true;
 		try {
+			// Check clipboard permissions first
+			const permission = await navigator.permissions.query({ name: 'clipboard-write' as PermissionName });
+			console.log('Clipboard permission:', permission.state);
+
 			// Detect Safari for optimizations
 			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 			const scale = isSafari ? 2 : 3;
 
-			// html2canvas options optimized for Safari
-			const options = {
+			console.log('Starting html2canvas capture...');
+
+			// Generate canvas using html2canvas with minimal options first
+			const canvas = await html2canvas(output, {
 				scale: scale,
-				useCORS: true,
-				allowTaint: false,
-				backgroundColor: '#1f2937',
-				removeContainer: true,
-				ignoreElements: (element: Element) => {
-					// Skip spinning animations
-					if (element.classList && element.classList.contains('animate-spin')) {
-						return true;
-					}
-					return false;
-				}
-			};
-
-			// Safari-specific optimizations
-			if (isSafari) {
-				options.width = output.offsetWidth;
-				options.height = output.offsetHeight;
-				options.foreignObjectRendering = false; // Disable for better Safari compatibility
-				options.imageTimeout = 5000; // Reduce timeout for faster processing
-			}
-
-			// Generate canvas using html2canvas
-			const canvas = await html2canvas(output, options);
+				backgroundColor: '#1f2937'
+			});
+			
+			console.log('Canvas generated:', canvas.width, 'x', canvas.height);
 			
 			// Convert canvas to blob
-			const blob = await new Promise<Blob>((resolve) => {
+			const blob = await new Promise<Blob>((resolve, reject) => {
 				canvas.toBlob((blob) => {
-					resolve(blob!);
-				}, 'image/png', isSafari ? 0.8 : 0.95);
+					if (blob) {
+						console.log('Blob created successfully:', blob.size, 'bytes');
+						resolve(blob);
+					} else {
+						reject(new Error('Failed to create blob from canvas'));
+					}
+				}, 'image/png', 0.95);
 			});
 
-			// Copy to clipboard
+			// Try copying to clipboard
+			console.log('Attempting to copy to clipboard...');
 			await navigator.clipboard.write([
 				new ClipboardItem({
 					'image/png': blob
 				})
 			]);
 
+			console.log('Successfully copied to clipboard');
 			running = false;
 		} catch (error) {
 			console.error('oops, something went wrong!', error);
