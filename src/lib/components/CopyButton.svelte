@@ -20,30 +20,26 @@
 			const scale = 3;
 			const { offsetWidth, offsetHeight } = output;
 
-			// Generate canvas using html2canvas (replacing dom-to-image)
-			const canvas = await html2canvas(output, {
-				scale: scale,
-				width: offsetWidth,
-				height: offsetHeight,
-				backgroundColor: null, // Keep transparent background like original
-				useCORS: true,
-				allowTaint: false
-			});
-
-			// Convert canvas to blob to mimic the original dom-to-image.toBlob behavior
-			const blob = await new Promise<Blob>((resolve, reject) => {
-				canvas.toBlob((blob) => {
-					if (blob) {
-						resolve(blob);
-					} else {
-						reject(new Error('Failed to create blob'));
-					}
-				}, 'image/png');
-			});
-
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': blob
+					'image/png': html2canvas(output, {
+						scale: scale,
+						width: offsetWidth,
+						height: offsetHeight,
+						backgroundColor: null, // Keep transparent background like original
+						useCORS: true,
+						allowTaint: false
+					}).then(canvas => {
+						return new Promise<Blob>((resolve, reject) => {
+							canvas.toBlob((blob) => {
+								if (blob) {
+									resolve(blob);
+								} else {
+									reject(new Error('Failed to create blob'));
+								}
+							}, 'image/png');
+						});
+					})
 				})
 			]);
 
