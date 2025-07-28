@@ -1,5 +1,5 @@
 <script lang="ts">
-	import domtoimage from 'dom-to-image';
+	import html2canvas from 'html2canvas';
 
 	interface Props {
 		element?: HTMLElement | undefined;
@@ -19,110 +19,51 @@
 		try {
 			// Detect Safari for optimizations
 			const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			const scale = isSafari ? 2 : 3; // Lower scale for Safari
-			const { offsetWidth, offsetHeight } = output;
+			const scale = isSafari ? 2 : 3;
 
-			// Temporarily hide complex elements for Safari during copy
-			const waveElements = isSafari ? output.querySelectorAll('.safari-optimize') : [];
-			let originalStyles = [];
-			
-			if (isSafari) {
-				// Hide wave animation
-				waveElements.forEach(el => el.style.display = 'none');
-				
-				// Disable all animations and transitions temporarily
-				const styleSheet = document.createElement('style');
-				styleSheet.id = 'safari-copy-optimize';
-				styleSheet.textContent = `
-					* {
-						animation-duration: 0s !important;
-						animation-delay: 0s !important;
-						transition-duration: 0s !important;
-						transition-delay: 0s !important;
-						transform: none !important;
-						filter: none !important;
-						box-shadow: none !important;
-						text-shadow: none !important;
-					}
-				`;
-				document.head.appendChild(styleSheet);
-				
-				// Force a reflow to apply the styles
-				output.offsetHeight;
-				
-				// Wait for next frame to ensure styles are applied
-				await new Promise(resolve => requestAnimationFrame(resolve));
-			}
-
-			// Safari-specific optimizations
+			// html2canvas options optimized for Safari
 			const options = {
-				height: offsetHeight * scale,
-				width: offsetWidth * scale,
-				cacheBust: false,
+				scale: scale,
 				useCORS: true,
 				allowTaint: false,
-				skipAutoScale: true,
-				filter: (node: Element) => {
-					// Skip animations and complex elements that slow down Safari
-					if (node.classList && node.classList.contains('animate-spin')) {
-						return false;
+				backgroundColor: '#1f2937',
+				removeContainer: true,
+				ignoreElements: (element: Element) => {
+					// Skip spinning animations
+					if (element.classList && element.classList.contains('animate-spin')) {
+						return true;
 					}
-					// Skip pseudo-elements that are expensive to render
-					if (isSafari && node.classList && node.classList.contains('safari-wave-dot')) {
-						return false;
-					}
-					return true;
-				},
-				style: {
-					transform: `scale(${scale})`,
-					transformOrigin: 'top left',
-					width: `${offsetWidth}px`,
-					height: `${offsetHeight}px`,
-					// Force simpler rendering
-					'image-rendering': isSafari ? 'pixelated' : 'auto',
-					'backface-visibility': 'hidden',
-					'transform-style': 'flat'
+					return false;
 				}
 			};
 
-			// Add Safari-specific optimizations
+			// Safari-specific optimizations
 			if (isSafari) {
-				options.quality = 0.7; // Even lower quality for Safari
-				options.pixelRatio = 1; // Force pixel ratio to 1 for Safari
-				options.bgcolor = '#1f2937'; // Set background color to avoid transparency calculations
-				options.imagePlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Tiny placeholder for images
+				options.width = output.offsetWidth;
+				options.height = output.offsetHeight;
+				options.foreignObjectRendering = false; // Disable for better Safari compatibility
+				options.imageTimeout = 5000; // Reduce timeout for faster processing
 			}
 
+			// Generate canvas using html2canvas
+			const canvas = await html2canvas(output, options);
+			
+			// Convert canvas to blob
+			const blob = await new Promise<Blob>((resolve) => {
+				canvas.toBlob((blob) => {
+					resolve(blob!);
+				}, 'image/png', isSafari ? 0.8 : 0.95);
+			});
+
+			// Copy to clipboard
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': domtoimage.toBlob(output, options)
+					'image/png': blob
 				})
 			]);
 
-			// Restore hidden elements and styles
-			if (isSafari) {
-				waveElements.forEach(el => el.style.display = '');
-				
-				// Remove the temporary style sheet
-				const tempStyleSheet = document.getElementById('safari-copy-optimize');
-				if (tempStyleSheet) {
-					tempStyleSheet.remove();
-				}
-			}
-
 			running = false;
 		} catch (error) {
-			// Restore hidden elements and styles on error
-			if (isSafari) {
-				const waveElements = output.querySelectorAll('.safari-optimize');
-				waveElements.forEach(el => el.style.display = '');
-				
-				// Remove the temporary style sheet
-				const tempStyleSheet = document.getElementById('safari-copy-optimize');
-				if (tempStyleSheet) {
-					tempStyleSheet.remove();
-				}
-			}
 			console.error('oops, something went wrong!', error);
 			running = false;
 		}

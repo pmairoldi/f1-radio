@@ -22,7 +22,7 @@
 	"dependencies": {
 		"@vercel/analytics": "^1.5.0",
 		"@vercel/speed-insights": "^1.2.0",
-		"dom-to-image": "^2.6.0",
+		"html2canvas": "^1.4.1",
 		"tailwind-merge": "^1.14.0"
 	},
 	"devDependencies": {
@@ -32,7 +32,6 @@
 		"@sveltejs/kit": "^2.22.2",
 		"@sveltejs/vite-plugin-svelte": "^5.1.0",
 		"@tailwindcss/vite": "^4.1.11",
-		"@types/dom-to-image": "^2.6.7",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
 		"@typescript-eslint/parser": "^6.21.0",
 		"eslint": "^8.57.1",
