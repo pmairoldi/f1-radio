@@ -1,12 +1,21 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
 	import '../app.css';
+	import { provideRandom } from '$lib/random.svelte';
+	import { type Snippet } from 'svelte';
+	import type { LayoutData } from './$types';
 
 	interface Props {
+		data: LayoutData;
 		children?: Snippet;
 	}
 
-	let { children }: Props = $props();
+	let { data, children }: Props = $props();
+
+	const random = provideRandom(data.random);
+
+	$effect(() => {
+		random.update(data.random);
+	});
 </script>
 
 <svelte:head>
