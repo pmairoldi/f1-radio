@@ -55,27 +55,8 @@
 	bind:this={element}
 	style="--team-color: {team.color}; --light-team-color: color-mix(in oklab, var(--team-color), white);"
 >
-	<div class="relative z-0 flex flex-col p-3">
-		<div class="flex flex-row items-center justify-end">
-			<span class="text-4xl leading-none font-bold text-[var(--team-color)] uppercase">
-				{name.display === 'first' ? name.first : name.last}
-			</span>
-		</div>
-		<div class="flex flex-row items-center justify-end">
-			<span class="text-4xl leading-none font-black text-white uppercase"> Radio </span>
-		</div>
-		<div class="flex flex-row items-center justify-between">
-			<span
-				class="font-kh-interference-f1 bg-gradient-to-tl from-[var(--light-team-color)] to-[var(--team-color)] to-60% bg-clip-text text-7xl font-black text-transparent"
-			>
-				{driver.number}
-			</span>
-			<div class="flex h-16 w-16 justify-end">
-				<img src={team.logo} alt={team.name} class="max-h-full max-w-full object-contain" />
-			</div>
-		</div>
-
-		<div class="absolute start-0 end-0 -bottom-6 -z-10 grid grid-cols-9 items-end">
+	<div class="relative flex flex-col p-3">
+		<div class="absolute start-0 end-0 -bottom-6 grid grid-cols-9 items-end">
 			{#each wave as item}
 				<div class="row-start-1 flex h-12 flex-row">
 					{#each item.top as column}
@@ -103,6 +84,28 @@
 					{/each}
 				</div>
 			{/each}
+		</div>
+
+		<div class="flex flex-row items-center justify-end">
+			<span class="text-4xl leading-none font-bold text-[var(--team-color)] uppercase">
+				{name.display === 'first' ? name.first : name.last}
+			</span>
+		</div>
+
+		<div class="flex flex-row items-center justify-end">
+			<span class="text-4xl leading-none font-black text-white uppercase"> Radio </span>
+		</div>
+
+		<div class="z-10 flex flex-row items-center justify-between">
+			<span
+				class="font-kh-interference-f1 bg-gradient-to-tl from-[var(--light-team-color)] to-[var(--team-color)] to-60% bg-clip-text text-7xl font-black text-transparent"
+			>
+				{driver.number}
+			</span>
+
+			<div class="flex h-16 w-16 justify-end">
+				<img src={team.logo} alt={team.name} class="max-h-full max-w-full object-contain" />
+			</div>
 		</div>
 	</div>
 
