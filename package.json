@@ -23,14 +23,14 @@
 		"@vercel/analytics": "^1.5.0",
 		"@vercel/speed-insights": "^1.2.0",
 		"dom-to-image": "^2.6.0",
-		"tailwind-merge": "^1.14.0"
+		"tailwind-merge": "^3.3.1"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.54.1",
 		"@sveltejs/adapter-auto": "^6.0.1",
 		"@sveltejs/adapter-vercel": "^5.8.0",
 		"@sveltejs/kit": "^2.25.1",
-		"@sveltejs/vite-plugin-svelte": "^5.1.1",
+		"@sveltejs/vite-plugin-svelte": "^6.1.0",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/dom-to-image": "^2.6.7",
 		"@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -47,8 +47,8 @@
 		"tailwindcss": "^4.1.11",
 		"tslib": "^2.8.1",
 		"typescript": "^5.8.3",
-		"vite": "^6.3.5",
-		"vite-imagetools": "^6.2.9",
+		"vite": "^7.0.5",
+		"vite-imagetools": "^7.1.0",
 		"vitest": "^3.2.4"
 	}
 }
