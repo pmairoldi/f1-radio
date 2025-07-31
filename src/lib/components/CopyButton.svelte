@@ -10,9 +10,10 @@
 	let running = $state<boolean>(false);
 
 	async function getImage(output: HTMLElement): Promise<Blob> {
-		const scale = 3;
+		const scale = 2;
 		const width = output.offsetWidth;
 		const height = output.offsetHeight;
+
 		return domtoimage.toBlob(output, {
 			width: width * scale,
 			height: height * scale,
