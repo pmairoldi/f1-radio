@@ -31,8 +31,6 @@
 
 		return wave;
 	});
-
-	$inspect(wave);
 </script>
 
 <div
