@@ -125,23 +125,23 @@
 
 <Header />
 
-<main class="p-4 font-f1 flex-auto">
-	<div class=" grid grid-cols-1 gap-4 w-full max-w-2xl mx-auto justify-items-center">
-		<h2 class="w-full flex items-center">
+<main class="font-f1 flex-auto p-4">
+	<div class=" mx-auto grid w-full max-w-2xl grid-cols-1 justify-items-center gap-4">
+		<h2 class="flex w-full items-center">
 			Generate funny f1 radio memes and copy the image to post to your favorite website!
 		</h2>
 		<form
 			oninput={onFormChange}
 			onsubmit={(event) => event.preventDefault()}
 			autocomplete="off"
-			class="flex flex-col gap-4 w-full"
+			class="flex w-full flex-col gap-4"
 		>
 			<label class="flex flex-col">
 				<span>Pick a driver:</span>
 				<select
 					value={driver?.key ?? ''}
 					name="driver"
-					class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+					class="appearance-none rounded-xl bg-red-700 p-2 text-white"
 				>
 					<option value="">&ndash;</option>
 					{#each drivers as d (d.key)}
@@ -159,19 +159,19 @@
 						<select
 							value={message.type}
 							name="messages"
-							class="text-white bg-red-700 p-2 appearance-none rounded-xl"
+							class="appearance-none rounded-xl bg-red-700 p-2 text-white"
 							aria-label="Pick to enter drive or team message"
 						>
 							<option value="driver" selected={message.type === 'driver'}>Driver</option>
 							<option value="team" selected={message.type === 'team'}>Team</option>
 						</select>
 						<span>:</span>
-						<div class="flex-auto flex items-center text-white bg-red-700 rounded-xl overflow-clip">
+						<div class="flex flex-auto items-center overflow-clip rounded-xl bg-red-700 text-white">
 							<input
 								type="text"
 								value={message.text}
 								name="messages"
-								class="w-full p-2 bg-inherit appearance-none"
+								class="w-full appearance-none bg-inherit p-2"
 								aria-label="Enter a message"
 								use:init
 							/>
@@ -186,7 +186,7 @@
 			<button
 				type="button"
 				onclick={() => addMessage()}
-				class="bg-red-700 text-white p-2 rounded-xl"
+				class="rounded-xl bg-red-700 p-2 text-white"
 			>
 				Add Message
 			</button>
@@ -212,7 +212,8 @@
 <style>
 	select {
 		padding-right: 28px;
-		background-image: linear-gradient(45deg, transparent 50%, white 50%),
+		background-image:
+			linear-gradient(45deg, transparent 50%, white 50%),
 			linear-gradient(135deg, white 50%, transparent 50%);
 		background-position:
 			calc(100% - 15px) calc(1em + 2px),

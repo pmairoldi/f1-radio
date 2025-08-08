@@ -22,26 +22,26 @@
 
 <Header />
 
-<main class="p-4 flex-auto">
-	<section class="flex flex-col gap-8 max-w-2xl mx-auto">
+<main class="flex-auto p-4">
+	<section class="mx-auto flex max-w-2xl flex-col gap-8">
 		{#if data.posts.length === 0}
-			<p class="text-center font-f1">No posts</p>
+			<p class="font-f1 text-center">No posts</p>
 		{:else}
 			<ul>
 				{#each data.posts as post}
 					<li>
 						<a
-							class="flex flex-row gap-2 hover:bg-gray-500/20 dark:hover:bg-gray-200/20 p-2 rounded-lg transition-colors"
+							class="flex flex-row gap-2 rounded-lg p-2 transition-colors hover:bg-gray-500/20 dark:hover:bg-gray-200/20"
 							href={`/blog/${post.slug}`}
 						>
-							<div class="flex flex-col gap-1 flex-1">
-								<h2 class="text-2xl col-start-1 font-f1">{post.title}</h2>
-								<p class="text-sm text-red-600 col-start-1">Published at {formatDate(post.date)}</p>
-								<p class="text-sm col-start-1">{post.description}</p>
+							<div class="flex flex-1 flex-col gap-1">
+								<h2 class="font-f1 col-start-1 text-2xl">{post.title}</h2>
+								<p class="col-start-1 text-sm text-red-600">Published at {formatDate(post.date)}</p>
+								<p class="col-start-1 text-sm">{post.description}</p>
 							</div>
 
 							<span
-								class="flex items-center gap-1 row-start-1 row-span-3 col-start-2 text-sm text-red-600 transition-colors"
+								class="col-start-2 row-span-3 row-start-1 flex items-center gap-1 text-sm text-red-600 transition-colors"
 							>
 								Read
 								<svg

@@ -1,6 +1,8 @@
+/// <reference types="vitest" />
+import { defineConfig } from 'vite';
+
 import { sveltekit } from '@sveltejs/kit/vite';
 import { imagetools } from 'vite-imagetools';
-import { defineConfig } from 'vitest/config';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
