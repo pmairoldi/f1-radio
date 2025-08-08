@@ -9,7 +9,24 @@
 
 	let running = $state<boolean>(false);
 
-	async function execute() {
+	async function getImage(output: HTMLElement): Promise<Blob> {
+		const scale = 3;
+		const width = output.offsetWidth;
+		const height = output.offsetHeight;
+
+		return domtoimage.toBlob(output, {
+			width: width * scale,
+			height: height * scale,
+			style: {
+				transform: `scale(${scale})`,
+				transformOrigin: 'top left',
+				width: `${width}px`,
+				height: `${height}px`
+			}
+		});
+	}
+
+	async function execute(): Promise<void> {
 		const output = element;
 		if (output == null) {
 			return;
@@ -17,21 +34,9 @@
 
 		running = true;
 		try {
-			const scale = 3;
-			const { offsetWidth, offsetHeight } = output;
-
 			await navigator.clipboard.write([
 				new ClipboardItem({
-					'image/png': domtoimage.toBlob(output, {
-						height: offsetHeight * scale,
-						width: offsetWidth * scale,
-						style: {
-							transform: `scale(${scale})`,
-							transformOrigin: 'top left',
-							width: `${offsetWidth}px`,
-							height: `${offsetHeight}px`
-						}
-					})
+					'image/png': getImage(output)
 				})
 			]);
 
@@ -45,13 +50,13 @@
 
 <button
 	type="button"
-	class="bg-red-700 text-white p-2 rounded-xl flex items-center gap-1 disabled:opacity-70"
-	onclick={() => execute()}
+	class="flex items-center gap-1 rounded-xl bg-red-700 p-2 text-white disabled:opacity-70"
+	onclick={execute}
 	disabled={running}
 >
 	{#if running}
 		<svg
-			class="animate-spin h-4 w-4 text-white"
+			class="h-4 w-4 animate-spin text-white"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
