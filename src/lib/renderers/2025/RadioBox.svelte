@@ -29,11 +29,11 @@
 		<div class="absolute start-0 end-0 -bottom-6 grid grid-cols-9 items-end">
 			{#each wave as item}
 				<div
-					class="audio-wave-item row-start-1 h-12"
+					class="audio-wave-item row-start-1 h-12 opacity-80"
 					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
 				></div>
 				<div
-					class="audio-wave-item row-start-2 h-6 -scale-y-[1] opacity-35"
+					class="audio-wave-item row-start-2 h-6 -scale-y-[1] opacity-20"
 					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
 				></div>
 			{/each}
