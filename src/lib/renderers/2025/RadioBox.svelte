@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { injectRandom } from '$lib/random.svelte';
+	import { SeededRandom } from '$lib/seeded-random';
 	import type { Driver } from '$lib/types';
 	import type { Snippet } from 'svelte';
+	import { cubicIn } from 'svelte/easing';
 
 	interface Props {
 		driver: Driver;
@@ -11,12 +14,22 @@
 	let { driver, children, element = $bindable() }: Props = $props();
 	let { name, team } = $derived(driver);
 
-	const sine: number[] = [0, 0.383, 0.707, 0.924, 1, 0.924, 0.707, 0.383, 0];
-	const wave = sine.map((v) => {
-		const rand = Math.random();
-		const noise = (rand - 0.5) * 40;
-		const normalized = (v + 1) * 50;
-		return Math.max(0, Math.min(100, normalized + noise));
+	const random = injectRandom();
+	const seed = $derived(`${random.get() * 100}`);
+
+	const wave = $derived.by(() => {
+		const random = new SeededRandom(seed);
+
+		const sine: number[] = [0, 0.383, 0.707, 0.924, 1, 0.924, 0.707, 0.383, 0];
+
+		const wave = sine.map((v) => {
+			const rand = random.next();
+			const noise = (rand - 0.5) * 40;
+			const normalized = (v + 1) * 50;
+			return Math.max(0, Math.min(100, normalized + noise));
+		});
+
+		return wave;
 	});
 </script>
 
