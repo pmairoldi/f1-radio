@@ -5,6 +5,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { m } from '$lib/paraglide/messages';
 	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
 	import { drivers as _drivers } from '$lib/seasons/current';
 	import { type Message, type Name } from '$lib/types';
@@ -29,17 +30,17 @@
 
 	const onFormChange: FormEventHandler<HTMLFormElement> = (event) => {
 		const form = new FormData(event.currentTarget);
-		const d = form.get('driver') as string | null;
-		const m = form.getAll('messages') as string[] | null;
+		const driver = form.get('driver') as string | null;
+		const messages = form.getAll('messages') as string[] | null;
 
 		const update: Partial<{ driver: string | null; messages: Message[] }> = {};
-		update.driver = d;
+		update.driver = driver;
 
-		if (m != null) {
+		if (messages != null) {
 			const newMessage: Message[] = [];
-			for (let i = 0; i < m.length; i += 2) {
-				const type = m[i] as 'driver' | 'team';
-				const text = m[i + 1];
+			for (let i = 0; i < messages.length; i += 2) {
+				const type = messages[i] as 'driver' | 'team';
+				const text = messages[i + 1];
 				newMessage.push({ type: type, text: text });
 			}
 			update.messages = newMessage;
@@ -95,8 +96,8 @@
 		if (messages !== undefined) {
 			if (messages.length > 0) {
 				searchParams.delete('m');
-				messages.forEach((m) => {
-					searchParams.append('m', `${m.type}:${m.text}`);
+				messages.forEach((message) => {
+					searchParams.append('m', `${message.type}:${message.text}`);
 				});
 			} else {
 				searchParams.delete('m');
@@ -128,7 +129,7 @@
 <main class="font-f1 flex-auto p-4">
 	<div class=" mx-auto grid w-full max-w-2xl grid-cols-1 justify-items-center gap-4">
 		<h2 class="flex w-full items-center">
-			Generate funny f1 radio memes and copy the image to post to your favorite website!
+			{m['home.heading']()}
 		</h2>
 		<form
 			oninput={onFormChange}

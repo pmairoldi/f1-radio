@@ -17,7 +17,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"i18n": "pnpm dlx lingo.dev@latest i18n"
 	},
 	"dependencies": {
 		"@vercel/analytics": "^1.5.0",
@@ -26,6 +27,7 @@
 		"tailwind-merge": "^1.14.0"
 	},
 	"devDependencies": {
+		"@inlang/paraglide-js": "2.2.0",
 		"@playwright/test": "^1.53.2",
 		"@sveltejs/adapter-auto": "^6.0.1",
 		"@sveltejs/adapter-vercel": "^5.7.2",
