@@ -9,6 +9,7 @@
 	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
 	import { drivers as _drivers } from '$lib/seasons/current';
 	import { type Message, type Name } from '$lib/types';
+	import { onMount } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
@@ -69,8 +70,15 @@
 		setQuery({ messages });
 	}
 
-	const focus: Attachment<HTMLElement> = (el) => {
-		el.focus();
+	let mounted = false;
+	onMount(() => {
+		mounted = true;
+	});
+
+	const init: Attachment<HTMLElement> = (el: HTMLElement) => {
+		if (mounted) {
+			el.focus();
+		}
 	};
 
 	function setQuery(update: Partial<{ driver: string | null; messages: Message[] }>) {
@@ -171,7 +179,7 @@
 								name="messages"
 								class="w-full appearance-none bg-inherit p-2"
 								aria-label="Enter a message"
-								{@attach focus}
+								{@attach init}
 							/>
 							{#if i !== 0}
 								<button class="p-2" type="button" onclick={() => removeMessage(i)}>X</button>
