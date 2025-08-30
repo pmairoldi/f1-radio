@@ -2,3 +2,8 @@ version: 1
 checksums:
   4188a166aad2705b4f09401f924502ed:
     home/heading: 2b193a09f6c3059f927a6503d965be16
+    home/pick_a_driver: 2211c6d7892ad4aad48884bc9fe7d1e3
+    home/messages: e1c72f31a0f4e5845ad27b62adddfce7
+    home/messages_driver: 50cde9cb581769eccd22018b473b591c
+    home/messages_team: c621ea9404a37af289def443b309bf1b
+    home/add_message: 2d9e14f76fadf0956e04b0c55e500d68

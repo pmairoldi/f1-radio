@@ -1,5 +1,10 @@
 {
 	"home": {
-		"heading": "Generate funny f1 radio memes and copy the image to post to your favorite website!"
+		"heading": "Generate funny f1 radio memes and copy the image to post to your favorite website!",
+		"pick_a_driver": "Pick a driver:",
+		"messages": "Messages:",
+		"messages_driver": "Driver",
+		"messages_team": "Team",
+		"add_message": "Add Message"
 	}
 }

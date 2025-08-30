@@ -9,7 +9,7 @@
 	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
 	import { drivers as _drivers } from '$lib/seasons/current';
 	import { type Message, type Name } from '$lib/types';
-	import { onMount } from 'svelte';
+	import type { Attachment } from 'svelte/attachments';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
 
@@ -69,16 +69,9 @@
 		setQuery({ messages });
 	}
 
-	let mounted = false;
-	onMount(() => {
-		mounted = true;
-	});
-
-	function init(el: HTMLElement) {
-		if (mounted) {
-			el.focus();
-		}
-	}
+	const focus: Attachment<HTMLElement> = (el) => {
+		el.focus();
+	};
 
 	function setQuery(update: Partial<{ driver: string | null; messages: Message[] }>) {
 		const url = new URL(page.url);
@@ -104,7 +97,7 @@
 			}
 		}
 
-		goto(url, { replaceState: true, keepFocus: true, invalidateAll: true });
+		goto(url, { replaceState: true, keepFocus: true, invalidateAll: true, noScroll: true });
 	}
 </script>
 
@@ -138,7 +131,7 @@
 			class="flex w-full flex-col gap-4"
 		>
 			<label class="flex flex-col">
-				<span>Pick a driver:</span>
+				<span>{m['home.pick_a_driver']()}</span>
 				<select
 					value={driver?.key ?? ''}
 					name="driver"
@@ -154,7 +147,7 @@
 			</label>
 
 			<div class="flex flex-col gap-2">
-				<span>Messages:</span>
+				<span>{m['home.messages']()}</span>
 				{#each messages as message, i}
 					<div class="flex flex-row items-center gap-2">
 						<select
@@ -163,8 +156,12 @@
 							class="appearance-none rounded-xl bg-red-700 p-2 text-white"
 							aria-label="Pick to enter drive or team message"
 						>
-							<option value="driver" selected={message.type === 'driver'}>Driver</option>
-							<option value="team" selected={message.type === 'team'}>Team</option>
+							<option value="driver" selected={message.type === 'driver'}>
+								{m['home.messages_driver']()}
+							</option>
+							<option value="team" selected={message.type === 'team'}>
+								{m['home.messages_team']()}
+							</option>
 						</select>
 						<span>:</span>
 						<div class="flex flex-auto items-center overflow-clip rounded-xl bg-red-700 text-white">
@@ -174,7 +171,7 @@
 								name="messages"
 								class="w-full appearance-none bg-inherit p-2"
 								aria-label="Enter a message"
-								use:init
+								{@attach focus}
 							/>
 							{#if i !== 0}
 								<button class="p-2" type="button" onclick={() => removeMessage(i)}>X</button>
@@ -189,7 +186,7 @@
 				onclick={() => addMessage()}
 				class="rounded-xl bg-red-700 p-2 text-white"
 			>
-				Add Message
+				{m['home.add_message']()}
 			</button>
 		</form>
 
