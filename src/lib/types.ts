@@ -15,12 +15,3 @@ export type Driver = {
 };
 
 export type Message = { type: 'driver' | 'team'; text: string };
-
-export type Post = {
-	title: string;
-	slug: string;
-	description: string;
-	date: string;
-	categories: string[];
-	published: boolean;
-};
