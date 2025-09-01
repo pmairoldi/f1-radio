@@ -9,7 +9,7 @@
 <footer class="mx-auto flex w-full max-w-2xl flex-row items-center justify-center gap-6 p-6">
 	<a
 		href="https://x.com/F1RadioMeme"
-		class="flex flex-none items-center gap-2 underline"
+		class="flex flex-none items-center gap-2 rounded underline outline-2 outline-offset-4 outline-red-700 outline-none focus-visible:outline-solid"
 		title={m['footer.follow_us_title']()}
 		target="_blank"
 	>
@@ -23,7 +23,7 @@
 
 	<a
 		href="https://buymeacoffee.com/pmairoldi"
-		class="flex flex-none items-center gap-2 underline"
+		class="flex flex-none items-center gap-2 rounded underline outline-2 outline-offset-4 outline-red-700 outline-none focus-visible:outline-solid"
 		title={m['footer.buy_coffee_title']()}
 		target="_blank"
 	>

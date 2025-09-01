@@ -33,7 +33,7 @@
 				{#each data.posts as post}
 					<li>
 						<a
-							class="flex flex-row gap-2 rounded-lg p-2 transition-colors hover:bg-gray-500/20 dark:hover:bg-gray-200/20"
+							class="flex flex-row gap-2 rounded-lg p-2 outline-2 -outline-offset-2 outline-red-700 transition-colors outline-none hover:bg-gray-500/20 focus-visible:outline-solid dark:hover:bg-gray-200/20"
 							href={localizeHref(`/blog/${post.slug}`)}
 						>
 							<div class="flex flex-1 flex-col gap-1">
