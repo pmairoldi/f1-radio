@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { m } from '$lib/paraglide/messages';
 	import domtoimage from 'dom-to-image';
+	import Button from './Button.svelte';
 
 	interface Props {
 		element?: HTMLElement | undefined;
@@ -48,12 +50,7 @@
 	}
 </script>
 
-<button
-	type="button"
-	class="flex items-center gap-1 rounded-xl bg-red-700 p-2 text-white disabled:opacity-70"
-	onclick={execute}
-	disabled={running}
->
+<Button type="button" onclick={execute} disabled={running}>
 	{#if running}
 		<svg
 			class="h-4 w-4 animate-spin text-white"
@@ -70,8 +67,8 @@
 		</svg>
 	{/if}
 	{#if running}
-		Copying
+		{m['copy_button.copying']()}
 	{:else}
-		Copy
+		{m['copy_button.copy']()}
 	{/if}
-</button>
+</Button>

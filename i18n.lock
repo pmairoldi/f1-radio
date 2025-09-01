@@ -7,3 +7,24 @@ checksums:
     home/messages_driver: 50cde9cb581769eccd22018b473b591c
     home/messages_team: c621ea9404a37af289def443b309bf1b
     home/add_message: 2d9e14f76fadf0956e04b0c55e500d68
+    home/aria/pick_message_type: b91621899da8690c25661a3c0661e5b3
+    home/aria/enter_message: 8a7432784184033d2022bcaa39cbc269
+    header/title_home: c227d2c8e5d86a375988bd63ebeececc
+    header/blog: 7feb9b36be2028520ffe37de06505148
+    header/blog_title: 7feb9b36be2028520ffe37de06505148
+    footer/follow_us: 204411a0759870f5d42594255d781989
+    footer/follow_us_title: c1a1d1f901b57a55f3d951b23d26bfdd
+    footer/buy_coffee: 87cd6c4f8d30a075bf868c086a4151a5
+    footer/buy_coffee_title: 87cd6c4f8d30a075bf868c086a4151a5
+    footer/x_logo_alt: 252fb8a1d6888484330af10db7f6b9b3
+    footer/coffee_logo_alt: e227e173974f483a7d0b3242a5543318
+    copy_button/copy: 627c00d2c850b9b45f7341a6ac01b6bb
+    copy_button/copying: 4213743586c0c25d1a110e9797f61d4b
+    blog/title: 7feb9b36be2028520ffe37de06505148
+    blog/no_posts: c2cc575911b5e46d99710d6f1e175dc8
+    blog/published_at: 989e5a1b91797966879f58f71da5ab65
+    blog/read: 2494ca23d10e5b6381eb271aceeb5270
+    seo/site_name: 1292c3393e7778f4f57da31be6737f32
+    seo/title: e19d7ca26dc20473900f714d67541447
+    seo/page_title: 5f9fdb85479109108ef209b06757364e
+    seo/description: 2b193a09f6c3059f927a6503d965be16

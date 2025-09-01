@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import Button from '$lib/components/Button.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import Select from '$lib/components/Select.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { m } from '$lib/paraglide/messages';
 	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
@@ -118,9 +120,9 @@
 {/snippet}
 
 <SEO
-	title="F1 Radio Meme"
-	description="Generate funny f1 radio memes and copy the image to post to your favorite website!"
-	name="F1RadioMeme"
+	title={m['seo.title']()}
+	description={m['seo.description']()}
+	name={m['seo.site_name']()}
 	url="https://f1radiomeme.com"
 	imageUrl="https://f1radiomeme.com/OG.png"
 />
@@ -140,29 +142,24 @@
 		>
 			<label class="flex flex-col">
 				<span>{m['home.pick_a_driver']()}</span>
-				<select
-					value={driver?.key ?? ''}
-					name="driver"
-					class="appearance-none rounded-xl bg-red-700 p-2 text-white"
-				>
+				<Select value={driver?.key ?? ''} name="driver">
 					<option value="">&ndash;</option>
 					{#each drivers as d (d.key)}
 						<option value={d.key} selected={driver?.key === d.key}>
 							{@render name(d.value.name)}
 						</option>
 					{/each}
-				</select>
+				</Select>
 			</label>
 
 			<div class="flex flex-col gap-2">
 				<span>{m['home.messages']()}</span>
 				{#each messages as message, i}
 					<div class="flex flex-row items-center gap-2">
-						<select
+						<Select
 							value={message.type}
 							name="messages"
-							class="appearance-none rounded-xl bg-red-700 p-2 text-white"
-							aria-label="Pick to enter drive or team message"
+							aria-label={m['home.aria.pick_message_type']()}
 						>
 							<option value="driver" selected={message.type === 'driver'}>
 								{m['home.messages_driver']()}
@@ -170,32 +167,40 @@
 							<option value="team" selected={message.type === 'team'}>
 								{m['home.messages_team']()}
 							</option>
-						</select>
+						</Select>
 						<span>:</span>
-						<div class="flex flex-auto items-center overflow-clip rounded-xl bg-red-700 text-white">
+						<div
+							class="flex flex-auto items-center overflow-clip rounded-xl bg-red-700 text-white outline-2 outline-offset-2 outline-red-700 outline-none has-focus-visible:outline-solid"
+						>
 							<input
 								type="text"
 								value={message.text}
 								name="messages"
-								class="w-full appearance-none bg-inherit p-2"
-								aria-label="Enter a message"
+								class="w-full appearance-none bg-inherit p-2 outline-none"
+								aria-label={m['home.aria.enter_message']()}
 								{@attach init}
 							/>
 							{#if i !== 0}
-								<button class="p-2" type="button" onclick={() => removeMessage(i)}>X</button>
+								<button
+									class="group p-2 pe-3 outline-none"
+									type="button"
+									onclick={() => removeMessage(i)}
+								>
+									<span
+										class="flex rounded-full leading-3.5 outline-1 outline-offset-5 outline-white outline-none group-focus-visible:outline-solid"
+									>
+										X
+									</span>
+								</button>
 							{/if}
 						</div>
 					</div>
 				{/each}
 			</div>
 
-			<button
-				type="button"
-				onclick={() => addMessage()}
-				class="rounded-xl bg-red-700 p-2 text-white"
-			>
+			<Button type="button" onclick={() => addMessage()}>
 				{m['home.add_message']()}
-			</button>
+			</Button>
 		</form>
 
 		{#if driver != null}
@@ -214,19 +219,3 @@
 </main>
 
 <Footer />
-
-<style>
-	select {
-		padding-right: 28px;
-		background-image:
-			linear-gradient(45deg, transparent 50%, white 50%),
-			linear-gradient(135deg, white 50%, transparent 50%);
-		background-position:
-			calc(100% - 15px) calc(1em + 2px),
-			calc(100% - 10px) calc(1em + 2px);
-		background-size:
-			5px 5px,
-			5px 5px;
-		background-repeat: no-repeat;
-	}
-</style>

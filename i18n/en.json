@@ -1,10 +1,44 @@
 {
+	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"home": {
 		"heading": "Generate funny f1 radio memes and copy the image to post to your favorite website!",
 		"pick_a_driver": "Pick a driver:",
 		"messages": "Messages:",
 		"messages_driver": "Driver",
 		"messages_team": "Team",
-		"add_message": "Add Message"
+		"add_message": "Add Message",
+		"aria": {
+			"pick_message_type": "Pick to enter drive or team message",
+			"enter_message": "Enter a message"
+		}
+	},
+	"header": {
+		"title_home": "home",
+		"blog": "Blog",
+		"blog_title": "Blog"
+	},
+	"footer": {
+		"follow_us": "Follow Us",
+		"follow_us_title": "Follow us on X",
+		"buy_coffee": "Buy me a coffee",
+		"buy_coffee_title": "Buy me a coffee",
+		"x_logo_alt": "X Logo",
+		"coffee_logo_alt": "Coffee Logo"
+	},
+	"copy_button": {
+		"copy": "Copy",
+		"copying": "Copying"
+	},
+	"blog": {
+		"title": "Blog",
+		"no_posts": "No posts",
+		"published_at": "Published at {date}",
+		"read": "Read"
+	},
+	"seo": {
+		"site_name": "F1RadioMeme",
+		"title": "F1 Radio Meme",
+		"page_title": "{name} | F1 Radio Meme",
+		"description": "Generate funny f1 radio memes and copy the image to post to your favorite website!"
 	}
 }
