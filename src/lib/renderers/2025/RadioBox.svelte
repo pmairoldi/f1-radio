@@ -49,7 +49,7 @@
 			<span class="text-4xl leading-none font-black text-white uppercase"> Radio </span>
 		</div>
 
-		<div class="z-10 flex flex-row items-center justify-between">
+		<div class="flex flex-row items-center justify-between">
 			<span
 				class="font-kh-interference-f1 bg-gradient-to-tl from-[var(--light-team-color)] to-[var(--team-color)] to-60% bg-clip-text text-7xl font-black text-transparent"
 			>

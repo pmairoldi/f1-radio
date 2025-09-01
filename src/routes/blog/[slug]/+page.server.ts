@@ -1,5 +1,10 @@
+import { getPosts } from '$lib/blog';
 import type { EntryGenerator } from './$types';
 
 export const entries: EntryGenerator = () => {
-	return [{ slug: 'best-of-2024' }];
+	const posts = getPosts();
+
+	return posts.map((post) => {
+		return { slug: post.slug };
+	});
 };

@@ -1,4 +1,4 @@
-import type { Post } from '$lib/types';
+import type { Post } from '$lib/blog';
 import { error } from '@sveltejs/kit';
 import type { Component } from 'svelte';
 import type { PageLoad } from './$types';
@@ -17,7 +17,7 @@ export const load: PageLoad = async ({ params }) => {
 		const post = await getPost(params.slug);
 
 		return post;
-	} catch (e) {
+	} catch {
 		error(404, `Could not find ${params.slug}`);
 	}
 };
