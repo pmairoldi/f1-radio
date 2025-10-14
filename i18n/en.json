@@ -15,7 +15,8 @@
 	"header": {
 		"title_home": "home",
 		"blog": "Blog",
-		"blog_title": "Blog"
+		"blog_title": "Blog",
+		"profile_title": "Profile"
 	},
 	"footer": {
 		"follow_us": "Follow Us",
