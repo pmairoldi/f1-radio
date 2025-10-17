@@ -13,11 +13,8 @@ checksums:
     header/blog: 7feb9b36be2028520ffe37de06505148
     header/blog_title: 7feb9b36be2028520ffe37de06505148
     footer/follow_us: 204411a0759870f5d42594255d781989
-    footer/follow_us_title: c1a1d1f901b57a55f3d951b23d26bfdd
-    footer/buy_coffee: 87cd6c4f8d30a075bf868c086a4151a5
-    footer/buy_coffee_title: 87cd6c4f8d30a075bf868c086a4151a5
-    footer/x_logo_alt: 252fb8a1d6888484330af10db7f6b9b3
-    footer/coffee_logo_alt: e227e173974f483a7d0b3242a5543318
+    footer/donate: dc5e7e3d3f4c453b85bd549a898f1775
+    footer/disclaimer: 6b0a3c96559710f4f04caebda8a4be72
     copy_button/copy: 627c00d2c850b9b45f7341a6ac01b6bb
     copy_button/copying: 4213743586c0c25d1a110e9797f61d4b
     blog/title: 7feb9b36be2028520ffe37de06505148
