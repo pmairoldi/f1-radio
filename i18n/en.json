@@ -19,11 +19,8 @@
 	},
 	"footer": {
 		"follow_us": "Follow Us",
-		"follow_us_title": "Follow us on X",
-		"buy_coffee": "Buy me a coffee",
-		"buy_coffee_title": "Buy me a coffee",
-		"x_logo_alt": "X Logo",
-		"coffee_logo_alt": "Coffee Logo"
+		"donate": "Donate",
+		"disclaimer": "F1 Radio Meme is an unofficial app and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing BV. F1 Radio Meme is a non-commercial, fan-made application. Data is used for non-commercial, fair use. All product, teams and company names are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them. Any product names, logos, brands, and other trademarks or images featured or referred to within the app are the property of their respective trademark holders. These trademark holders are not affiliated with F1 Radio Meme or its contributors. They do not sponsor or endorse F1 Radio Meme or any of our products."
 	},
 	"copy_button": {
 		"copy": "Copy",
