@@ -21,9 +21,9 @@
 		"i18n": "pnpm dlx lingo.dev@latest i18n"
 	},
 	"dependencies": {
-		"@vercel/analytics": "^1.5.0",
-		"@vercel/speed-insights": "^1.2.0",
 		"dom-to-image": "^2.6.0",
+		"posthog-js": "^1.279.1",
+		"posthog-node": "^5.10.2",
 		"tailwind-merge": "^1.14.0"
 	},
 	"devDependencies": {

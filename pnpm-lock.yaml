@@ -8,15 +8,15 @@ importers:
 
   .:
     dependencies:
-      '@vercel/analytics':
-        specifier: ^1.5.0
-        version: 1.5.0(@sveltejs/kit@2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)
-      '@vercel/speed-insights':
-        specifier: ^1.2.0
-        version: 1.2.0(@sveltejs/kit@2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)
       dom-to-image:
         specifier: ^2.6.0
         version: 2.6.0
+      posthog-js:
+        specifier: ^1.279.1
+        version: 1.279.1
+      posthog-node:
+        specifier: ^5.10.2
+        version: 5.10.2
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
@@ -463,6 +463,9 @@ packages:
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
+  '@posthog/core@1.3.0':
+    resolution: {integrity: sha512-hxLL8kZNHH098geedcxCz8y6xojkNYbmJEW+1vFXsmPcExyCXIUUJ/34X6xa9GcprKxd0Wsx3vfJQLQX4iVPhw==}
+
   '@rollup/pluginutils@5.2.0':
     resolution: {integrity: sha512-qWJ2ZTbmumwiLFomfzTyt5Kng4hwPi9rwCYN4SHb6eaRU1KNO4ccxINHr/VhH4GgPlt1XfSTLX2LBTme8ne4Zw==}
     engines: {node: '>=14.0.0'}
@@ -796,59 +799,10 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@vercel/analytics@1.5.0':
-    resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
-    peerDependencies:
-      '@remix-run/react': ^2
-      '@sveltejs/kit': ^1 || ^2
-      next: '>= 13'
-      react: ^18 || ^19 || ^19.0.0-rc
-      svelte: '>= 4'
-      vue: ^3
-      vue-router: ^4
-    peerDependenciesMeta:
-      '@remix-run/react':
-        optional: true
-      '@sveltejs/kit':
-        optional: true
-      next:
-        optional: true
-      react:
-        optional: true
-      svelte:
-        optional: true
-      vue:
-        optional: true
-      vue-router:
-        optional: true
-
   '@vercel/nft@0.29.4':
     resolution: {integrity: sha512-6lLqMNX3TuycBPABycx7A9F1bHQR7kiQln6abjFbPrf5C/05qHM9M5E4PeTE59c7z8g6vHnx1Ioihb2AQl7BTA==}
     engines: {node: '>=18'}
     hasBin: true
-
-  '@vercel/speed-insights@1.2.0':
-    resolution: {integrity: sha512-y9GVzrUJ2xmgtQlzFP2KhVRoCglwfRQgjyfY607aU0hh0Un6d0OUyrJkjuAlsV18qR4zfoFPs/BiIj9YDS6Wzw==}
-    peerDependencies:
-      '@sveltejs/kit': ^1 || ^2
-      next: '>= 13'
-      react: ^18 || ^19 || ^19.0.0-rc
-      svelte: '>= 4'
-      vue: ^3
-      vue-router: ^4
-    peerDependenciesMeta:
-      '@sveltejs/kit':
-        optional: true
-      next:
-        optional: true
-      react:
-        optional: true
-      svelte:
-        optional: true
-      vue:
-        optional: true
-      vue-router:
-        optional: true
 
   '@vitest/expect@3.2.4':
     resolution: {integrity: sha512-Io0yyORnB6sikFlt8QW5K7slY4OjqNX9jmJQ02QDda8lyM6B5oNgVWoSoKPac8/kgnCUzuHQKrSLtu/uOqqrig==}
@@ -1030,6 +984,9 @@ packages:
   cookie@0.6.0:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
+
+  core-js@3.46.0:
+    resolution: {integrity: sha512-vDMm9B0xnqqZ8uSBpZ8sNtRtOdmfShrvT6h2TuQGLs0Is+cR0DYbj/KWP6ALVNbWPpqA/qPLoOuppJN07humpA==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -1214,6 +1171,9 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
 
   file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
@@ -1668,6 +1628,16 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  posthog-js@1.279.1:
+    resolution: {integrity: sha512-EhWSP4IoNE1iFczEyrLnstb2P1Wxyou10wGgjuNZJszq3p9aDIIROSisSAYOoHTvvfB8TsqbGONLKa8xnXoklg==}
+
+  posthog-node@5.10.2:
+    resolution: {integrity: sha512-/C8dlu3bPH4BJ5C5bFJY3jzd2ZvP12N8dqeddTCatRTXYqfWjrLV8fqC1rn8t+zNZz1bx+cC2E4hfYF0vba8jw==}
+    engines: {node: '>=20'}
+
+  preact@10.27.2:
+    resolution: {integrity: sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -2079,6 +2049,9 @@ packages:
       jsdom:
         optional: true
 
+  web-vitals@4.2.4:
+    resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -2431,6 +2404,8 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
+  '@posthog/core@1.3.0': {}
+
   '@rollup/pluginutils@5.2.0(rollup@4.44.1)':
     dependencies:
       '@types/estree': 1.0.8
@@ -2743,11 +2718,6 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vercel/analytics@1.5.0(@sveltejs/kit@2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)':
-    optionalDependencies:
-      '@sveltejs/kit': 2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1))
-      svelte: 5.34.9
-
   '@vercel/nft@0.29.4(rollup@4.44.1)':
     dependencies:
       '@mapbox/node-pre-gyp': 2.0.0
@@ -2766,11 +2736,6 @@ snapshots:
       - encoding
       - rollup
       - supports-color
-
-  '@vercel/speed-insights@1.2.0(@sveltejs/kit@2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)':
-    optionalDependencies:
-      '@sveltejs/kit': 2.22.2(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1)))(svelte@5.34.9)(vite@6.3.5(jiti@2.4.2)(lightningcss@1.30.1))
-      svelte: 5.34.9
 
   '@vitest/expect@3.2.4':
     dependencies:
@@ -2938,6 +2903,8 @@ snapshots:
   consola@3.4.2: {}
 
   cookie@0.6.0: {}
+
+  core-js@3.46.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -3151,6 +3118,8 @@ snapshots:
   fdir@6.4.6(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
+
+  fflate@0.4.8: {}
 
   file-entry-cache@6.0.1:
     dependencies:
@@ -3528,6 +3497,20 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  posthog-js@1.279.1:
+    dependencies:
+      '@posthog/core': 1.3.0
+      core-js: 3.46.0
+      fflate: 0.4.8
+      preact: 10.27.2
+      web-vitals: 4.2.4
+
+  posthog-node@5.10.2:
+    dependencies:
+      '@posthog/core': 1.3.0
+
+  preact@10.27.2: {}
 
   prelude-ls@1.2.1: {}
 
@@ -3908,6 +3891,8 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  web-vitals@4.2.4: {}
 
   webidl-conversions@3.0.1: {}
 

@@ -1,5 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
+import { sequence } from '@sveltejs/kit/hooks';
+import { posthogHandle } from '$lib/posthog/server';
 
 const paraglideHandle: Handle = ({ event, resolve }) => {
 	return paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
@@ -12,4 +14,4 @@ const paraglideHandle: Handle = ({ event, resolve }) => {
 	});
 };
 
-export const handle: Handle = paraglideHandle;
+export const handle: Handle = sequence(paraglideHandle, posthogHandle);
