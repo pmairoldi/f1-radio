@@ -3,9 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
+	"packageManager": "pnpm@10.19.0",
 	"engines": {
-		"node": "22.x",
-		"pnpm": ">=10"
+		"node": "22.x"
 	},
 	"scripts": {
 		"dev": "vite dev",
