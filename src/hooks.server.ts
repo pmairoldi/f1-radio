@@ -3,6 +3,7 @@ import { paraglideMiddleware } from '$lib/paraglide/server';
 import { sequence } from '@sveltejs/kit/hooks';
 import { PostHog } from 'posthog-node';
 import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
+import { posthogHandle } from '$lib/posthog/server';
 
 export const handleError: HandleServerError = async function (input) {
 	const { error, status, message, event } = input;
