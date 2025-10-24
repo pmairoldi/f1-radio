@@ -8,11 +8,11 @@ import { posthogHandle } from '$lib/posthog/server';
 export const handleError: HandleServerError = async function (input) {
 	const { error, status, message, event } = input;
 
-	const posthog = new PostHog(PUBLIC_POSTHOG_KEY, {
-		host: 'https://us.i.posthog.com'
-	});
-
 	if (status !== 404) {
+		const posthog = new PostHog(PUBLIC_POSTHOG_KEY, {
+			host: 'https://us.i.posthog.com'
+		});
+
 		posthog.captureException(error, undefined, {
 			status: status,
 			message: message,
