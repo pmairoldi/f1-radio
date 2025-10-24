@@ -1,3 +1,6 @@
-import { initPosthog } from '../lib/posthog/client';
+import type { LayoutLoad } from './$types';
+import { initPosthog } from '$lib/posthog/client';
 
-initPosthog();
+export const load: LayoutLoad = async function () {
+	initPosthog();
+};

@@ -9,7 +9,7 @@ export const posthog = new PostHog(PUBLIC_POSTHOG_KEY, {
 export const posthogHandle: Handle = async function ({ event, resolve }) {
 	const { pathname } = event.url;
 
-	if (pathname.startsWith('/relay-ujOT')) {
+	if (pathname.startsWith('/relay-ujOT/')) {
 		// Determine target hostname based on static or dynamic ingestion
 		const hostname = pathname.startsWith('/relay-ujOT/static/')
 			? 'us-assets.i.posthog.com'
