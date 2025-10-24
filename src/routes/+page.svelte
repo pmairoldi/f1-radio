@@ -15,6 +15,7 @@
 	import type { Attachment } from 'svelte/attachments';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { PageData } from './$types';
+	import posthog from 'posthog-js';
 
 	interface Props {
 		data: PageData;
@@ -108,6 +109,23 @@
 		}
 
 		goto(url, { replaceState: true, keepFocus: true, invalidateAll: true, noScroll: true });
+	}
+
+	function onCopy(duration: number) {
+		const url = new URL(page.url);
+		const { searchParams } = url;
+
+		posthog.capture('copy_button.success', {
+			driver: searchParams.get('d'),
+			messages: searchParams.getAll('m'),
+			duration: duration
+		});
+	}
+
+	function onError(error: unknown, duration: number) {
+		posthog.captureException(error, {
+			duration: duration
+		});
 	}
 </script>
 
@@ -213,7 +231,7 @@
 				</RadioBox>
 			</div>
 
-			<CopyButton element={output} />
+			<CopyButton element={output} {onCopy} {onError} />
 		{/if}
 	</div>
 </main>

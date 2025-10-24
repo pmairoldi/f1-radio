@@ -4,10 +4,12 @@
 	import Button from './Button.svelte';
 
 	interface Props {
-		element?: HTMLElement | undefined;
+		element: HTMLElement | undefined;
+		onCopy: (duration: number) => void;
+		onError: (error: unknown, duration: number) => void;
 	}
 
-	let { element }: Props = $props();
+	let { element, onCopy, onError }: Props = $props();
 
 	let running = $state<boolean>(false);
 
@@ -34,6 +36,7 @@
 			return;
 		}
 
+		const start = performance.now();
 		running = true;
 		try {
 			await navigator.clipboard.write([
@@ -42,9 +45,10 @@
 				})
 			]);
 
+			onCopy(performance.now() - start);
 			running = false;
 		} catch (error) {
-			console.error('oops, something went wrong!', error);
+			onError(error, performance.now() - start);
 			running = false;
 		}
 	}
