@@ -1,10 +1,12 @@
+import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 import type { Handle } from '@sveltejs/kit';
 import { PostHog } from 'posthog-node';
-import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
-export const posthog = new PostHog(PUBLIC_POSTHOG_KEY, {
-	host: 'https://us.i.posthog.com'
-});
+export function createPosthogClient() {
+	return new PostHog(PUBLIC_POSTHOG_KEY, {
+		host: 'https://us.i.posthog.com'
+	});
+}
 
 export const posthogHandle: Handle = async function ({ event, resolve }) {
 	const { pathname } = event.url;
