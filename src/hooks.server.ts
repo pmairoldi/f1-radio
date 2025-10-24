@@ -1,10 +1,15 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import { sequence } from '@sveltejs/kit/hooks';
-import { posthog, posthogHandle } from '$lib/posthog/server';
+import { PostHog } from 'posthog-node';
+import { PUBLIC_POSTHOG_KEY } from '$env/static/public';
 
 export const handleError: HandleServerError = async function (input) {
 	const { error, status, message, event } = input;
+
+	const posthog = new PostHog(PUBLIC_POSTHOG_KEY, {
+		host: 'https://us.i.posthog.com'
+	});
 
 	if (status !== 404) {
 		posthog.captureException(error, undefined, {
@@ -12,6 +17,7 @@ export const handleError: HandleServerError = async function (input) {
 			message: message,
 			url: event.url.toString()
 		});
+
 		await posthog.shutdown();
 	}
 
