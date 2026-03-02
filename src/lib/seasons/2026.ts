@@ -8,9 +8,9 @@ import ferrari_logo from '$lib/assets/ferrari-logo.png';
 import haas_logo from '$lib/assets/haas-logo.png';
 import mclaren_logo from '$lib/assets/mclaren-logo.png';
 import mercedes_logo from '$lib/assets/mercedes-logo.png';
-import rb_logo from '$lib/assets/rb-logo.png';
+import rb_logo from '$lib/assets/racing-bulls-logo.png';
 import red_bull_racing_logo from '$lib/assets/red-bull-racing-logo.png';
-import williams_logo from '$lib/assets/williams-logo-2025.png';
+import williams_logo from '$lib/assets/williams-logo-2026.png';
 
 export const teams = {
 	red_bull_racing: {
