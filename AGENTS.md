@@ -1,79 +1,118 @@
-# AGENTS.md
+# PROJECT KNOWLEDGE BASE
 
-This file provides guidance for AI agents working with this repository.
+**Generated:** 2026-03-02
+**Commit:** fa9537b
+**Branch:** 2026
 
-## Project Overview
+## OVERVIEW
 
-F1 Radio Meme — a web app for generating F1-style radio message images. Users pick a driver, compose alternating driver/team messages, preview a styled radio box, and copy it as a PNG.
+F1 Radio Meme — SvelteKit app for generating F1-style radio message images (driver + team alternating chat). Users pick a driver, compose messages, preview a styled RadioBox, and copy it as a PNG via dom-to-image.
 
-## Commands
+Stack: Svelte 5 runes + SvelteKit 2, TypeScript strict, Tailwind CSS v4, Paraglide.js i18n, mdsvex blog, PostHog analytics, Vercel deployment.
 
-- `pnpm dev` — start dev server
-- `pnpm build` — production build
-- `pnpm check` — Svelte type checking
-- `pnpm lint` — Prettier + ESLint
-- `pnpm format` — auto-format
-- `pnpm test` — all tests
-- `pnpm test:unit --run` — unit tests once
-- `pnpm test:integration` — Playwright (requires build first)
+## STRUCTURE
 
-Requires **pnpm 10.19.0** and **Node 22.x**.
-
-## Tech Stack
-
-Svelte 5 + SvelteKit 2, TypeScript strict, Tailwind CSS v4, Paraglide.js i18n, mdsvex blog, PostHog analytics, Vercel deployment, dom-to-image for PNG export.
-
-## Architecture
-
-### Season/Renderer Versioning
-
-- `src/lib/seasons/` — driver/team data per year (e.g., `2025.ts`)
-- `src/lib/renderers/` — RadioBox components per year (e.g., `2025/`, `2022-2024/`)
-- `src/lib/*/current.ts` — re-exports active year; edit these to switch seasons
-
-### URL-Based State
-
-State encoded in URL params (`?d=driver_key&m=type:message`). Loaded in `+page.ts`, synced via `goto()` with `replaceState`.
-
-### I18n
-
-Import `m` from `$lib/paraglide/messages`, call as `m['key.name']()`. Source files in `i18n/`.
-
-### Blog
-
-Markdown files in `src/posts/`, processed by mdsvex. Can embed Svelte components.
-
-## Svelte 5 Patterns
-
-This project uses Svelte 5 runes syntax:
-
-```svelte
-<script lang="ts">
-	interface Props {
-		driver: Driver;
-		children?: Snippet;
-	}
-	let { driver, children }: Props = $props();
-	let { name } = $derived(driver);
-	let el = $state<HTMLElement>();
-	let bindable = $bindable(); // for bind:this from parent
-</script>
-
-{#snippet name(arg: Type)}...{/snippet}
-{@render name(value)}
-attach attachmentFn}
+```
+f1-radio/
+├── src/
+│   ├── lib/
+│   │   ├── seasons/          # Driver/team data per year; current.ts = active season
+│   │   ├── renderers/        # Versioned RadioBox components; current.ts = active renderer
+│   │   ├── components/       # Shared UI (Button, Select, CopyButton, Header, Footer, SEO)
+│   │   ├── posthog/          # Analytics client (browser) + server (proxy handle)
+│   │   ├── types.ts          # Driver, Team, Message, Name, NameDisplay
+│   │   ├── seeded-random.ts  # LCG for deterministic audio waveform noise
+│   │   ├── blog.ts           # Post discovery via import.meta.glob + mdsvex
+│   │   └── data-formatter.ts # Intl.DateTimeFormat wrapper
+│   ├── routes/               # SvelteKit file-based routing
+│   │   ├── +page.svelte      # Main generator UI
+│   │   ├── +page.ts          # URL param → state loader
+│   │   └── blog/             # Blog listing + [slug] post pages
+│   ├── posts/                # Markdown blog posts (mdsvex)
+│   ├── hooks.server.ts       # Paraglide + PostHog proxy + error capture
+│   ├── hooks.client.ts       # Client-side error capture
+│   └── app.html              # Shell with %lang% placeholder for Paraglide
+├── i18n/                     # i18n source messages (Paraglide source of truth)
+├── static/                   # Fonts (formula1, kh-interference-f1), favicon
+├── tests/                    # Playwright integration tests
+└── scripts/                  # Build utilities
 ```
 
-## Testing
+## WHERE TO LOOK
 
-- **Unit**: Vitest — `src/**/*.test.ts`
-- **Integration**: Playwright — `tests/*.test.ts` (run `pnpm build` first)
+| Task | Location |
+|------|----------|
+| Add/change driver or team | `src/lib/seasons/current.ts` → edit `2026.ts` (or current year) |
+| Switch active season | Edit `src/lib/seasons/current.ts` and `src/lib/renderers/current.ts` only |
+| Modify RadioBox visual | `src/lib/renderers/2025-current/RadioBox.svelte` |
+| Add UI component | `src/lib/components/` |
+| Change URL state encoding | `src/routes/+page.ts` (load) + `+page.svelte` (goto call) |
+| Add i18n string | `i18n/*.json`, then use `m['key.name']()` |
+| Add blog post | New `.md` in `src/posts/` with frontmatter |
+| Track analytics event | Where event fires; PostHog proxy in `hooks.server.ts` |
 
-## Code Style
+## SEASON / RENDERER VERSIONING
 
-Tabs, single quotes, no trailing commas, 100 char width. Use `tailwind-merge` for conditional classes.
+Two parallel versioning systems — keep them in sync:
 
-## Do Not Edit
+- `src/lib/seasons/current.ts` → re-exports active year data
+- `src/lib/renderers/current.ts` → re-exports active year component
 
-- `src/lib/paraglide/*` — auto-generated by Paraglide
-- To change season: only edit `current.ts` files
+**Never** update season data in non-current year files unless backfilling. Only edit `current.ts` files to switch seasons.
+
+## URL STATE
+
+All generator state lives in URL params — no client stores:
+
+```
+?d=lando_norris&m=driver:Box+box+box&m=team:Understood
+```
+
+- `d` = driver key (snake_case, matches key in season's `drivers` object)
+- `m` = repeated param, format `type:text` where type is `driver` or `team`
+- **Gotcha:** message text cannot contain `:` — naive `split(':')` in `+page.ts`
+- State synced on every keystroke via `goto(..., { replaceState: true, keepFocus: true })`
+
+## SVELTE 5 PATTERNS
+
+```svelte
+let { driver, children }: Props = $props();
+let { name } = $derived(driver);
+let el = $state<HTMLElement>();
+{#snippet name(arg: Type)}...{/snippet}
+{@render name(value)}
+{@attach attachmentFn}   <!-- custom DOM actions (replaces Svelte 4 actions) -->
+```
+
+## I18N
+
+```typescript
+import { m } from '$lib/paraglide/messages';
+m['header.title_home']()   // function call, not string
+localizeHref('/blog')       // locale-aware href
+```
+
+Source files in `i18n/`. `src/lib/paraglide/*` is **auto-generated** — never edit.
+
+## CODE STYLE
+
+Tabs, single quotes, no trailing commas, 100 char width. `tailwind-merge` for conditional Tailwind classes.
+
+## COMMANDS
+
+```bash
+pnpm dev                    # dev server
+pnpm build && pnpm preview  # production build
+pnpm check                  # Svelte type check
+pnpm lint / pnpm format     # ESLint + Prettier
+pnpm test:unit --run        # Vitest (no watch)
+pnpm build && pnpm test:integration  # Playwright
+```
+
+## ANTI-PATTERNS
+
+- Editing `src/lib/paraglide/*` (auto-generated)
+- Editing historical season files (2024.ts, 2025.ts) to add current-year data
+- Storing UI state in Svelte stores — use URL params
+- Using `onchange` instead of `oninput` for real-time message sync
+- Adding new renderers without following the `index.ts` + `current.ts` pattern
