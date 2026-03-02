@@ -1,3 +1,5 @@
+import type { Driver, Team } from '../types';
+
 import alpine_logo from '$lib/assets/alpine-logo.png';
 import aston_martin_logo from '$lib/assets/aston-martin-logo.png';
 import ferrari_logo from '$lib/assets/ferrari-logo.png';
@@ -5,10 +7,9 @@ import haas_logo from '$lib/assets/haas-logo.png';
 import kick_logo from '$lib/assets/kick-logo.png';
 import mclaren_logo from '$lib/assets/mclaren-logo.png';
 import mercedes_logo from '$lib/assets/mercedes-logo.png';
-import rb_logo from '$lib/assets/rb-logo.png';
+import racing_bulls_logo from '$lib/assets/racing-bulls-logo.png';
 import red_bull_racing_logo from '$lib/assets/red-bull-racing-logo.png';
 import williams_logo from '$lib/assets/williams-logo.png';
-import type { Driver, Team } from '../types';
 
 export const teams = {
 	red_bull_racing: {
@@ -54,7 +55,7 @@ export const teams = {
 	racing_bulls: {
 		name: 'RB',
 		color: '#6692FF',
-		logo: rb_logo
+		logo: racing_bulls_logo
 	},
 	kick: {
 		name: 'Kick',

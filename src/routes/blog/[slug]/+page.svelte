@@ -65,13 +65,13 @@
 	}
 
 	.prose :global(a) {
-		color: var(--color-red-700);
+		color: var(--color-red-600);
 		text-decoration-line: underline;
 		outline: none;
 		border-radius: var(--radius-sm);
 
 		&:focus-visible {
-			outline: calc(var(--spacing) * 0.5) solid var(--color-red-700);
+			outline: calc(var(--spacing) * 0.5) solid var(--color-red-600);
 			outline-offset: 2px;
 		}
 	}

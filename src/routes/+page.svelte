@@ -158,7 +158,7 @@
 			autocomplete="off"
 			class="flex w-full flex-col gap-4"
 		>
-			<label class="flex flex-col">
+			<label class="flex flex-col gap-2">
 				<span>{m['home.pick_a_driver']()}</span>
 				<Select value={driver?.key ?? ''} name="driver">
 					<option value="">&ndash;</option>
