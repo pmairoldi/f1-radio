@@ -1,7 +1,7 @@
 ---
 title: Best Radios of 2024
 description: The best radios of the 2024 season
-date: '2024-1-1'
+date: '2024-01-01'
 categories:
   - 2024
   - Best Of

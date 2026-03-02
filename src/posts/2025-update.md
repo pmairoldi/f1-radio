@@ -1,15 +1,16 @@
 ---
 title: 2025 Update
 description: Get ready for the 2025 season
-date: '2025-3-3'
+date: '2025-03-03'
 categories:
   - 2025
+  - Update
 published: true
 ---
 
 <script>
   import ArticleRadioBox from "$lib/components/ArticleRadioBox.svelte";
-  import { RadioBox, RadioBoxMessage} from "$lib/renderers/2025";
+  import { RadioBox, RadioBoxMessage} from "$lib/renderers/2025-current";
   import { drivers } from "$lib/seasons/2025";
 </script>
 
