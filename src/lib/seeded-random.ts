@@ -36,9 +36,7 @@ export class SeededRandom {
 
 		for (let i = 0, l = s.length; i < l; i++) {
 			const char = s.charCodeAt(i);
-			// eslint-disable-next-line no-bitwise
 			hash = (hash << 5) - hash + char; // optimized version of 32^(n-1-i)
-			// eslint-disable-next-line no-bitwise
 			hash |= 0; // Convert to 32bit integer
 		}
 
