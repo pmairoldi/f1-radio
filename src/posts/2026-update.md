@@ -16,7 +16,7 @@ published: true
 
 Lights out and away we go for the 2026 season! [F1 Radio Meme](/) has got you covered for all your radio meme needs. New regulations! New teams! New Drivers! It is all here!
 
-## Cadillac the House
+## Cadillac in the House
 
 For the first time in a while a new team joins the grid this year with some familiar faces! [Valtteri Bottas](/?d=valtteri_bottas) and [Sergio Perez](/?d=sergio_perez) are back to represent Cadillac!
 

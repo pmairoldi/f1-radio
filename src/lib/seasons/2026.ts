@@ -54,7 +54,7 @@ export const teams = {
 		logo: haas_logo
 	},
 	racing_bulls: {
-		name: 'RB',
+		name: 'Racing Bulls',
 		color: '#6C98FF',
 		logo: rb_logo
 	},
