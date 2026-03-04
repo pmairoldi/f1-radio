@@ -40,16 +40,16 @@ f1-radio/
 
 ## WHERE TO LOOK
 
-| Task | Location |
-|------|----------|
-| Add/change driver or team | `src/lib/seasons/current.ts` → edit `2026.ts` (or current year) |
-| Switch active season | Edit `src/lib/seasons/current.ts` and `src/lib/renderers/current.ts` only |
-| Modify RadioBox visual | `src/lib/renderers/2025-current/RadioBox.svelte` |
-| Add UI component | `src/lib/components/` |
-| Change URL state encoding | `src/routes/+page.ts` (load) + `+page.svelte` (goto call) |
-| Add i18n string | `i18n/*.json`, then use `m['key.name']()` |
-| Add blog post | New `.md` in `src/posts/` with frontmatter |
-| Track analytics event | Where event fires; PostHog proxy in `hooks.server.ts` |
+| Task                      | Location                                                                  |
+| ------------------------- | ------------------------------------------------------------------------- |
+| Add/change driver or team | `src/lib/seasons/current.ts` → edit `2026.ts` (or current year)           |
+| Switch active season      | Edit `src/lib/seasons/current.ts` and `src/lib/renderers/current.ts` only |
+| Modify RadioBox visual    | `src/lib/renderers/2025-current/RadioBox.svelte`                          |
+| Add UI component          | `src/lib/components/`                                                     |
+| Change URL state encoding | `src/routes/+page.ts` (load) + `+page.svelte` (goto call)                 |
+| Add i18n string           | `i18n/*.json`, then use `m['key.name']()`                                 |
+| Add blog post             | New `.md` in `src/posts/` with frontmatter                                |
+| Track analytics event     | Where event fires; PostHog proxy in `hooks.server.ts`                     |
 
 ## SEASON / RENDERER VERSIONING
 
@@ -88,8 +88,8 @@ let el = $state<HTMLElement>();
 
 ```typescript
 import { m } from '$lib/paraglide/messages';
-m['header.title_home']()   // function call, not string
-localizeHref('/blog')       // locale-aware href
+m['header.title_home'](); // function call, not string
+localizeHref('/blog'); // locale-aware href
 ```
 
 Source files in `i18n/`. `src/lib/paraglide/*` is **auto-generated** — never edit.

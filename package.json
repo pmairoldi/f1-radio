@@ -22,7 +22,7 @@
 	},
 	"dependencies": {
 		"dom-to-image": "^2.6.0",
-		"posthog-js": "^1.357.1",
+		"posthog-js": "^1.358.0",
 		"posthog-node": "^5.26.2",
 		"tailwind-merge": "^3.5.0"
 	},
@@ -42,9 +42,9 @@
 		"globals": "^17.4.0",
 		"mdsvex": "^0.12.6",
 		"prettier": "^3.8.1",
-		"prettier-plugin-svelte": "^3.5.0",
+		"prettier-plugin-svelte": "^3.5.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"svelte": "^5.53.6",
+		"svelte": "^5.53.7",
 		"svelte-check": "^4.4.4",
 		"tailwindcss": "^4.2.1",
 		"tslib": "^2.8.1",
