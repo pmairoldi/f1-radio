@@ -5,7 +5,7 @@
 
 	interface Props {
 		element: HTMLElement | undefined;
-		onCopy: (duration: number) => void;
+		onCopy: (duration: number, method: 'clipboard' | 'download') => void;
 		onError: (error: unknown, duration: number) => void;
 	}
 
@@ -30,6 +30,33 @@
 		});
 	}
 
+	function download(blob: Blob) {
+		const url = URL.createObjectURL(blob);
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.download = 'f1-radio-meme.png';
+		anchor.click();
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
+	}
+
+	async function copy(image: Promise<Blob>): Promise<'clipboard' | 'download'> {
+		if (navigator.clipboard?.write != null && typeof ClipboardItem !== 'undefined') {
+			try {
+				await navigator.clipboard.write([
+					new ClipboardItem({
+						'image/png': image
+					})
+				]);
+				return 'clipboard';
+			} catch {
+				// clipboard denied or unsupported for images; fall through to download
+			}
+		}
+
+		download(await image);
+		return 'download';
+	}
+
 	async function execute(): Promise<void> {
 		const output = element;
 		if (output == null) {
@@ -39,16 +66,11 @@
 		const start = performance.now();
 		running = true;
 		try {
-			await navigator.clipboard.write([
-				new ClipboardItem({
-					'image/png': getImage(output)
-				})
-			]);
-
-			onCopy(performance.now() - start);
-			running = false;
+			const method = await copy(getImage(output));
+			onCopy(performance.now() - start, method);
 		} catch (error) {
 			onError(error, performance.now() - start);
+		} finally {
 			running = false;
 		}
 	}
