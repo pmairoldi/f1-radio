@@ -111,14 +111,15 @@
 		goto(url, { replaceState: true, keepFocus: true, invalidateAll: true, noScroll: true });
 	}
 
-	function onCopy(duration: number) {
+	function onCopy(duration: number, method: 'clipboard' | 'download') {
 		const url = new URL(page.url);
 		const { searchParams } = url;
 
 		posthog.capture('copy_button.success', {
 			driver: searchParams.get('d'),
 			messages: searchParams.getAll('m'),
-			duration: duration
+			duration: duration,
+			method: method
 		});
 	}
 

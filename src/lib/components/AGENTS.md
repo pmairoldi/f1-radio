@@ -12,7 +12,7 @@ General-purpose components that are not season- or renderer-specific. All use Sv
 |---|---|---|
 | `Button.svelte` | Extends `HTMLButtonAttributes`; `children: Snippet` | Styled button with red bg (`bg-red-700` / `#b91c1c`); enforces disabled guard |
 | `Select.svelte` | Extends `HTMLSelectAttributes`; `children: Snippet` | Styled select with red bg and custom CSS-gradient chevron |
-| `CopyButton.svelte` | `element: HTMLElement \| undefined`; `onCopy(duration)`; `onError(error, duration)` | Exports a DOM element as PNG via dom-to-image at 3x scale; shows spinner during export |
+| `CopyButton.svelte` | `element: HTMLElement \| undefined`; `onCopy(duration, method)`; `onError(error, duration)` | Exports a DOM element as PNG via dom-to-image at 3x scale; copies to clipboard with download fallback; shows spinner during export |
 | `Header.svelte` | none | Sticky nav with F1 Radio Meme branding; Home, Blog, and Buy me a coffee links; uses `localizeHref()` |
 | `Footer.svelte` | none | X social link with theme-aware icon (light/dark via `<picture>`); disclaimer text via i18n |
 | `SEO.svelte` | `title`, `description`, `name`, `url`, `imageUrl` | Injects OG and Twitter Card meta tags into `<svelte:head>` |
