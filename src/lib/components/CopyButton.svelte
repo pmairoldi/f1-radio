@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { getImage } from '$lib/element-to-image';
 	import { m } from '$lib/paraglide/messages';
-	import domtoimage from 'dom-to-image';
 	import Button from './Button.svelte';
 
 	interface Props {
@@ -12,23 +12,6 @@
 	let { element, onCopy, onError }: Props = $props();
 
 	let running = $state<boolean>(false);
-
-	async function getImage(output: HTMLElement): Promise<Blob> {
-		const scale = 3;
-		const width = output.offsetWidth;
-		const height = output.offsetHeight;
-
-		return domtoimage.toBlob(output, {
-			width: width * scale,
-			height: height * scale,
-			style: {
-				transform: `scale(${scale})`,
-				transformOrigin: 'top left',
-				width: `${width}px`,
-				height: `${height}px`
-			}
-		});
-	}
 
 	function download(blob: Blob) {
 		const url = URL.createObjectURL(blob);
