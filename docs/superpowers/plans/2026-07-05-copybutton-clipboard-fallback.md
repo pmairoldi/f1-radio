@@ -24,10 +24,12 @@
 ### Task 1: Download fallback in CopyButton (test-first)
 
 **Files:**
+
 - Modify: `src/lib/components/CopyButton.svelte`
 - Test: `tests/copy-button.test.ts` (one test already exists and currently fails; add a second)
 
 **Interfaces:**
+
 - Consumes: `domtoimage.toBlob(node, options): Promise<Blob>` (existing `getImage` helper, unchanged).
 - Produces: `CopyButton` prop signature `onCopy: (duration: number, method: 'clipboard' | 'download') => void`. Task 2 relies on this exact signature. `onError: (error: unknown, duration: number) => void` is unchanged.
 
@@ -40,8 +42,7 @@ test('downloads the image when the clipboard write is denied', async ({ page }) 
 	await page.addInitScript(() => {
 		Object.defineProperty(navigator, 'clipboard', {
 			value: {
-				write: () =>
-					Promise.reject(new DOMException('Write permission denied.', 'NotAllowedError'))
+				write: () => Promise.reject(new DOMException('Write permission denied.', 'NotAllowedError'))
 			}
 		});
 	});
@@ -176,10 +177,12 @@ git commit -m "add download fallback to copy button"
 ### Task 2: Report copy method in analytics
 
 **Files:**
+
 - Modify: `src/routes/+page.svelte:114-123` (the `onCopy` function)
 - Modify: `src/lib/components/AGENTS.md` (CopyButton row in the components table)
 
 **Interfaces:**
+
 - Consumes: `onCopy(duration: number, method: 'clipboard' | 'download')` — the prop signature produced by Task 1.
 - Produces: `copy_button.success` PostHog event gains a `method` property (`'clipboard'` or `'download'`), used later to monitor fallback frequency.
 
@@ -188,17 +191,17 @@ git commit -m "add download fallback to copy button"
 Replace the existing `onCopy` function (currently lines 114-123):
 
 ```typescript
-	function onCopy(duration: number, method: 'clipboard' | 'download') {
-		const url = new URL(page.url);
-		const { searchParams } = url;
+function onCopy(duration: number, method: 'clipboard' | 'download') {
+	const url = new URL(page.url);
+	const { searchParams } = url;
 
-		posthog.capture('copy_button.success', {
-			driver: searchParams.get('d'),
-			messages: searchParams.getAll('m'),
-			duration: duration,
-			method: method
-		});
-	}
+	posthog.capture('copy_button.success', {
+		driver: searchParams.get('d'),
+		messages: searchParams.getAll('m'),
+		duration: duration,
+		method: method
+	});
+}
 ```
 
 No other change in this file — `<CopyButton element={output} {onCopy} {onError} />` already passes the function by reference.

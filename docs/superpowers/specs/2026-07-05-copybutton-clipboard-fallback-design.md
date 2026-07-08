@@ -13,12 +13,12 @@ PostHog via `captureException`.
 
 PostHog evidence (project 115317, last 90 days):
 
-| Issue | Cause | Impact |
-| --- | --- | --- |
-| `NotAllowedError: Write permission denied.` (019a2ef2) | Chrome/Android denies image clipboard writes | 135 occurrences / 14 users |
-| `NotAllowedError: Clipboard write is not allowed.` (019a44c1) | Safari denial variant | 6 / 5 |
-| `NotAllowedError: request not allowed by user agent` (019a7b71) | Firefox denial variant | 1 / 1 |
-| `TypeError: Failed to construct 'ClipboardItem': Failed to convert value to 'Blob'.` (019edf1d + 019ce799) | Chrome ≤~105 rejects Promise-valued ClipboardItem | 5 / 2 |
+| Issue                                                                                                      | Cause                                             | Impact                     |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------- |
+| `NotAllowedError: Write permission denied.` (019a2ef2)                                                     | Chrome/Android denies image clipboard writes      | 135 occurrences / 14 users |
+| `NotAllowedError: Clipboard write is not allowed.` (019a44c1)                                              | Safari denial variant                             | 6 / 5                      |
+| `NotAllowedError: request not allowed by user agent` (019a7b71)                                            | Firefox denial variant                            | 1 / 1                      |
+| `TypeError: Failed to construct 'ClipboardItem': Failed to convert value to 'Blob'.` (019edf1d + 019ce799) | Chrome ≤~105 rejects Promise-valued ClipboardItem | 5 / 2                      |
 
 Firefox < 127 also lacks `ClipboardItem` entirely.
 
