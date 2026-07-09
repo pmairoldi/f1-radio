@@ -34,10 +34,10 @@ test('exported image is stable for a driver and team conversation', async ({ pag
 		page,
 		'/?d=lando_norris&m=driver%3ABox%20box%20box&m=team%3ACopy%20that'
 	);
-	expect(image).toMatchSnapshot('mclaren-driver-team.png', { maxDiffPixelRatio: 0.01 });
+	expect(image).toMatchSnapshot('mclaren-driver-team.png', { maxDiffPixels: 25 });
 });
 
 test('exported image is stable for a driver message', async ({ page }) => {
 	const image = await exportImage(page, '/?d=charles_leclerc&m=driver%3AWe%20are%20checking');
-	expect(image).toMatchSnapshot('ferrari-driver.png', { maxDiffPixelRatio: 0.01 });
+	expect(image).toMatchSnapshot('ferrari-driver.png', { maxDiffPixels: 25 });
 });
