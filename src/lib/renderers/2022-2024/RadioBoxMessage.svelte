@@ -9,13 +9,13 @@
 
 {#if type === 'team'}
 	<span class="team-message">
-		"{@html text}"
+		"{text}"
 	</span>
 {/if}
 
 {#if type === 'driver'}
 	<span class="driver-message">
-		"{@html text}"
+		"{text}"
 	</span>
 {/if}
 

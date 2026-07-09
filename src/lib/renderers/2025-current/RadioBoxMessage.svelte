@@ -9,12 +9,12 @@
 
 {#if type === 'team'}
 	<span class="text-start wrap-break-word text-white">
-		"{@html text}"
+		"{text}"
 	</span>
 {/if}
 
 {#if type === 'driver'}
 	<span class="text-end wrap-break-word text-(--team-color)">
-		"{@html text}"
+		"{text}"
 	</span>
 {/if}
