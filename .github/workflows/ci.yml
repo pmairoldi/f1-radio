@@ -12,6 +12,8 @@ jobs:
   validate:
     name: Validate
     runs-on: ubuntu-latest
+    env:
+      PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY || secrets.PUBLIC_POSTHOG_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
