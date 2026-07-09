@@ -21,7 +21,7 @@
 		"i18n": "pnpm dlx lingo.dev@latest i18n"
 	},
 	"dependencies": {
-		"dom-to-image": "^2.6.0",
+		"@zumer/snapdom": "^2.15.0",
 		"posthog-js": "^1.398.2",
 		"posthog-node": "^5.40.0",
 		"tailwind-merge": "^3.6.0"
@@ -35,7 +35,6 @@
 		"@sveltejs/kit": "^2.69.2",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"@tailwindcss/vite": "^4.3.2",
-		"@types/dom-to-image": "^2.6.7",
 		"@types/node": "^26.1.0",
 		"eslint": "^10.6.0",
 		"eslint-config-prettier": "^10.1.8",
