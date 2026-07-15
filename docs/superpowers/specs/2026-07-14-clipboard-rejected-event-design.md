@@ -26,12 +26,12 @@ subsequent successful download.
 ## Structure
 
 `CopyButton` remains responsible for detecting the failed clipboard write and continuing the
-fallback. The route remains responsible for analytics, matching the existing `onCopy` and `onError`
-callback boundary and keeping PostHog out of the reusable component.
+fallback. The route passes the URL-state context to a focused PostHog event helper, matching the
+existing callback boundary and keeping PostHog out of the reusable component.
 
 ## Testing
 
-An integration test will verify that a rejected clipboard write emits
-`copy_button.clipboard_rejected` with the error details and still downloads the PNG. Coverage will
-also verify that an unavailable Clipboard API downloads the PNG without emitting the rejection
-event.
+A unit test will verify the `copy_button.clipboard_rejected` event name, context, and normalized
+error details. The existing integration tests will verify that rejected and unavailable clipboard
+writes both still download the PNG. The callback's placement inside the `clipboard.write()` catch
+keeps the unavailable-API path from emitting the rejection event.

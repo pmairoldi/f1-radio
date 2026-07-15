@@ -14,6 +14,13 @@ the event contract without sending analytics traffic.
 
 **Tech Stack:** Svelte 5, strict TypeScript, PostHog JS, Playwright
 
+## Execution Adjustment
+
+The npm PostHog instance is not exposed on `window`, so the planned Playwright capture spy cannot
+observe it. Keep the production callback architecture, isolate event normalization and capture in
+`src/lib/posthog/events.ts`, verify that contract with a Vitest PostHog mock, and retain the existing
+Playwright coverage for both download fallback paths.
+
 ## Global Constraints
 
 - Fire `copy_button.clipboard_rejected` only when `navigator.clipboard.write()` rejects.

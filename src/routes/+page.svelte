@@ -8,6 +8,7 @@
 	import Select from '$lib/components/Select.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { m } from '$lib/paraglide/messages';
+	import { captureClipboardRejected } from '$lib/posthog/events';
 	import { RadioBox, RadioBoxMessage } from '$lib/renderers/current';
 	import { drivers as _drivers } from '$lib/seasons/current';
 	import { type Message, type Name } from '$lib/types';
@@ -128,6 +129,15 @@
 			duration: duration
 		});
 	}
+
+	function onClipboardRejected(error: unknown) {
+		const { searchParams } = new URL(page.url);
+
+		captureClipboardRejected(error, {
+			driver: searchParams.get('d'),
+			messages: searchParams.getAll('m')
+		});
+	}
 </script>
 
 {#snippet name(name: Name)}
@@ -232,7 +242,7 @@
 				</RadioBox>
 			</div>
 
-			<CopyButton element={output} {onCopy} {onError} />
+			<CopyButton element={output} {onCopy} {onError} {onClipboardRejected} />
 		{/if}
 	</div>
 </main>

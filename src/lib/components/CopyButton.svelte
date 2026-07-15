@@ -7,9 +7,10 @@
 		element: HTMLElement | undefined;
 		onCopy: (duration: number, method: 'clipboard' | 'download') => void;
 		onError: (error: unknown, duration: number) => void;
+		onClipboardRejected: (error: unknown) => void;
 	}
 
-	let { element, onCopy, onError }: Props = $props();
+	let { element, onCopy, onError, onClipboardRejected }: Props = $props();
 
 	let running = $state<boolean>(false);
 
@@ -31,7 +32,8 @@
 					})
 				]);
 				return 'clipboard';
-			} catch {
+			} catch (error) {
+				onClipboardRejected(error);
 				// clipboard denied or unsupported for images; fall through to download
 			}
 		}
