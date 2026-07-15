@@ -1,11 +1,25 @@
+import posthog from 'posthog-js';
+
+export function captureClipboardRejected(error: unknown) {
+	const errorDetails =
+		error instanceof Error
+			? {
+					error_name: error.name,
+					error_message: error.message,
+					...(error.stack == null ? {} : { error_stack: error.stack })
+				}
+			: { error_message: String(error) };
+
+	posthog.capture('copy_button.clipboard_rejected', errorDetails);
+}
+
 interface CopyImageOptions {
 	download: (blob: Blob) => void;
-	onClipboardRejected: (error: unknown) => void;
 }
 
 export async function copyImage(
 	image: Promise<Blob>,
-	{ download, onClipboardRejected }: CopyImageOptions
+	{ download }: CopyImageOptions
 ): Promise<'clipboard' | 'download'> {
 	if (navigator.clipboard?.write != null && typeof ClipboardItem !== 'undefined') {
 		try {
@@ -17,7 +31,7 @@ export async function copyImage(
 			return 'clipboard';
 		} catch (error) {
 			try {
-				onClipboardRejected(error);
+				captureClipboardRejected(error);
 			} catch {
 				// Analytics must not block the download fallback.
 			}

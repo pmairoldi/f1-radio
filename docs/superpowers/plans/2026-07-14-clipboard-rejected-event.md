@@ -1,222 +1,40 @@
 # Clipboard Rejected Event Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
-> (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
-> checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Capture a PostHog custom event with error details when an attempted clipboard image write
 rejects, while preserving the PNG download fallback.
 
-**Architecture:** A focused helper owns the clipboard attempt, rejection notification, and download
-decision while `CopyButton` remains unaware of PostHog. The generator route passes URL-state context
-to a PostHog event helper. Vitest verifies both helpers, and Playwright preserves browser-level
-coverage for the download fallback.
+**Architecture:** The `copy-image` helper owns the clipboard attempt and download decision.
+`CopyButton` captures the rejection event directly through the helper's rejection callback. The
+generator route is not involved.
 
 **Tech Stack:** Svelte 5, strict TypeScript, PostHog JS, Vitest, Playwright
 
-## Execution Adjustment
-
-The npm PostHog instance is not exposed on `window`, so the planned Playwright capture spy cannot
-observe it. The executed plan supersedes the original Playwright-spy steps below: isolate event
-capture in `src/lib/posthog/events.ts`, isolate clipboard behavior in
-`src/lib/components/copy-image.ts`, verify both with Vitest, and retain Playwright coverage for both
-download fallback paths.
-
-## Global Constraints
+## Constraints
 
 - Fire `copy_button.clipboard_rejected` only when `navigator.clipboard.write()` rejects.
 - Do not fire it when the Clipboard API or `ClipboardItem` is unavailable.
 - Attach `error_name`, `error_message`, and `error_stack` when available.
-- Attach the current `driver` and `messages` URL-state context.
+- Do not attach driver or message state.
 - Do not call `posthog.captureException` for this handled rejection.
 - Preserve the successful PNG download fallback and `copy_button.success` event.
-- Use tabs, single quotes, no trailing commas, and 100-character lines.
 
----
+## Tasks
 
-### Task 1: Capture clipboard write rejections
+### 1. Specify the component-owned event
 
-**Files:**
+- Add a focused `CopyButton` unit test that mocks `posthog-js`.
+- Assert the custom event contains only normalized error details.
+- Verify the test fails before the component exports the capture function.
 
-- Modify: `tests/copy-button.test.ts`
-- Create: `src/lib/components/copy-image.ts`
-- Create: `src/lib/components/copy-image.test.ts`
-- Create: `src/lib/posthog/events.ts`
-- Create: `src/lib/posthog/events.test.ts`
-- Modify: `src/lib/components/CopyButton.svelte`
-- Modify: `src/routes/+page.svelte`
+### 2. Capture directly in `CopyButton`
 
-**Interfaces:**
+- Define `captureClipboardRejected(error)` in `CopyButton.svelte`.
+- Pass it to the clipboard helper as the rejection observer.
+- Remove the `onClipboardRejected` component prop.
+- Remove the route-level handler and standalone PostHog event helper.
 
-- Consumes: the existing `CopyButton` props `element`, `onCopy`, and `onError`
-- Produces: required prop `onClipboardRejected: (error: unknown) => void`
-- Produces: PostHog event `copy_button.clipboard_rejected` with generator context and normalized
-  error properties
+### 3. Verify fallback behavior
 
-- [ ] **Step 1: Add a PostHog capture spy and failing rejection assertions**
-
-Update the Playwright import and add helpers at the top of `tests/copy-button.test.ts`:
-
-```typescript
-import { expect, test, type Page } from '@playwright/test';
-
-interface CapturedEvent {
-	event: string;
-	properties?: Record<string, unknown>;
-}
-
-async function spyOnPosthog(page: Page) {
-	await page.evaluate(() => {
-		const target = window as typeof window & {
-			__posthogCaptures: CapturedEvent[];
-			posthog: {
-				capture: (event: string, properties?: Record<string, unknown>) => void;
-			};
-		};
-		target.__posthogCaptures = [];
-		target.posthog.capture = (event, properties) => {
-			target.__posthogCaptures.push({ event, properties });
-		};
-	});
-}
-
-async function getCapturedEvent(page: Page, event: string): Promise<CapturedEvent | undefined> {
-	return page.evaluate((eventName) => {
-		const target = window as typeof window & {
-			__posthogCaptures: CapturedEvent[];
-		};
-		return target.__posthogCaptures.find((capture) => capture.event === eventName);
-	}, event);
-}
-```
-
-After each existing `page.goto(...)`, call:
-
-```typescript
-await spyOnPosthog(page);
-```
-
-At the end of the unavailable-API test, assert that the event was not emitted:
-
-```typescript
-expect(await getCapturedEvent(page, 'copy_button.clipboard_rejected')).toBeUndefined();
-```
-
-At the end of the rejected-write test, assert the event and its properties:
-
-```typescript
-await expect
-	.poll(() => getCapturedEvent(page, 'copy_button.clipboard_rejected'))
-	.toEqual({
-		event: 'copy_button.clipboard_rejected',
-		properties: expect.objectContaining({
-			driver: 'lando_norris',
-			messages: ['driver:Test'],
-			error_name: 'NotAllowedError',
-			error_message: 'Write permission denied.',
-			error_stack: expect.any(String)
-		})
-	});
-```
-
-- [ ] **Step 2: Run the focused test and verify RED**
-
-Run:
-
-```bash
-pnpm exec playwright test tests/copy-button.test.ts
-```
-
-Expected: the rejected-write test fails because no `copy_button.clipboard_rejected` event is
-captured. The unavailable-API assertion passes.
-
-- [ ] **Step 3: Report the rejected value from `CopyButton`**
-
-Add the callback to `Props` in `src/lib/components/CopyButton.svelte`:
-
-```typescript
-onClipboardRejected: (error: unknown) => void;
-```
-
-Destructure it with the existing props:
-
-```typescript
-let { element, onCopy, onError, onClipboardRejected }: Props = $props();
-```
-
-Replace the empty catch binding with a rejection callback while retaining the fallback:
-
-```typescript
-} catch (error) {
-	onClipboardRejected(error);
-	// clipboard denied or unsupported for images; fall through to download
-}
-```
-
-- [ ] **Step 4: Capture the normalized custom event in the route**
-
-Add this handler next to `onCopy` and `onError` in `src/routes/+page.svelte`:
-
-```typescript
-function onClipboardRejected(error: unknown) {
-	const { searchParams } = new URL(page.url);
-	const errorDetails =
-		error instanceof Error
-			? {
-					error_name: error.name,
-					error_message: error.message,
-					...(error.stack == null ? {} : { error_stack: error.stack })
-				}
-			: { error_message: String(error) };
-
-	posthog.capture('copy_button.clipboard_rejected', {
-		driver: searchParams.get('d'),
-		messages: searchParams.getAll('m'),
-		...errorDetails
-	});
-}
-```
-
-Pass the handler into `CopyButton`:
-
-```svelte
-<CopyButton element={output} {onCopy} {onError} {onClipboardRejected} />
-```
-
-- [ ] **Step 5: Run the focused test and verify GREEN**
-
-Run:
-
-```bash
-pnpm exec playwright test tests/copy-button.test.ts
-```
-
-Expected: both clipboard integration tests pass; the rejection test also observes the successful
-download.
-
-- [ ] **Step 6: Run required and proportional verification**
-
-Run:
-
-```bash
-pnpm check
-pnpm lint
-pnpm test:integration
-```
-
-Expected: all commands exit with status 0 and report no type, Svelte, formatting, lint, or
-Playwright failures.
-
-- [ ] **Step 7: Review and commit the implementation**
-
-Run:
-
-```bash
-git diff --check
-git status --short
-git diff -- src/lib/components/CopyButton.svelte src/routes/+page.svelte tests/copy-button.test.ts
-git add src/lib/components/CopyButton.svelte src/routes/+page.svelte tests/copy-button.test.ts
-git commit -m "feat: track rejected clipboard writes"
-```
-
-Expected: only the three intended implementation files are staged, and the commit succeeds.
+- Keep unit coverage for rejected, unavailable, and throwing-observer paths.
+- Keep Playwright coverage that rejected and unavailable clipboard writes download the PNG.
+- Run `pnpm check`, `pnpm lint`, and the relevant unit and integration tests.

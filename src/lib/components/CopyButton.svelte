@@ -8,10 +8,9 @@
 		element: HTMLElement | undefined;
 		onCopy: (duration: number, method: 'clipboard' | 'download') => void;
 		onError: (error: unknown, duration: number) => void;
-		onClipboardRejected: (error: unknown) => void;
 	}
 
-	let { element, onCopy, onError, onClipboardRejected }: Props = $props();
+	let { element, onCopy, onError }: Props = $props();
 
 	let running = $state<boolean>(false);
 
@@ -33,7 +32,7 @@
 		const start = performance.now();
 		running = true;
 		try {
-			const method = await copyImage(getImage(output), { download, onClipboardRejected });
+			const method = await copyImage(getImage(output), { download });
 			onCopy(performance.now() - start, method);
 		} catch (error) {
 			onError(error, performance.now() - start);

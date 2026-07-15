@@ -6,27 +6,22 @@ vi.mock('posthog-js', () => ({
 	default: { capture }
 }));
 
-import { captureClipboardRejected } from './events';
+import { captureClipboardRejected } from './copy-image';
 
 describe('captureClipboardRejected', () => {
 	beforeEach(() => {
 		capture.mockClear();
 	});
 
-	it('captures the generator context and error details', () => {
+	it('captures only the clipboard error details', () => {
 		const error = new Error('Write permission denied.');
 		error.name = 'NotAllowedError';
 		error.stack = 'NotAllowedError: Write permission denied.';
 
-		captureClipboardRejected(error, {
-			driver: 'lando_norris',
-			messages: ['driver:Test']
-		});
+		captureClipboardRejected(error);
 
 		expect(capture).toHaveBeenCalledOnce();
 		expect(capture).toHaveBeenCalledWith('copy_button.clipboard_rejected', {
-			driver: 'lando_norris',
-			messages: ['driver:Test'],
 			error_name: 'NotAllowedError',
 			error_message: 'Write permission denied.',
 			error_stack: 'NotAllowedError: Write permission denied.'
