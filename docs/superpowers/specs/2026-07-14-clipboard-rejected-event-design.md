@@ -24,12 +24,11 @@ subsequent successful download.
 
 ## Structure
 
-The `copy-image` helper owns the clipboard attempt, rejection notification, and download decision.
-`CopyButton` supplies the browser download function and captures the PostHog event directly. The
-generator route is not involved in clipboard rejection tracking.
+The `copy-image` helper owns the clipboard attempt, PostHog rejection event, and download decision.
+No rejection callback is exposed to `CopyButton` or the generator route.
 
 ## Testing
 
 Unit tests will verify the `copy_button.clipboard_rejected` event contract and the clipboard
-helper's rejected, unavailable, and throwing-observer paths. The existing integration tests will
+helper's rejected, unavailable, and throwing-analytics paths. The existing integration tests will
 verify that rejected and unavailable clipboard writes both still download the PNG.

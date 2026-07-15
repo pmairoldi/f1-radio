@@ -1,6 +1,6 @@
 import posthog from 'posthog-js';
 
-export function captureClipboardRejected(error: unknown) {
+function captureClipboardRejected(error: unknown) {
 	const errorDetails =
 		error instanceof Error
 			? {

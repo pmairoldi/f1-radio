@@ -1,5 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+const { capture } = vi.hoisted(() => ({ capture: vi.fn() }));
+
+vi.mock('posthog-js', () => ({
+	default: { capture }
+}));
+
 import { copyImage } from './copy-image';
 
 class ClipboardItemMock {
@@ -12,14 +18,15 @@ class ClipboardItemMock {
 
 describe('copyImage', () => {
 	afterEach(() => {
+		capture.mockReset();
 		vi.unstubAllGlobals();
 	});
 
-	it('reports a rejected clipboard write and downloads the image', async () => {
+	it('captures a rejected clipboard write and downloads the image', async () => {
 		const error = new DOMException('Write permission denied.', 'NotAllowedError');
+		error.stack = 'NotAllowedError: Write permission denied.';
 		const blob = new Blob();
 		const download = vi.fn();
-		const onClipboardRejected = vi.fn();
 		vi.stubGlobal('ClipboardItem', ClipboardItemMock);
 		vi.stubGlobal('navigator', {
 			clipboard: {
@@ -27,32 +34,31 @@ describe('copyImage', () => {
 			}
 		});
 
-		await expect(copyImage(Promise.resolve(blob), { download, onClipboardRejected })).resolves.toBe(
-			'download'
-		);
-		expect(onClipboardRejected).toHaveBeenCalledOnce();
-		expect(onClipboardRejected).toHaveBeenCalledWith(error);
+		await expect(copyImage(Promise.resolve(blob), { download })).resolves.toBe('download');
+		expect(capture).toHaveBeenCalledOnce();
+		expect(capture).toHaveBeenCalledWith('copy_button.clipboard_rejected', {
+			error_name: 'NotAllowedError',
+			error_message: 'Write permission denied.',
+			error_stack: 'NotAllowedError: Write permission denied.'
+		});
 		expect(download).toHaveBeenCalledWith(blob);
 	});
 
-	it('downloads without reporting when the clipboard API is unavailable', async () => {
+	it('downloads without capturing when the clipboard API is unavailable', async () => {
 		const blob = new Blob();
 		const download = vi.fn();
-		const onClipboardRejected = vi.fn();
 		vi.stubGlobal('ClipboardItem', undefined);
 		vi.stubGlobal('navigator', { clipboard: undefined });
 
-		await expect(copyImage(Promise.resolve(blob), { download, onClipboardRejected })).resolves.toBe(
-			'download'
-		);
-		expect(onClipboardRejected).not.toHaveBeenCalled();
+		await expect(copyImage(Promise.resolve(blob), { download })).resolves.toBe('download');
+		expect(capture).not.toHaveBeenCalled();
 		expect(download).toHaveBeenCalledWith(blob);
 	});
 
-	it('downloads when the rejection observer throws', async () => {
+	it('downloads when PostHog throws', async () => {
 		const blob = new Blob();
 		const download = vi.fn();
-		const onClipboardRejected = vi.fn(() => {
+		capture.mockImplementationOnce(() => {
 			throw new Error('Analytics unavailable');
 		});
 		vi.stubGlobal('ClipboardItem', ClipboardItemMock);
@@ -62,9 +68,8 @@ describe('copyImage', () => {
 			}
 		});
 
-		await expect(copyImage(Promise.resolve(blob), { download, onClipboardRejected })).resolves.toBe(
-			'download'
-		);
+		await expect(copyImage(Promise.resolve(blob), { download })).resolves.toBe('download');
+		expect(capture).toHaveBeenCalledOnce();
 		expect(download).toHaveBeenCalledWith(blob);
 	});
 });

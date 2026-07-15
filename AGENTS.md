@@ -42,6 +42,9 @@ Paraglide.js, mdsvex, PostHog, Vitest, and Playwright.
 - `pnpm build`: create a production build
 - `pnpm test`: run the full test suite
 
+Run validation only through scripts declared in `package.json`. Do not invoke underlying tool
+binaries directly.
+
 Every source or test change must pass `pnpm check` before finishing. Run `pnpm lint` and relevant
 tests proportional to the change. Review the final diff for generated or unrelated changes before
 finishing.

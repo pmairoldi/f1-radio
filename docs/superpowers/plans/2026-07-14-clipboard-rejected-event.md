@@ -3,9 +3,8 @@
 **Goal:** Capture a PostHog custom event with error details when an attempted clipboard image write
 rejects, while preserving the PNG download fallback.
 
-**Architecture:** The `copy-image` helper owns the clipboard attempt and download decision.
-`CopyButton` captures the rejection event directly through the helper's rejection callback. The
-generator route is not involved.
+**Architecture:** The `copy-image` helper owns the clipboard attempt, rejection event, and download
+decision. The component and generator route are not involved in rejection tracking.
 
 **Tech Stack:** Svelte 5, strict TypeScript, PostHog JS, Vitest, Playwright
 
@@ -20,21 +19,20 @@ generator route is not involved.
 
 ## Tasks
 
-### 1. Specify the component-owned event
+### 1. Specify the helper-owned event
 
-- Add a focused `CopyButton` unit test that mocks `posthog-js`.
+- Add a focused `copy-image` unit test that mocks `posthog-js`.
 - Assert the custom event contains only normalized error details.
-- Verify the test fails before the component exports the capture function.
+- Verify the download fallback still succeeds.
 
-### 2. Capture directly in `CopyButton`
+### 2. Capture directly in `copyImage`
 
-- Define `captureClipboardRejected(error)` in `CopyButton.svelte`.
-- Pass it to the clipboard helper as the rejection observer.
-- Remove the `onClipboardRejected` component prop.
-- Remove the route-level handler and standalone PostHog event helper.
+- Capture the PostHog event when `navigator.clipboard.write()` rejects.
+- Keep the analytics helper private to `copy-image.ts`.
+- Do not expose a rejection callback through the helper, component, or route.
 
 ### 3. Verify fallback behavior
 
-- Keep unit coverage for rejected, unavailable, and throwing-observer paths.
+- Keep unit coverage for rejected, unavailable, and throwing-analytics paths.
 - Keep Playwright coverage that rejected and unavailable clipboard writes download the PNG.
 - Run `pnpm check`, `pnpm lint`, and the relevant unit and integration tests.
