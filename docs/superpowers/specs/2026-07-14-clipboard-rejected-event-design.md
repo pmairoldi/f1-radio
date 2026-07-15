@@ -9,7 +9,8 @@ fallback.
 
 When `navigator.clipboard.write()` rejects, `CopyButton` calls a new
 `onClipboardRejected(error)` callback exactly once and then downloads the generated PNG as it does
-today. The callback is not called when the Clipboard API or `ClipboardItem` is unavailable.
+today. The callback is not called when the Clipboard API or `ClipboardItem` is unavailable. An
+exception thrown by the observer is ignored so analytics cannot block the download fallback.
 
 The page captures a `copy_button.clipboard_rejected` event with these properties:
 
@@ -25,13 +26,13 @@ subsequent successful download.
 
 ## Structure
 
-`CopyButton` remains responsible for detecting the failed clipboard write and continuing the
-fallback. The route passes the URL-state context to a focused PostHog event helper, matching the
-existing callback boundary and keeping PostHog out of the reusable component.
+The `copy-image` helper owns the clipboard attempt, rejection notification, and download decision.
+`CopyButton` supplies the browser download function and observer callback. The route passes the
+URL-state context to a focused PostHog event helper, matching the existing callback boundary and
+keeping PostHog out of the reusable component.
 
 ## Testing
 
-A unit test will verify the `copy_button.clipboard_rejected` event name, context, and normalized
-error details. The existing integration tests will verify that rejected and unavailable clipboard
-writes both still download the PNG. The callback's placement inside the `clipboard.write()` catch
-keeps the unavailable-API path from emitting the rejection event.
+Unit tests will verify the `copy_button.clipboard_rejected` event contract and the clipboard
+helper's rejected, unavailable, and throwing-observer paths. The existing integration tests will
+verify that rejected and unavailable clipboard writes both still download the PNG.

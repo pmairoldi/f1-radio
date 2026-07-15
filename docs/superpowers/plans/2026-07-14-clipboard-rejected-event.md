@@ -7,19 +7,20 @@
 **Goal:** Capture a PostHog custom event with error details when an attempted clipboard image write
 rejects, while preserving the PNG download fallback.
 
-**Architecture:** `CopyButton` reports the rejected value through a new callback and remains unaware
-of PostHog. The generator route normalizes the error details and captures the event alongside the
-existing URL-state context. Playwright spies on the initialized browser PostHog instance to verify
-the event contract without sending analytics traffic.
+**Architecture:** A focused helper owns the clipboard attempt, rejection notification, and download
+decision while `CopyButton` remains unaware of PostHog. The generator route passes URL-state context
+to a PostHog event helper. Vitest verifies both helpers, and Playwright preserves browser-level
+coverage for the download fallback.
 
-**Tech Stack:** Svelte 5, strict TypeScript, PostHog JS, Playwright
+**Tech Stack:** Svelte 5, strict TypeScript, PostHog JS, Vitest, Playwright
 
 ## Execution Adjustment
 
 The npm PostHog instance is not exposed on `window`, so the planned Playwright capture spy cannot
-observe it. Keep the production callback architecture, isolate event normalization and capture in
-`src/lib/posthog/events.ts`, verify that contract with a Vitest PostHog mock, and retain the existing
-Playwright coverage for both download fallback paths.
+observe it. The executed plan supersedes the original Playwright-spy steps below: isolate event
+capture in `src/lib/posthog/events.ts`, isolate clipboard behavior in
+`src/lib/components/copy-image.ts`, verify both with Vitest, and retain Playwright coverage for both
+download fallback paths.
 
 ## Global Constraints
 
@@ -38,6 +39,10 @@ Playwright coverage for both download fallback paths.
 **Files:**
 
 - Modify: `tests/copy-button.test.ts`
+- Create: `src/lib/components/copy-image.ts`
+- Create: `src/lib/components/copy-image.test.ts`
+- Create: `src/lib/posthog/events.ts`
+- Create: `src/lib/posthog/events.test.ts`
 - Modify: `src/lib/components/CopyButton.svelte`
 - Modify: `src/routes/+page.svelte`
 
