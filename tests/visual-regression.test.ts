@@ -1,6 +1,25 @@
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
 
+test('exported image is stable for a driver and team conversation', async ({ page }, testInfo) => {
+	testInfo.snapshotSuffix = '';
+
+	const image = await exportImage(
+		page,
+		'/?d=lando_norris&m=driver%3ABox%20box%20box&m=team%3ACopy%20that'
+	);
+
+	expect(image).toMatchSnapshot('mclaren-driver-team.png', { maxDiffPixels: 0.01 });
+});
+
+test('exported image is stable for a driver message', async ({ page }, testInfo) => {
+	testInfo.snapshotSuffix = '';
+
+	const image = await exportImage(page, '/?d=charles_leclerc&m=driver%3AWe%20are%20checking');
+
+	expect(image).toMatchSnapshot('ferrari-driver.png', { maxDiffPixels: 0.01 });
+});
+
 async function exportImage(page: Page, url: string): Promise<Buffer> {
 	await page.addInitScript(() => {
 		Math.random = () => 0.5;
@@ -26,18 +45,6 @@ async function exportImage(page: Page, url: string): Promise<Buffer> {
 	const download = page.waitForEvent('download');
 	await page.getByRole('button', { name: 'Copy' }).click();
 	const path = await (await download).path();
+
 	return readFile(path);
 }
-
-test('exported image is stable for a driver and team conversation', async ({ page }) => {
-	const image = await exportImage(
-		page,
-		'/?d=lando_norris&m=driver%3ABox%20box%20box&m=team%3ACopy%20that'
-	);
-	expect(image).toMatchSnapshot('mclaren-driver-team.png', { maxDiffPixels: 25 });
-});
-
-test('exported image is stable for a driver message', async ({ page }) => {
-	const image = await exportImage(page, '/?d=charles_leclerc&m=driver%3AWe%20are%20checking');
-	expect(image).toMatchSnapshot('ferrari-driver.png', { maxDiffPixels: 25 });
-});

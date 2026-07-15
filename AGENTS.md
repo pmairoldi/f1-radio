@@ -42,6 +42,6 @@ Paraglide.js, mdsvex, PostHog, Vitest, and Playwright.
 - `pnpm build`: create a production build
 - `pnpm test`: run the full test suite
 
-Run checks proportional to the change. For application changes, run `pnpm check` and
-`pnpm lint` at minimum, plus the relevant tests. Review the final diff for generated or unrelated
-changes before finishing.
+Every source or test change must pass `pnpm check` before finishing. Run `pnpm lint` and relevant
+tests proportional to the change. Review the final diff for generated or unrelated changes before
+finishing.
