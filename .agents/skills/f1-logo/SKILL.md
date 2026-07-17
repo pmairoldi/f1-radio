@@ -20,25 +20,26 @@ https://media.formula1.com/image/upload/{transforms}/common/f1/{year}/{url-slug}
 
 ## 2026 URL Slug Reference
 
-| Season key        | URL slug                                    | Local asset filename            |
-|-------------------|---------------------------------------------|---------------------------------|
-| `audi`            | `audi`                                      | `audi-logo.png`                 |
-| `ferrari`         | `ferrari`                                   | `ferrari-logo.png`              |
-| `mercedes`        | `mercedes`                                  | `mercedes-logo.png`             |
-| `alpine`          | `alpine`                                    | `alpine-logo.png`               |
-| `mclaren`         | `mclaren`                                   | `mclaren-logo.png`              |
-| `williams`        | `williams`                                  | `williams-logo-2026.png`        |
-| `haas`            | `haas`                                      | `haas-logo.png`                 |
-| `cadillac`        | `cadillac`                                  | `cadillac-logo.png`             |
-| `red_bull_racing` | `redbullracing` (try: `redbull`, `rbr`)     | `red-bull-racing-logo.png`      |
-| `aston_martin`    | `astonmartin` (try: `aston-martin`)         | `aston-martin-logo.png`         |
-| `racing_bulls`    | `racingbulls` (try: `rb`)                   | `rb-logo.png`                   |
+| Season key        | URL slug                                | Local asset filename       |
+| ----------------- | --------------------------------------- | -------------------------- |
+| `audi`            | `audi`                                  | `audi-logo.png`            |
+| `ferrari`         | `ferrari`                               | `ferrari-logo.png`         |
+| `mercedes`        | `mercedes`                              | `mercedes-logo.png`        |
+| `alpine`          | `alpine`                                | `alpine-logo.png`          |
+| `mclaren`         | `mclaren`                               | `mclaren-logo.png`         |
+| `williams`        | `williams`                              | `williams-logo-2026.png`   |
+| `haas`            | `haas`                                  | `haas-logo.png`            |
+| `cadillac`        | `cadillac`                              | `cadillac-logo.png`        |
+| `red_bull_racing` | `redbullracing` (try: `redbull`, `rbr`) | `red-bull-racing-logo.png` |
+| `aston_martin`    | `astonmartin` (try: `aston-martin`)     | `aston-martin-logo.png`    |
+| `racing_bulls`    | `racingbulls` (try: `rb`)               | `rb-logo.png`              |
 
 ## Workflow
 
 ### Step 1: Gather inputs
 
 Determine from user request:
+
 - `YEAR` — e.g., `2026`
 - `URL_SLUG` — from table above; for unknowns, derive as lowercase-no-spaces team name
 - `TRANSFORMS` — default `c_fit,h_512/q_100`; override if user specifies size
@@ -48,16 +49,19 @@ Determine from user request:
 ### Step 2: Attempt URLs in order (stop at first 200)
 
 **Attempt 1 — no version:**
+
 ```
 https://media.formula1.com/image/upload/{TRANSFORMS}/common/f1/{YEAR}/{URL_SLUG}/{YEAR}{URL_SLUG}logo.png
 ```
 
 **Attempt 2 — with version (if user supplied one):**
+
 ```
 https://media.formula1.com/image/upload/{TRANSFORMS}/{VERSION}/common/f1/{YEAR}/{URL_SLUG}/{YEAR}{URL_SLUG}logo.png
 ```
 
 Check status before downloading:
+
 ```bash
 curl -sI "URL" | head -1
 ```
@@ -69,6 +73,7 @@ curl -L -o "src/lib/assets/{SAVE_NAME}" "{URL}"
 ```
 
 Verify it's actually a PNG (not an error HTML page):
+
 ```bash
 file src/lib/assets/{SAVE_NAME}
 ```
@@ -78,6 +83,7 @@ Expected output contains `PNG image data`. If `HTML document` — delete and ret
 ### Step 4: Update season file (if requested)
 
 In `src/lib/seasons/{YEAR}.ts`:
+
 1. Add import: `import {team_key}_logo from '$lib/assets/{SAVE_NAME}';`
 2. Set `logo: {team_key}_logo` on the team object.
 
@@ -85,11 +91,11 @@ Follow existing import style: `snake_case` variable matching the season key.
 
 ## Save Path Conventions
 
-| Scenario                    | Filename pattern                        |
-|-----------------------------|-----------------------------------------|
-| Standard logo               | `{team-slug}-logo.png`                  |
-| Year-specific redesign      | `{team-slug}-logo-{year}.png`           |
-| Year-specific variant       | `{team-slug}-logo-{variant}-{year}.png` |
+| Scenario               | Filename pattern                        |
+| ---------------------- | --------------------------------------- |
+| Standard logo          | `{team-slug}-logo.png`                  |
+| Year-specific redesign | `{team-slug}-logo-{year}.png`           |
+| Year-specific variant  | `{team-slug}-logo-{variant}-{year}.png` |
 
 ## Failure Handling
 
