@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { getImage } from '$lib/element-to-image';
 	import { m } from '$lib/paraglide/messages';
-	import domtoimage from 'dom-to-image';
 	import Button from './Button.svelte';
+	import { copyImage } from './copy-image';
 
 	interface Props {
 		element: HTMLElement | undefined;
-		onCopy: (duration: number) => void;
+		onCopy: (duration: number, method: 'clipboard' | 'download') => void;
 		onError: (error: unknown, duration: number) => void;
 	}
 
@@ -13,21 +14,13 @@
 
 	let running = $state<boolean>(false);
 
-	async function getImage(output: HTMLElement): Promise<Blob> {
-		const scale = 3;
-		const width = output.offsetWidth;
-		const height = output.offsetHeight;
-
-		return domtoimage.toBlob(output, {
-			width: width * scale,
-			height: height * scale,
-			style: {
-				transform: `scale(${scale})`,
-				transformOrigin: 'top left',
-				width: `${width}px`,
-				height: `${height}px`
-			}
-		});
+	function download(blob: Blob) {
+		const url = URL.createObjectURL(blob);
+		const anchor = document.createElement('a');
+		anchor.href = url;
+		anchor.download = 'f1-radio-meme.png';
+		anchor.click();
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
 	}
 
 	async function execute(): Promise<void> {
@@ -39,16 +32,11 @@
 		const start = performance.now();
 		running = true;
 		try {
-			await navigator.clipboard.write([
-				new ClipboardItem({
-					'image/png': getImage(output)
-				})
-			]);
-
-			onCopy(performance.now() - start);
-			running = false;
+			const method = await copyImage(getImage(output), { download });
+			onCopy(performance.now() - start, method);
 		} catch (error) {
 			onError(error, performance.now() - start);
+		} finally {
 			running = false;
 		}
 	}

@@ -26,21 +26,21 @@
 	style="--team-color: {team.color}; --light-team-color: color-mix(in oklab, var(--team-color), white);"
 >
 	<div class="relative flex flex-col p-3">
-		<div class="absolute start-0 end-0 -bottom-6 grid grid-cols-9 items-end">
+		<div class="absolute inset-s-0 inset-e-0 -bottom-6 grid grid-cols-9 items-end">
 			{#each wave as item}
 				<div
 					class="audio-wave-item row-start-1 h-12 opacity-80"
 					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
 				></div>
 				<div
-					class="audio-wave-item row-start-2 h-6 -scale-y-[1] opacity-20"
+					class="audio-wave-item row-start-2 h-6 scale-y-[-1] opacity-20"
 					style="--wave-height: {item}%; --wave-intensity: {item * 0.25}%;"
 				></div>
 			{/each}
 		</div>
 
 		<div class="flex flex-row items-center justify-end">
-			<span class="text-4xl leading-none font-bold text-[var(--team-color)] uppercase">
+			<span class="text-4xl leading-none font-bold text-(--team-color) uppercase">
 				{name.display === 'first' ? name.first : name.last}
 			</span>
 		</div>
@@ -51,7 +51,7 @@
 
 		<div class="z-10 flex flex-row items-center justify-between">
 			<span
-				class="font-kh-interference-f1 bg-gradient-to-tl from-[var(--light-team-color)] to-[var(--team-color)] to-60% bg-clip-text text-7xl font-black text-transparent"
+				class="font-kh-interference-f1 bg-linear-to-tl from-(--light-team-color) to-(--team-color) to-60% bg-clip-text text-7xl font-black text-transparent"
 			>
 				{driver.number}
 			</span>
